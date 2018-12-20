@@ -5,7 +5,9 @@
 export EDITOR=vim
 export VISUAL=vim
 export WORKON_HOME=~/.virtualenvs
-export GITHUB_TOKEN=1753eeeb300a674a916f3b7d7705053c0e194ae6
+if [ -f "$HOME/.tokens" ]; then
+    source "$HOME/.tokens"
+fi
 
 source /usr/bin/virtualenvwrapper_lazy.sh
 source /usr/local/etc/aliases.sh
