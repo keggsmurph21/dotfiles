@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+if [ -z $1 ]; then
+	echo "usage: $ ebin <filename>"
+	exit 1
+fi
+
+DIR=/usr/local/bin
+
+if [ ! -f "$DIR/$1" ]; then
+	echo "ebin: cannot find file \"$DIR/$1\""
+	exit 2
+fi
+
+sudo "$EDITOR" "$DIR/$1"

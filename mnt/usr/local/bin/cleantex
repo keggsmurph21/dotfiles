@@ -1,0 +1,28 @@
+#!/bin/sh -e
+
+get_files() {
+
+	find . -type f | grep -E $PATTERN
+
+}
+
+PATTERN='\.(aux|fdb_latemx|fls|log|out|synctex.gz)$'
+
+echo "found files:"
+get_files | xargs -I {} echo "  " {}
+
+if [[ `get_files | wc -l` -eq 0 ]]; then
+
+	echo "no files found matching PATTERN '$PATTERN'"
+
+elif confirm "delete all? [y/n] "; then
+
+	get_files | xargs -I {} rm {}
+	echo "deleted files"
+
+else
+
+	echo "not deleting files"
+
+fi
+

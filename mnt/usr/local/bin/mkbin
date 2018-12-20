@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+if [ -z $1 ]; then
+	echo "usage: $ mkbin <filename>"
+	exit 1
+fi
+
+DIR=/usr/local/bin
+
+if [ -f "$DIR/$1" ]; then
+	ebin "$1"
+	exit
+fi
+
+sudo "$EDITOR" "$DIR/$1"
+sudo chmod +x "$DIR/$1"

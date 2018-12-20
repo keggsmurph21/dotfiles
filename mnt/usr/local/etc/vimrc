@@ -1,0 +1,139 @@
+
+" [general]
+set nocompatible
+set history=420
+filetype plugin on
+filetype indent on
+syntax enable "highlighting
+set autoread "read when a file is changed from outside
+let mapleader = "-" "for extra key combos
+
+" [commands]
+
+" accidental caps
+command W w
+command Q q
+
+" save as sudo
+command S w !sudo tee % > /dev/null
+
+" make tags
+"command MkTags !ctags -R .
+
+" [interface]
+
+set path+=**
+set wildmenu
+set wildmode=longest:full,full
+set wildignore=*.o,*~,*.pyc,*/.git/*
+
+"if filereadable("tags")
+"    set tags "use ctags file
+"endif
+
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+set ignorecase "when searching
+set smartcase
+set hlsearch "highlight search results
+set incsearch "behave like modern browsers
+
+set lazyredraw "macro performance
+set magic "regex
+
+set showmatch "show matching brackets
+set mat=2 "blink speed for bracket matching
+
+set number
+set relativenumber
+set numberwidth=4
+highlight LineNr ctermfg=DarkGrey ctermbg=NONE
+augroup numbertoggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
+augroup end
+
+set encoding=utf8
+set ffs=unix
+
+set nobackup
+set nowb
+set noswapfile
+
+set expandtab
+set smarttab
+set tabstop=4
+set shiftwidth=4
+
+set ai "auto indent
+set si "smart indent
+set wrap
+
+" [mappings]
+
+" visual-mode pressing */# searches for current selection
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
+vnoremap <silent> # :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
+
+" move b/w windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" close current buffer
+map <leader>bd :Bclose<cr>:tabclose<cr>gT
+
+" close all buffers
+map <leader>ba :bufdo bd<cr>
+
+" move b/w buffers
+map <leader>l :bnext<cr>
+map <leader>h :bprevious<cr>
+
+" manage tabs
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+map <leader>t<leader> :tabnext
+
+" 'tl' toggles b/w this and last accessed tab
+let g:lasttab=1
+nmap <leader>tl :exe "tabn ".g:lasttab<cr>
+au TabLeave * let g:lasttab = tabpagenr()
+
+" opens new tab w/ current buffer's path
+"map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+
+" cd to directory of open buffer
+"map <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" return to last edit position when opening files
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" status line stuff
+"set laststatus=2
+"set statusline=%F%m%r%h:%l,%c
+"highlight StatusLine ctermfg=Black ctermbg=Black
+
+" move line (up|down) with Alt+[jk]
+"nnoremap <A-j> :m .+1<cr>==
+"nnoremap <A-k> :m .-2<cr>==
+"vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+nmap <C-UP> :m-2<cr>==
+nmap <C-K> :m-2<cr>==
+nmap <C-DOWN> :m+<cr>==
+nmap <C-J> :m+<cr>==
+
+nnoremap <leader>html :-1read $HOME/.vim/.skeleton.html<cr>3jwf>a 
+
+" [functions]
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE '
+    endif
+    return ''
+endfunction
