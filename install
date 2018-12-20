@@ -48,6 +48,8 @@ while getopts ":hr:R:u:U:" opt; do
     esac
 done
 
+confirm="$ROOT_SRC/usr/local/bin/confirm"
+
 echo "
 install.sh config:
 
@@ -55,7 +57,7 @@ install.sh config:
   user:    $USER_SRC => $USER_TAR
 " >&2
 
-if ! confirm "confirm install location? [yN] "; then
+if ! confirm "confirm install locations? [yN] "; then
     echo "quitting"
     exit 2
 fi
