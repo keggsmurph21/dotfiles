@@ -6,7 +6,7 @@ filetype plugin on
 filetype indent on
 syntax enable "highlighting
 set autoread "read when a file is changed from outside
-let mapleader = "-" "for extra key combos
+let mapleader = "\\" "for extra key combos
 
 " [commands]
 
@@ -72,6 +72,9 @@ set si "smart indent
 set wrap
 
 " [mappings]
+
+" clear search highlighting
+nmap <esc> :noh<cr>
 
 " visual-mode pressing */# searches for current selection
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>

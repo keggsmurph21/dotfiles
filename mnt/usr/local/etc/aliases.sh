@@ -6,7 +6,8 @@ alias ls="ls -aF --color=auto"
 alias shrc="vim $HOME/.shrc && source $HOME/.bashrc && source $HOME/.zshrc"
 alias bashrc="vim $HOME/.bashrc && source $HOME/.bashrc"
 alias zshrc="vim $HOME/.zshrc && source $HOME/.zshrc"
-alias vimrc="vim $HOME/.vimrc"
+alias vimrc="vim /usr/local/etc/vimrc"
+alias aliasrc="vim /usr/local/etc/aliases.sh && source /usr/local/etc/aliases.sh"
 
 # override defaults
 alias vi=vim
