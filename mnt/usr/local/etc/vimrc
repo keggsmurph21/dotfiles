@@ -74,7 +74,7 @@ set wrap
 " [mappings]
 
 " clear search highlighting
-nmap <esc> :noh<cr>
+"nmap <esc> :noh<cr>
 
 " visual-mode pressing */# searches for current selection
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
