@@ -57,6 +57,7 @@ alias xcopy="xclip -i -selection c"
 alias xpaste="xclip -o -selection c"
 alias peek='tee >(cat 1>&2)' # mirror stdout to stderr (for seeing data thru pipe)
 alias gtrim="trim \$(git status --porcelain | sed 's/^...//g')"
+alias ipaddr="curl https://api.ipify.org/"
 
 # trim whitespace
 trim() {
