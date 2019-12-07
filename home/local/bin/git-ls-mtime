@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -euo pipefail
+
+get_mtime() {
+    git log --pretty=format:%ad -n1 --date="$2" $1
+}
+
+cat <<EOF | python3
+files = [
+$(for path in $(git ls-tree -r --name-only HEAD); do
+        [ -e $path ] || continue
+        raw_mtime=$(get_mtime $path unix)
+        pretty_mtime=$(get_mtime $path "format:%b %d %Y  %H:%M")
+        echo "[$raw_mtime, '$path', '$pretty_mtime'],"
+    done)
+]
+
+for _, path, mtime in sorted(files, key=lambda x: -x[0]):
+    print(f'{mtime}  {path}')
+EOF

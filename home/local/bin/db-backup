@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+set -e
+
+usage() {
+    echo "usage: $0 [export|import \$FILE|list]"
+    exit 1
+}
+
+DB_DUMP_DIR=~/dumps
+
+_timestamp() {
+    date -u "+%Y-%m-%d_%H:%M:%S"
+}
+
+_get_output_base() {
+    echo "$DB_DUMP_DIR/$(_timestamp)"
+}
+
+_ensure_privileges() {
+    if [[ $UID != 0 ]]; then
+        echo "this function requires sudo"
+        exit 2
+    fi
+}
+
+_export_pg() {
+    OUTPUT_FILE="$1.psql"
+    pg_dump VPC > "$OUTPUT_FILE"
+}
+
+_import_pg() {
+    _ensure_privileges
+    INPUT_FILE="$1.psql"
+    if [ ! -f "$INPUT_FILE" ]; then
+        echo "psql import file does not exist: $INPUT_FILE"
+        usage
+    fi
+    service postgresql restart
+    sudo -u postgres dropdb VPC
+    sudo -u postgres createdb -T template0 VPC
+    sudo -u postgres psql VPC < "$INPUT_FILE"
+}
+
+_export_mysql() {
+    OUTPUT_FILE="$1.mysql"
+    mysqldump --hex-blob -ulocal ESI > $OUTPUT_FILE
+}
+
+_import_mysql() {
+    INPUT_FILE="$1.mysql"
+    if [ ! -f "$INPUT_FILE" ]; then
+        echo "mysql import file does not exist: $INPUT_FILE"
+        usage
+    fi
+    mysql -uroot -e "DROP DATABASE ESI;"
+    mysql -uroot -e "CREATE DATABASE ESI DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;"
+    mysql -uroot ESI < "$INPUT_FILE"
+}
+
+_list_dbs() {
+    for file in $(ls $DB_DUMP_DIR); do
+        #file="$(basename -- $file)"
+        file="$DB_DUMP_DIR/${file%.*}"
+        echo $file
+    done | sort -r | uniq
+}
+
+case "$1" in
+    list)
+        _list_dbs
+        ;;
+    export)
+        OUTPUT_BASE=$(_get_output_base)
+        _export_pg $OUTPUT_BASE
+        #_export_mysql $OUTPUT_BASE
+        ;;
+    import)
+        _import_pg "$2"
+        #_import_mysql "$2"
+        ;;
+    *)
+        usage
+        ;;
+esac
+

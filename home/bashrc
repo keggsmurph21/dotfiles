@@ -1,0 +1,97 @@
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s globstar
+
+HISTCONTROL=ignoreboth
+HISTSIZE=1000
+HISTFILESIZE=2000
+HISTIGNORE="pwd"
+
+# prompt
+PS1='\[\033[01;32m\]\u@\h:\[\033[01;34m\]\w\[\033[0m\]\$ '
+
+export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
+export EDITOR=vim
+export VISUAL=vim
+export VIRTUALENVWRAPPER_SCRIPT=~/.local/bin/virtualenvwrapper.sh
+export WORKON_HOME=~/.virtualenvs
+export PIP_REQUIRE_VIRTUALENV=true
+export PIP_DOWNLOAD_CACHE="$HOME/.cache/pip"
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+if which go &>/dev/null; then
+    export GOPATH=$(go env GOPATH)
+    export PATH="$PATH:$GOPATH/bin"
+fi
+
+# system aliases
+alias vi=vim
+alias python=python3
+alias pip=pip3
+alias ls="ls -aF --color=auto"
+alias g=git
+alias pwd="pwd -P"
+alias tree="tree -a -I '.git|__pycache__|*.pyc'"
+alias cat="cat -v" # show ^/M- escapes for nonprintable chars
+
+# edit bash config file && source it
+alias bashrc="vim $HOME/.bashrc && . $HOME/.bashrc"
+alias bashrclocal="vim $HOME/.bashrc.local && . $HOME/.bashrc"
+alias bashrcmacos="vim $HOME/.bashrc.macos && . $HOME/.bashrc"
+alias bashrclinux="vim $HOME/.bashrc.linux && . $HOME/.bashrc"
+
+# other quick edit-config-file shortcuts
+alias bashprofile="vim $HOME/.bash_profile"
+alias bashlogout="vim $HOME/.bash_logout"
+alias vimrc="vim $HOME/.vimrc"
+alias sshconf="vim $HOME/.ssh/config"
+alias gitconf="vim $HOME/.gitconfig"
+
+# custom aliases
+alias xcopy="xclip -i -selection c"
+alias xpaste="xclip -o -selection c"
+alias peek='tee >(cat 1>&2)' # mirror stdout to stderr (for seeing data thru pipe)
+alias gtrim="trim \$(git status --porcelain | sed 's/^...//g')"
+
+# trim whitespace
+trim() {
+    for file in "$@"; do
+        sed -E 's/\s+$//g' -i $file
+    done
+}
+
+# see where python is importing a module from
+pywhich() {
+    for module in "$@"; do
+        python -c "import $module; print($module.__file__)";
+    done
+}
+pywhich3() {
+    for module in "$@"; do
+        python3 -c "import $module; print($module.__file__)";
+    done
+}
+
+# pip without a venv
+gpip() {
+    PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
+
+# source external files
+[ -r "$HOME/.tokens" ] && . "$HOME/.tokens"
+[ -r "$HOME/src/keggsmurph21/backstack/backstack.bash" ] && . "$HOME/src/keggsmurph21/backstack/backstack.bash"
+[ -r "$HOME/.local/bin/virtualenvwrapper_lazy.sh" ] && . "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
+[ -r "/usr/share/bash-completion/bash_completion" ] && . "/usr/share/bash-completion/bash_completion"
+[ -r "$HOME/src/keggsmurph21/wt/scripts/wt.bash" ] && . "$HOME/src/keggsmurph21/wt/scripts/wt.bash" # see https://github.com/keggsmurph21/wt
+case "$OSTYPE" in
+    linux-gnu)  [ -r "$HOME/.bashrc.linux" ] && . "$HOME/.bashrc.linux" ;;
+    darwin)     [ -r "$HOME/.bashrc.macos" ] && . "$HOME/.bashrc.macos" ;;
+    *)          echo "unrecognized OSTYPE: $OSTYPE" >&2 ;;
+esac
+[ -r "$HOME/.bashrc.local" ] && . "$HOME/.bashrc.local"
+
+# start the ssh-agent
+eval "$(ssh-agent)" >/dev/null

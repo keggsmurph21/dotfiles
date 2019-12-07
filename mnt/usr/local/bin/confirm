@@ -1,7 +1,0 @@
-#!/bin/sh -e
-
-read -p "$1" -n 1 -r
-echo
-[[ $REPLY =~ ^[Yy]$ ]]
-exit $?
-

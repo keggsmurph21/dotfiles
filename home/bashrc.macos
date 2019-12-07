@@ -1,0 +1,13 @@
+#!/bin/bash
+
+realpath() {
+    # for some reason MacOS doesn't have this builtin :(
+    if [[ $# -eq 0 ]]; then
+        echo "realpath: missing operand"
+    else
+        for path in "$@"; do
+            python3 -c "import os; print(os.path.realpath('$path'))"
+        done
+    fi
+}
+

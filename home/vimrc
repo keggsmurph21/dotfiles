@@ -2,8 +2,31 @@
 " [general]
 set nocompatible
 set history=420
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+    Plugin 'VundleVim/Vundle.vim'
+    Plugin 'cakebaker/scss-syntax.vim'
+    Plugin 'leafgarland/typescript-vim'
+    setlocal indentkeys+=0.
+    Plugin 'alvan/vim-closetag'
+    Plugin 'swig'
+    Plugin 'neovimhaskell/haskell-vim'
+    Plugin 'hashivim/vim-terraform'
+    Plugin 'hashivim/vim-packer'
+    Plugin 'pearofducks/ansible-vim'
+    Plugin 'rhysd/vim-clang-format'
+    Plugin 'xavierd/clang_complete'
+    Plugin 'scrooloose/nerdtree'
+    "Plugin 'vim-syntastic/syntastic'
+
+call vundle#end()
+
 filetype plugin on
 filetype indent on
+
 syntax enable "highlighting
 set autoread "read when a file is changed from outside
 let mapleader = "\\" "for extra key combos
@@ -13,9 +36,16 @@ let mapleader = "\\" "for extra key combos
 " accidental caps
 command W w
 command Q q
+command Wq wq
+command WQ wq
+command Qw wq
+command QW wq
 
 " save as sudo
-command S w !sudo tee % > /dev/null
+cmap w!! w !sudo tee % > /dev/null <cr>l
+
+" tell vim to re-detect filetype
+cmap #! filetype detect<cr>
 
 " make tags
 "command MkTags !ctags -R .
@@ -36,8 +66,20 @@ set whichwrap+=<,>,h,l
 
 set ignorecase "when searching
 set smartcase
-set hlsearch "highlight search results
 set incsearch "behave like modern browsers
+set hlsearch "highlight search results
+
+" display <tab> as >\u00b7+ and &nbsp; as \u23b5 (<C-v>u....)
+set list
+set listchars=tab:>·,nbsp:⎵
+highlight SpecialKey ctermfg=darkgrey
+
+set linebreak "softwrap: break intelligently
+set showcmd " show current command buffer
+set nojoinspaces
+set mouse+=a " allow clicking!
+
+set scrolloff=3 " show lines above & below cursor if possible
 
 set lazyredraw "macro performance
 set magic "regex
@@ -70,6 +112,8 @@ set shiftwidth=4
 set ai "auto indent
 set si "smart indent
 set wrap
+
+set background=dark
 
 " [mappings]
 
@@ -128,10 +172,8 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 "vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 nmap <C-UP> :m-2<cr>==
 nmap <C-K> :m-2<cr>==
-nmap <C-DOWN> :m+<cr>==
 nmap <C-J> :m+<cr>==
-
-nnoremap <leader>html :-1read $HOME/.vim/.skeleton.html<cr>3jwf>a 
+nmap <C-DOWN> :m+<cr>==
 
 " [functions]
 function! HasPaste()
@@ -140,3 +182,40 @@ function! HasPaste()
     endif
     return ''
 endfunction
+
+" highlight trailing whitespace in normal mode
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%$\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+autocmd FileType c,cpp,objc ClangFormatAutoEnable
+
+" clang_complete
+let g:clang_library_path='/usr/lib/x86_64-linux-gnu/libclang-6.0.so.1'
+let g:clang_auto_select=0
+"let g:clang_snippets=1
+let g:clang_close_preview=1
+let g:clang_complete_macros=1
+"let g:clang_complete_patterns=1
+
+" syntastic
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_python_python_exec = system('which python')
+"let g:syntastic_python_flake8_args = system('echo "--config=$HOME/.flake8"')
+"let g:synastic_mode_map = { 'mode': 'passive' }
+
+map <leader>j :%!python -m json.tool<cr>
+
+vnoremap <C-c> "+yy
+nnoremap <C-v> "+P
+

@@ -1,0 +1,93 @@
+[user]
+    useConfigOnly = true
+
+[advice]
+    detachedHead = false
+
+[grep]
+    lineNumber = true
+
+[push]
+    default = upstream
+
+[diff]
+    mnemonicPrefix = true
+
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+    defaultToUpstream = true
+
+[color]
+	ui = auto
+
+[pretty]
+    line = "%C(auto)%h %<|(60,trunc)%s %C(green)%ad%C(auto)%d"
+    detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
+
+[credential]
+	helper = cache
+
+[alias]
+    a       = add
+    af      = add -N
+    ap      = add -p
+    au      = add -u
+    aup     = add -up
+
+    br      = checkout -b
+    bl      = branch --all -vv
+
+    c       = commit -v
+    ca      = commit -v --amend
+
+    co      = checkout
+
+    conf    = config --edit
+
+    count   = ! git diff --stat "$(git null)"
+
+    cp      = cherry-pick
+
+    d       = diff
+    ds      = diff --stat
+    dv      = diff -vv
+    dw      = diff --color-words
+    dc      = diff --cached
+    dcs     = diff --cached --stat
+    dcv     = diff --cached -vv
+    dcw     = diff --cached --color-words
+
+    # NB: this can be undone by running
+    #   $ git reflog # get the $hash
+    #   $ git reset --hard $hash
+    drop    = git reset --hard HEAD~1
+
+    f       = fetch --all -p
+
+    graph   = log --graph
+
+    null    = hash-object -t tree /dev/null
+
+    l       = log
+    lp      = log -p
+    lpw     = log -p --color-words
+    lstat   = log --stat
+    last    = log -p -1 HEAD
+
+    lsm     = ! git-ls-mtime
+
+    root    = rev-parse --show-toplevel
+
+    s       = status -sb
+
+    sm      = submodule
+
+    unstage = reset HEAD --
+
+[core]
+    excludesfile = ~/.gitignore
+
+[include]
+    # local customization
+    path    = ~/.gitconfig.local

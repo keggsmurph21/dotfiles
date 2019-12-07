@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]] || [[ $1 == '-h' ]]; then
+    echo "usage: mkscript <script-name>" >&2
+    exit 1
+fi
+
+PREFIX="$DOTFILES_DIR/home/local/bin"
+path="$PREFIX/$1"
+
+if [[ -f "$path" ]]; then
+    echo "file exists!" >&2
+    exit 2
+fi
+
+touch "$path"
+chmod +x "$path"
+$EDITOR "$path"
+

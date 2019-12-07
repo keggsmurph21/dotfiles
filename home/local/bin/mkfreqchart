@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Kevin Murphy
+# 11/19/19
+#
+# This script assumes that you're in the directory containing
+# the (already-tokenized) text files!
+
+set -euo pipefail
+
+# get (strlen, freq) pairs for a corpus
+cat "$@" \
+    | sed -E 's/^(.*__METADATA_END__ )?(.*)$/\2/g' \
+    | tr ' ' '\n' \
+    | sed -E 's/./x/g' \
+    | sort \
+    | uniq -c \
+    | while read line; do\
+        freq=$(echo $line | sed -E 's/ x*//g');\
+        strlen=$(echo $line | sed -E 's/.* //g' | wc -c);\
+        echo $strlen $freq;\
+      done \
+    > /tmp/freqs.txt
+
+cat <<EOF | python3
+
+import matplotlib.pyplot as plt
+
+X = []
+Y = []
+with open('/tmp/freqs.txt') as fp:
+    for line in fp:
+        x, y = map(int, line.strip().split())
+        X.append(x)
+        Y.append(y)
+
+plt.scatter(X, Y)
+plt.xlabel('token length')
+plt.yscale('log')
+plt.ylabel('log(frequency)')
+plt.savefig('/tmp/freqs.png', bbox_inches='tight')
+EOF
+
+xdg-open /tmp/freqs.png

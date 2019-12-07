@@ -1,0 +1,29 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+SpaceAfterTemplateKeyword: false
+AlignEscapedNewlines: true
+AlignTrailingComments: true
+BreakBeforeInheritanceComma: true
+BreakConstructorInitializers: BeforeComma
+IndentPPDirectives: AfterHash
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterFunction: true
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: true
+ColumnLimit: 100
+PointerAlignment: Left
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+NamespaceIndentation: None
+Standard: Cpp11
+AccessModifierOffset: -4
+#SpaceAfterLogicalNot: true
+Cpp11BracedListStyle: false
+AlignOperands: true
+BinPackParameters: false
+BinPackArguments: false
+#ExperimentalAutoDetectBinPacking: true
+BreakBeforeBinaryOperators: "NonAssignment"

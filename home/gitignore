@@ -1,0 +1,8 @@
+# netbeans
+.settings
+.classpath
+.project
+model/nbproject
+
+# local config
+*.local
