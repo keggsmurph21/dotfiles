@@ -49,6 +49,8 @@ alias bashlogout="vim $HOME/.bash_logout"
 alias vimrc="vim $HOME/.vimrc"
 alias sshconf="vim $HOME/.ssh/config"
 alias gitconf="vim $HOME/.gitconfig"
+alias inputrc="vim $HOME/.inputrc"
+alias xinitrc="vim $HOME/.xinitrc"
 
 # custom aliases
 alias xcopy="xclip -i -selection c"
