@@ -60,6 +60,7 @@
     dcv     = diff --cached -vv
     dcw     = diff --cached --color-words
 
+    # drop the most recent commit from the local tree
     # NB: this can be undone by running
     #   $ git reflog # get the $hash
     #   $ git reset --hard $hash
