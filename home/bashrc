@@ -83,18 +83,24 @@ gpip() {
     PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
 
+__src() {
+    [ -r "$1" ] && . "$1" &>/dev/null || true
+}
+
 # source external files
-[ -r "$HOME/.tokens" ] && . "$HOME/.tokens"
-[ -r "$HOME/src/keggsmurph21/backstack/backstack.bash" ] && . "$HOME/src/keggsmurph21/backstack/backstack.bash"
-[ -r "$HOME/.local/bin/virtualenvwrapper_lazy.sh" ] && . "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
-[ -r "/usr/share/bash-completion/bash_completion" ] && . "/usr/share/bash-completion/bash_completion"
-[ -r "$HOME/src/keggsmurph21/wt/scripts/wt.bash" ] && . "$HOME/src/keggsmurph21/wt/scripts/wt.bash" # see https://github.com/keggsmurph21/wt
+__src "$HOME/.tokens"
+__src "$HOME/src/keggsmurph21/backstack/backstack.bash"
+__src "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
+__src "/usr/share/bash-completion/bash_completion"
+__src "$HOME/src/keggsmurph21/wt/scripts/wt.bash"
 case "$OSTYPE" in
-    linux-gnu)  [ -r "$HOME/.bashrc.linux" ] && . "$HOME/.bashrc.linux" ;;
-    darwin)     [ -r "$HOME/.bashrc.macos" ] && . "$HOME/.bashrc.macos" ;;
+    linux-gnu)  __src "$HOME/.bashrc.linux" ;;
+    darwin)     __src "$HOME/.bashrc.macos" ;;
     *)          echo "unrecognized OSTYPE: $OSTYPE" >&2 ;;
 esac
-[ -r "$HOME/.bashrc.local" ] && . "$HOME/.bashrc.local"
+__src "$HOME/.bashrc.local"
+
+unset __src
 
 # start the ssh-agent
 eval "$(ssh-agent)" >/dev/null
