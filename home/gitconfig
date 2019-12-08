@@ -73,12 +73,15 @@
     null    = hash-object -t tree /dev/null
 
     l       = log
+    lol     = log --pretty=oneline
     lp      = log -p
     lpw     = log -p --color-words
     lstat   = log --stat
     last    = log -p -1 HEAD
 
     lsm     = ! git-ls-mtime
+
+    ri      = rebase -i
 
     root    = rev-parse --show-toplevel
 
