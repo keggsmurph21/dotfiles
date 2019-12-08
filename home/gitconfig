@@ -62,11 +62,12 @@
 
     # drop the most recent commit from the local tree
     # NB: this can be undone by running
-    #   $ git reflog # get the $hash
-    #   $ git reset --hard $hash
-    drop    = git reset --hard HEAD~1
+    #   $ git reflog # get the $sha
+    #   $ git reset --hard $sha
+    drop    = reset --hard HEAD~1
 
-    f       = fetch --all -p
+    f       = fetch
+    fa      = fetch --all -p
 
     graph   = log --graph
 
@@ -80,6 +81,8 @@
     last    = log -p -1 HEAD
 
     lsm     = ! git-ls-mtime
+
+    ra      = remote add
 
     ri      = rebase -i
 
