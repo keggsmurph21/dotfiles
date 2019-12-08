@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+#   (shebang && shebang == /bin/(ba)?sh)
+#       | true >   complain and exit
+#       | false>   scan for "# set by toggle-flag"
+#           | match>    toggle it +/- with `sed -i`.
+#           | no match> add line immediately after shebang
