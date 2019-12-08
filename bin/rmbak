@@ -2,8 +2,19 @@
 
 set -euo pipefail
 
+confirm=yes
+if [[ $# -ge 1 ]] && [[ "$1" =~ "--?y(es)?" ]]; then
+    confirm=no
+    shift
+fi
+
 for filename in "$@"; do
     if echo "$filename" | grep -qE '_\d{10}.bak$'; then
-        rm -i "$filename"
+        if [[ $confirm == yes ]]; then
+            rm -i "$filename"
+        else
+            echo "removing: $filename"
+            rm "$filename"
+        fi
     fi
 done
