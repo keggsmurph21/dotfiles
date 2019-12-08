@@ -1,5 +1,12 @@
 #!/bin/bash
 
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+# -G is --color-auto on MacOS
+alias ls="ls -aFG"
+
 realpath() {
     # for some reason MacOS doesn't have this builtin :(
     if [[ $# -eq 0 ]]; then
