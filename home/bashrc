@@ -14,6 +14,7 @@ HISTIGNORE="pwd"
 PS1='\[\033[01;32m\]\u@\h:\[\033[01;34m\]\w\[\033[0m\]\$ '
 
 export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
+export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$PATH"
 export EDITOR=vim
 export VISUAL=vim
 export VIRTUALENVWRAPPER_SCRIPT=~/.local/bin/virtualenvwrapper.sh
@@ -88,10 +89,10 @@ __src() {
 }
 
 # source external files
+__src "/usr/share/bash-completion/bash_completion"
 __src "$HOME/.tokens"
 __src "$HOME/src/keggsmurph21/backstack/backstack.bash"
 __src "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
-__src "/usr/share/bash-completion/bash_completion"
 __src "$HOME/src/keggsmurph21/wt/scripts/wt.bash"
 case "$OSTYPE" in
     linux-gnu)  __src "$HOME/.bashrc.linux" ;;
