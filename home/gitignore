@@ -6,3 +6,6 @@ model/nbproject
 
 # local config
 *.local
+
+# backups created by `bak`
+*_[0123456789]*[0123456789].bak

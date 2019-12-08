@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+for filename in "$@"; do
+    if echo "$filename" | grep -qE '_\d{10}.bak$'; then
+        rm -i "$filename"
+    fi
+done

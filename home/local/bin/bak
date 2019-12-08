@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+for orig_filename in "$@"; do
+    new_filename="${orig_filename}_$(date +%s).bak"
+    cp -i "$orig_filename" "$new_filename"
+    echo "backed up: $new_filename" >&2
+done
