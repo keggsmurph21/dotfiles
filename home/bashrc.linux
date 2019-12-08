@@ -3,6 +3,10 @@
 # --color=auto is -G on MacOS
 alias ls="ls -aF --color=auto"
 
+# MacOS has pb(copy|paste) already available
+alias xcopy="xclip -i -selection c"
+alias xpaste="xclip -o -selection c"
+
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias dir='dir --color=auto'
