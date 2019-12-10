@@ -7,16 +7,16 @@ cd "$(dirname $0)"
 # move dotfiles to $HOME
 
 __backup_and_link() {
-	src="$1"
-	tar="$2"
+    src="$1"
+    tar="$2"
     [ -e "$tar" ] && ./bin/bak "$tar"
-	ln -sf "$src" "$tar"
-	echo "linked: $tar@ -> $src"
+    ln -sf "$src" "$tar"
+    echo "linked: $tar@ -> $src"
 }
 
 for rcfile in ./home/*; do
-	basename="$(basename "$rcfile")"
-	__backup_and_link "$(pwd)/home/$basename" "$HOME/.$basename"
+    basename="$(basename "$rcfile")"
+    __backup_and_link "$(pwd)/home/$basename" "$HOME/.$basename"
 done
 
 # set up directory structure
