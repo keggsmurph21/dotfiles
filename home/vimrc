@@ -104,6 +104,8 @@ augroup binaryfile
     au BufWritePost *.bin,*.class set nomod | endif
 augroup END
 
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
 " return to last edit position when opening files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
