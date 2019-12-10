@@ -20,6 +20,8 @@ call vundle#begin()
     Plugin 'xavierd/clang_complete'
     Plugin 'scrooloose/nerdtree'
     "Plugin 'vim-syntastic/syntastic'
+    Plugin 'vim-airline/vim-airline'
+    Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 
@@ -191,3 +193,7 @@ let g:clang_auto_select=0
 let g:clang_close_preview=1
 let g:clang_complete_macros=1
 
+" vim-airline
+let g:airline_theme='custom'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_symbols_ascii = 1
