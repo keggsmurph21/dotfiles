@@ -92,6 +92,18 @@ set wrap
 
 set background=dark
 
+" automatically open files in hex mode
+augroup binaryfile
+    au!
+    au BufReadPre   *.bin,*.class let &bin=1
+    au BufReadPost  *.bin,*.class if &bin | %!xxd
+    au BufReadPost  *.bin,*.class set filetype=xxd | endif
+    au BufWritePre  *.bin,*.class if &bin | %!xxd -r
+    au BufWritePre  *.bin,*.class endif
+    au BufWritePost *.bin,*.class if &bin | %!xxd
+    au BufWritePost *.bin,*.class set nomod | endif
+augroup END
+
 " return to last edit position when opening files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
