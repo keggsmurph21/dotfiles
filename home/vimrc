@@ -22,6 +22,7 @@ call vundle#begin()
     "Plugin 'vim-syntastic/syntastic'
     Plugin 'vim-airline/vim-airline'
     Plugin 'tpope/vim-fugitive'
+    Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
 
@@ -94,6 +95,8 @@ set wrap
 
 set background=dark
 
+set hidden " allow hiding modified buffers
+
 " automatically open files in hex mode
 augroup binaryfile
     au!
@@ -129,9 +132,9 @@ vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
 
 " move line (up|down) with Ctrl+[jk<up><down>]
-nmap <C-K> :m-2<cr>==
+"nmap <C-K> :m-2<cr>==
 nmap <C-UP> :m-2<cr>==
-nmap <C-J> :m+<cr>==
+"nmap <C-J> :m+<cr>==
 nmap <C-DOWN> :m+<cr>==
 
 " pretty-print JSON
@@ -161,30 +164,18 @@ map <C-k> <C-w>k
 map <C-h> <C-w>h
 map <C-l> <C-w>l
 
-" close current buffer
-map <leader>bd :Bclose<cr>:tabclose<cr>gT
+" create a new buffer (list all with :ls)
+nmap <leader>t :enew<cr>
+
+" close current buffer and move to previous
+nmap <leader>q :bprevious<bar>bdelete #<cr>
 
 " close all buffers
-map <leader>ba :bufdo bd<cr>
+nmap <leader>Q :bufdo bd<cr>
 
 " move b/w buffers
-map <leader>l :bnext<cr>
-map <leader>h :bprevious<cr>
-
-" manage tabs
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
-map <leader>t<leader> :tabnext
-
-" 'tl' toggles b/w this and last accessed tab
-let g:lasttab=1
-nmap <leader>tl :exe "tabn ".g:lasttab<cr>
-au TabLeave * let g:lasttab = tabpagenr()
-
-" opens new tab w/ current buffer's path
-"map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+nmap <leader>l :bnext<cr>
+nmap <leader>h :bprevious<cr>
 
 " clang_complete
 autocmd FileType c,cpp,objc ClangFormatAutoEnable
@@ -197,3 +188,27 @@ let g:clang_complete_macros=1
 let g:airline_theme='custom'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_symbols_ascii = 1
+
+" CtrlP
+" ---------------------------------------
+" <c-f>/<c-b>   cycle b/w modes
+" <c-d>         search filename only
+" <c-r>         search regex
+" <c-j>/<c-k>   navigate results list
+" <c-t>         open in new tab
+" <c-v>         open in vsplit
+" <c-x>         open in xsplit
+" <c-n>/<c-p>   cycle thru prompt history
+" <c-y>         create new file & parent dirs
+" <c-z>         mark/unmark file
+" <c-o>         open marked files
+" :<command>    execute <command> after opening (e.g. :25)
+nmap <c-p> :CtrlP<cr>
+let g:ctrlp_custom_ignore = {
+    \   'dir':  '\v[\/](\.git|__pycache__|efs)$',
+    \   'file': '\v\.(o|class|png|jpg|jpeg)$',
+    \}
+let g:ctrlp_max_files=0
+let g:ctrlp_clear_cache_on_exit=0
+let g:ctrlp_working_path_mode = 'r'
+
