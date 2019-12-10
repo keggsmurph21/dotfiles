@@ -30,6 +30,7 @@ if which go &>/dev/null; then
 fi
 
 # system aliases
+alias sudo="sudo " # allow $ sudo <alias>
 alias vi=vim
 alias python=python3
 alias pip=pip3
