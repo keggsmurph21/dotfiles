@@ -22,11 +22,14 @@
     ui = auto
 
 [pretty]
-    line = "%C(auto)%h %<|(60,trunc)%s %C(green)%ad%C(auto)%d"
+    line = "%C(auto)%h %<|(80,trunc)%s %C(green)%ad%C(auto)%d"
     detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
 
 [credential]
     helper = cache
+
+[log]
+    date = local
 
 [alias]
     a       = add
@@ -75,7 +78,7 @@
     null    = hash-object -t tree /dev/null
 
     l       = log
-    lol     = log --pretty=oneline
+    lol     = log --pretty=line
     lp      = log -p
     lpw     = log -p --color-words
     lstat   = log --stat
