@@ -25,6 +25,9 @@ git_username=$(git config --get user.name | sed 's/@.*//g')
 mkdir -p "$HOME/src/$git_username" \
          "$HOME/.local/bin"
 
+# install vim plugins via vundle
+vim +PluginInstall
+
 cat <<EOM
 > Success! Don't forget to source ~/.bashrc :^)
 EOM
