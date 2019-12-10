@@ -29,5 +29,5 @@ elif args.command == 'pull':
     run('git pull')
 
 elif args.command == 'status':
-    run('git status -s')
+    run('git status -sb')
 
