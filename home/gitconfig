@@ -35,8 +35,9 @@
     au      = add -u
     aup     = add -up
 
-    br      = checkout -b
+    bd      = branch -D
     bl      = branch --all -vv
+    br      = checkout -b
 
     c       = commit -v
     ca      = commit -v --amend
