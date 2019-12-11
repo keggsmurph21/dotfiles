@@ -32,8 +32,7 @@ fi
 # system aliases
 alias sudo="sudo " # allow $ sudo <alias>
 alias vi=vim
-alias python=python3
-alias pip=pip3
+alias pip="python -m pip"
 alias g=git
 alias pwd="pwd -P"
 alias tree="tree -a -I '.git|__pycache__|*.pyc'"
