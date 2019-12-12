@@ -146,8 +146,8 @@ vnoremap <C-c> "+yy
 nnoremap <C-v> "+P
 
 " accidental caps
-command W w
-command Q q
+command! W w
+command! Q q
 command Wq wq
 command WQ wq
 command Qw wq
