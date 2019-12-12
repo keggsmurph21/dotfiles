@@ -9,7 +9,7 @@ if [[ $# -ge 1 ]] && [[ "$1" =~ "--?y(es)?" ]]; then
 fi
 
 for filename in "$@"; do
-    if echo "$filename" | grep -qE '_\d{10}.bak$'; then
+    if echo "$filename" | grep -qE '_[0-9]{10}.bak$'; then
         if [[ $confirm == yes ]]; then
             rm -i "$filename"
         else
