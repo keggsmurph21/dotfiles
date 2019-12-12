@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ssh-keygen -l -E md5 -f "$1" \
+    | sed -E 's/^.*MD5:([a-f0-9:]*) .*$/\1/'
+
