@@ -31,6 +31,12 @@
 [log]
     date = local
 
+[lfs]
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+
 [alias]
     a       = add
     af      = add -N
