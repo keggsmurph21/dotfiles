@@ -21,7 +21,7 @@ __prompt_rc_color() {
 PS1='\[`__prompt_rc_color`\]\u@\h\[\e[0m\]:\[\e[01;34m\]\w\[\e[0m\]\$ '
 
 export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
-export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$PATH"
+export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$HOME/.cargo/bin:$PATH"
 export EDITOR=vim
 export VISUAL=vim
 export VIRTUALENVWRAPPER_SCRIPT=~/.local/bin/virtualenvwrapper.sh
