@@ -11,7 +11,14 @@ HISTFILESIZE=2000
 HISTIGNORE="pwd"
 
 # prompt
-PS1='\[\033[01;32m\]\u@\h:\[\033[01;34m\]\w\[\033[0m\]\$ '
+__prompt_rc_color() {
+    if [[ $? -eq 0 ]]; then
+        echo -e '\e[01;32m'
+    else
+        echo -e '\e[01;31m'
+    fi
+}
+PS1='\[`__prompt_rc_color`\]\u@\h\[\e[0m\]:\[\e[01;34m\]\w\[\e[0m\]\$ '
 
 export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
 export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$PATH"
