@@ -26,7 +26,12 @@ git_username="$( (git config --get user.name || true) | sed 's/@.*//g')"
         "$HOME/.local/bin"
 
 # install vim plugins via vundle
-vim +PluginInstall
+vim +PluginInstall +qall
+
+# copy custom vim plugin into expected location :^)
+ln -sf \
+    "$(pwd)/vim/custom-airline-theme.vim" \
+    "$HOME/.vim/bundle/vim-airline/autoload/airline/themes/custom.vim"
 
 cat <<EOM
 > Success! Don't forget to source ~/.bashrc :^)
