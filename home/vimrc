@@ -23,6 +23,7 @@ call vundle#begin()
     Plugin 'vim-airline/vim-airline'
     Plugin 'tpope/vim-fugitive'
     Plugin 'kien/ctrlp.vim'
+    Plugin 'cespare/vim-toml'
 
 call vundle#end()
 
