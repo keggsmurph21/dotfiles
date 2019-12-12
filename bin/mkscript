@@ -7,7 +7,7 @@ if [[ $# -ne 1 ]] || [[ $1 == '-h' ]]; then
     exit 1
 fi
 
-PREFIX="$DOTFILES_DIR/home/local/bin"
+PREFIX="$DOTFILES_DIR/bin"
 path="$PREFIX/$1"
 
 if [[ -f "$path" ]]; then
