@@ -43,6 +43,7 @@
     ap      = add -p
     au      = add -u
     aup     = add -up
+    ac      = ! git add -up && git commit -v
 
     bd      = branch -D
     bl      = branch --all -vv
