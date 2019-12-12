@@ -20,10 +20,10 @@ for rcfile in ./home/*; do
 done
 
 # set up directory structure
-
-git_username=$(git config --get user.name | sed 's/@.*//g')
-mkdir -p "$HOME/src/$git_username" \
-         "$HOME/.local/bin"
+git_username="$( (git config --get user.name || true) | sed 's/@.*//g')"
+[[ -z "$git_username" ]] || mkdir -p \
+        "$HOME/src/$git_username" \
+        "$HOME/.local/bin"
 
 # install vim plugins via vundle
 vim +PluginInstall
