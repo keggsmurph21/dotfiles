@@ -95,6 +95,13 @@ git-find() {
     git ls-files $(git root) | grep "$@"
 }
 
+# interact with DOTFILES repo from anywhere
+dot() {
+    pushd "$DOTFILES_DIR" >/dev/null
+    git "$@"
+    popd >/dev/null
+}
+
 __src() {
     [ -r "$1" ] && . "$1" &>/dev/null || true
 }
