@@ -100,9 +100,11 @@ __src() {
 }
 
 # source external files
+for file in $(ls "$DOTFILES_DIR/bash-sources"); do
+    __src "$DOTFILES_DIR/bash-sources/$file"
+done
 __src "/usr/share/bash-completion/bash_completion"
 __src "$HOME/.tokens"
-__src "$HOME/src/keggsmurph21/backstack/backstack.bash"
 __src "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
 __src "$HOME/.opam/opam-init/init.sh"
 __src "$HOME/src/keggsmurph21/wt/scripts/wt.bash"
