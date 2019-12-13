@@ -1,2 +1,13 @@
 #!/bin/bash
+cat <<BEANS
+ _______________
+< what's beadly >
+ ---------------
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||
+BEANS
+
 source $HOME/.bashrc
