@@ -46,7 +46,7 @@ function back() {
         else
             echo "directory no longer exists: $target, skipping..." >&2
         fi
-        sed -i '$ d' $BACKSTACK
+        sed -iE '$ d' $BACKSTACK
     else
         echo "cannot go back any farther" >&2
     fi
@@ -61,7 +61,7 @@ function fw() {
         else
             echo "directory no longer exists: $target, skipping..." >&2
         fi
-        sed -i '$ d' $FWSTACK
+        sed -iE '$ d' $FWSTACK
     else
         echo "cannot go fw any farther" >&2
     fi
