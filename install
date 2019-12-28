@@ -9,7 +9,13 @@ cd "$(dirname $0)"
 __backup_and_link() {
     src="$1"
     tar="$2"
-    [ -e "$tar" ] && ./bin/bak "$tar"
+    if [ -e "$tar" ]; then
+        src_hash=$(git hash-object "$src")
+        tar_hash=$(git hash-object "$tar")
+        if [[ $src_hash != $tar_hash ]]; then
+            ./bin/bak "$tar"
+        fi
+    fi
     ln -sf "$src" "$tar"
     echo "linked: $tar@ -> $src"
 }
