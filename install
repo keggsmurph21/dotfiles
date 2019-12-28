@@ -32,6 +32,8 @@ git_username="$( (git config --get user.email || true) | sed 's/@.*//g')"
         "$HOME/.local/bin"
 
 # install vim plugins via vundle
+[[ -d ~/.vim/bundle/Vundle.vim ]] \
+    || git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
 
 # copy custom vim plugin into expected location :^)
