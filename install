@@ -20,7 +20,7 @@ for rcfile in ./home/*; do
 done
 
 # set up directory structure
-git_username="$( (git config --get user.name || true) | sed 's/@.*//g')"
+git_username="$( (git config --get user.email || true) | sed 's/@.*//g')"
 [[ -z "$git_username" ]] || mkdir -p \
         "$HOME/src/$git_username" \
         "$HOME/.local/bin"
