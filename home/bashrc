@@ -126,5 +126,8 @@ __src "$HOME/.bashrc.local"
 
 unset __src
 
+# read the inputrc file if it exists
+[ -r "$HOME/.inputrc" ] && bind -f "$HOME/.inputrc"
+
 # start the ssh-agent
 eval "$(ssh-agent)" >/dev/null
