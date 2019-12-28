@@ -20,6 +20,18 @@ __backup_and_link() {
     echo "linked: $tar@ -> $src"
 }
 
+__install_dependency() {
+    if uname -a | grep Ubuntu; then
+        sudo apt-get install -y "$1"
+    else
+        echo "Unrecognized OS! Aborting..." >&2
+        exit 1
+    fi
+}
+
+# ensure we have `git`
+which git &>/dev/null || __install_dependency git
+
 for rcfile in ./home/*; do
     basename="$(basename "$rcfile")"
     __backup_and_link "$(pwd)/home/$basename" "$HOME/.$basename"
