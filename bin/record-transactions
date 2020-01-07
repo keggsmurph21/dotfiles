@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+
+from datetime import datetime
+from google_auth_oauthlib.flow import InstalledAppFlow  # type: ignore
+from google.auth.transport.requests import Request as AuthRequest  # type: ignore
+from google.oauth2.credentials import Credentials  # type: ignore
+from typing import IO, Iterable, Optional, Tuple
+
+import argparse
+import os
+import pickle
+
+
+def clean_date(date_entry: str) -> datetime:
+    return datetime.strptime(date_entry, "%m/%d/%Y")
+
+
+def clean_currency(amount_entry: str) -> float:
+    factor = 1
+    if amount_entry.startswith("-"):
+        factor = -1
+        amount_entry = amount_entry[1:]
+    if not amount_entry.startswith("$"):
+        raise ValueError("Invalid currency format")
+    return float(amount_entry[1:]) * factor
+
+
+def iter_records(
+    records_fp: IO[str], includes_header: bool, delimiter: str
+) -> Iterable[Tuple[datetime, str, float]]:
+
+    if includes_header:
+        records_fp.readline()  # consume one
+    for lineno, line in enumerate(records_fp):
+        fields = line.strip().split(",")
+        try:
+            if len(fields) == 1 and fields[0] == "":
+                continue
+            elif len(fields) == 3:
+                date, desc, amount = fields
+                yield clean_date(date), desc, clean_currency(amount)
+            elif len(fields) == 4 and fields[3] == '""':
+                date, desc, amount, _ = fields
+                yield clean_date(date), desc, clean_currency(amount)
+            else:
+                raise ValueError(f"Wrong number of fields")
+        except ValueError as e:
+            raise ValueError(f"Invalid record at line {lineno}: '{fields}'") from e
+
+
+def validate_credentials(credentials_fp: IO[str]) -> Credentials:
+    TOKEN_PATH = "/tmp/google-api-token.pkl"
+    SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+    creds: Optional[Credentials] = None
+    if os.path.exists(TOKEN_PATH):
+        with open(TOKEN_PATH, "rb") as token_fp:
+            creds = pickle.load(token_fp)
+            assert isinstance(creds, Credentials)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(AuthRequest())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                credentials_fp.name, scopes=SCOPES
+            )
+            creds = flow.run_local_server(port=0)
+        with open(TOKEN_PATH, "wb") as token_fp:
+            pickle.dump(creds, token_fp)
+    return creds
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("records", type=argparse.FileType("r"))
+    parser.add_argument("--no-header", dest="includes_header", action="store_false")
+    parser.add_argument("-d", "--delimiter", default=",")
+    parser.add_argument("--credentials", type=argparse.FileType("r"), required=True)
+    args = parser.parse_args()
+
+    print(args)
+
+    creds = validate_credentials(args.credentials)
+
+    for date, desc, amount in iter_records(
+        args.records, args.includes_header, args.delimiter
+    ):
+        print(date, desc, amount)
