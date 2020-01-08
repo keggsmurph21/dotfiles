@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+pattern="(\$"
+for pattern_arg in "$@"; do
+    pattern="$pattern|$pattern_arg"
+done
+pattern="$pattern)"
+
+cat | grep --color=auto -E "$pattern"
