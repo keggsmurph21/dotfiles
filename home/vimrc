@@ -26,6 +26,7 @@ call vundle#begin()
     Plugin 'cespare/vim-toml'
     Plugin 'psf/black'
     Plugin 'elzr/vim-json'
+    Plugin 'vim-latex/vim-latex'
 
 call vundle#end()
 
