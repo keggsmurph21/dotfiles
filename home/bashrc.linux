@@ -18,3 +18,8 @@ fi
 
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+# automatically write PNGs to system clipboard
+l2p() {
+    "$HOME/src/keggsmurph21/latex2png/latex2png" "$@" \
+        | xclip -selection c -t image/png -i
+}
