@@ -3,6 +3,12 @@
 set nocompatible
 filetype off
 
+" vi can only have one version of python loaded at a time, so
+" the first version that gets loaded is the only one that we
+" can load.  Thus, we explicitly load python3 here...
+if has('python3')
+endif
+
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
