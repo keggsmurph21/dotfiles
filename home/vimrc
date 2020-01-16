@@ -225,3 +225,7 @@ let g:ctrlp_working_path_mode = 'r'
 " black
 let g:black_quiet=1
 autocmd BufWritePre *.py execute ':Black'
+
+if filereadable(expand('~/.vimrc.local'))
+    source ~/.vimrc.local
+endif
