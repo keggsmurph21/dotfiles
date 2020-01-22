@@ -229,3 +229,10 @@ autocmd BufWritePre *.py execute ':Black'
 if filereadable(expand('~/.vimrc.local'))
     source ~/.vimrc.local
 endif
+
+" autoformatting XML / HTML
+function Tidy(type)
+    :silent execute "!tidy -q -mi -".a:type." -wrap %" | edit! | redraw!
+endfunction
+cnoremap <leader>xml call Tidy("xml")
+cnoremap <leader>html call Tidy("html")
