@@ -163,7 +163,7 @@ command Qw wq
 command QW wq
 
 " save as sudo
-cmap w!! w !sudo tee % > /dev/null <cr>l
+cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
 
 " tell vim to re-detect filetype
 cmap #! filetype detect<cr>
