@@ -157,10 +157,10 @@ nnoremap <C-v> "+P
 " accidental caps
 command! W w
 command! Q q
-command Wq wq
-command WQ wq
-command Qw wq
-command QW wq
+command! Wq wq
+command! WQ wq
+command! Qw wq
+command! QW wq
 
 " save as sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
@@ -231,7 +231,7 @@ if filereadable(expand('~/.vimrc.local'))
 endif
 
 " autoformatting XML / HTML
-function Tidy(type)
+function! Tidy(type)
     :silent execute "!tidy -q -mi -".a:type." -wrap %" | edit! | redraw!
 endfunction
 cnoremap <leader>xml call Tidy("xml")
