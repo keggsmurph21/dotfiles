@@ -240,3 +240,5 @@ function! Tidy(type)
 endfunction
 cnoremap <leader>xml call Tidy("xml")
 cnoremap <leader>html call Tidy("html")
+
+iabbrev @@ kevin@murp.us
