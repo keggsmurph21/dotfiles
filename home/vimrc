@@ -248,3 +248,7 @@ nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 vnoremap <leader>" <esc>`<i"<esc>`>la"<esc>`<lv`>ll
 vnoremap <leader>' <esc>`<i'<esc>`>la'<esc>`<lv`>ll
+
+" easier movement to beginning / end of line
+nnoremap H 0
+nnoremap L $
