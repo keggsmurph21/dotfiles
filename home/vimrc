@@ -162,6 +162,10 @@ command! WQ wq
 command! Qw wq
 command! QW wq
 
+" edit/source vimrc
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
 " save as sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
 
