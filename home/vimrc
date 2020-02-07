@@ -174,12 +174,12 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
 
 " move line (up|down) with Ctrl+[jk<up><down>]
 "nmap <C-K> :m-2<cr>==
-nmap <C-UP> :m-2<cr>==
+nnoremap <C-UP> :m-2<cr>==
 "nmap <C-J> :m+<cr>==
-nmap <C-DOWN> :m+<cr>==
+nnoremap <C-DOWN> :m+<cr>==
 
 " pretty-print JSON
-map <leader>j :%!python -m json.tool<cr>
+nnoremap <leader>j :%!python -m json.tool<cr>
 
 " copy / paste to system clipboard
 vnoremap <C-c> "+yy
@@ -193,26 +193,26 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
 
 " tell vim to re-detect filetype
-cmap #! filetype detect<cr>
+cnoremap #! filetype detect<cr>
 
 " move b/w windows
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-l> <C-w>l
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-h> <C-w>h
+noremap <C-l> <C-w>l
 
 " create a new buffer (list all with :ls)
-nmap <leader>t :enew<cr>
+nnoremap <leader>t :enew<cr>
 
 " close current buffer and move to previous
-nmap <leader>q :bprevious<bar>bdelete #<cr>
+nnoremap <leader>q :bprevious<bar>bdelete #<cr>
 
 " close all buffers
-nmap <leader>Q :bufdo bd<cr>
+nnoremap <leader>Q :bufdo bd<cr>
 
 " move b/w buffers
-nmap <leader>l :bnext<cr>
-nmap <leader>h :bprevious<cr>
+nnoremap <leader>l :bnext<cr>
+nnoremap <leader>h :bprevious<cr>
 
 " quote word
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
@@ -267,7 +267,7 @@ let g:airline_symbols_ascii = 1
 " <c-z>         mark/unmark file
 " <c-o>         open marked files
 " :<command>    execute <command> after opening (e.g. :25)
-nmap <c-p> :CtrlP<cr>
+nnoremap <c-p> :CtrlP<cr>
 let g:ctrlp_custom_ignore = {
     \   'dir':  '\v[\/](\.git|__pycache__|efs)$',
     \   'file': '\v\.(o|class|png|jpg|jpeg)$',
