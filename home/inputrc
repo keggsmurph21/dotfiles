@@ -45,3 +45,6 @@ set convert-meta off
 # Cycle thru autocomplete
 "\C-n": menu-complete
 "\C-b": menu-complete-backward
+
+# Treat hyphens and underscores the same
+set completion-map-case on
