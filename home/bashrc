@@ -1,16 +1,31 @@
+# Prelude {{{
+
+# vim: foldmethod=marker:foldlevel=0
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+
+# }}}
+
+# Shell options {{{
 
 shopt -s histappend
 shopt -s checkwinsize
 shopt -s globstar
+
+# }}}
+
+# History {{{
 
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
 HISTIGNORE="pwd"
 
-# prompt
+# }}}
+
+# Prompt {{{
+
 __prompt_rc_color() {
     if [[ $? -eq 0 ]]; then
         echo -e '\e[01;32m' # bright green
@@ -19,6 +34,10 @@ __prompt_rc_color() {
     fi
 }
 PS1='\[`__prompt_rc_color`\]\u@\h\[\e[0m\]:\[\e[01;34m\]\w\[\e[0m\]\$ '
+
+# }}}
+
+# Exports {{{
 
 export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
 export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$HOME/.cargo/bin:$PATH"
@@ -37,7 +56,11 @@ if which go &>/dev/null; then
     export PATH="$PATH:$GOPATH/bin"
 fi
 
-# system aliases
+# }}}
+
+# Aliases {{{
+
+# system {{{
 alias sudo="sudo " # allow $ sudo <alias>
 alias vi=vim
 alias pip="python -m pip"
@@ -47,14 +70,16 @@ alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pyte
 alias grep="grep --color=auto --devices=skip -I"
 alias cat="cat -v" # show ^/M- escapes for nonprintable chars
 alias hl=highlight
+# }}}
 
-# edit bash config file && source it
+# bash rc files {{{
 alias bashrc="vim $HOME/.bashrc && . $HOME/.bashrc"
 alias bashrclocal="vim $HOME/.bashrc.local && . $HOME/.bashrc"
 alias bashrcmacos="vim $HOME/.bashrc.macos && . $HOME/.bashrc"
 alias bashrclinux="vim $HOME/.bashrc.linux && . $HOME/.bashrc"
+# }}}
 
-# other quick edit-config-file shortcuts
+# other rc files {{{
 alias bashprofile="vim $HOME/.bash_profile"
 alias bashlogout="vim $HOME/.bash_logout"
 alias vimrc="vim $HOME/.vimrc"
@@ -63,11 +88,17 @@ alias sshconf="vim $HOME/.ssh/config"
 alias gitconf="vim $HOME/.gitconfig"
 alias inputrc="vim $HOME/.inputrc"
 alias xinitrc="vim $HOME/.xinitrc"
+# }}}
 
-# custom aliases
+# one-liners {{{
 alias peek='tee >(cat 1>&2)' # mirror stdout to stderr (for seeing data thru pipe)
 alias gtrim="trim \$(git status --porcelain | sed 's/^...//g')"
 alias ipaddr="curl https://api.ipify.org/"
+# }}}
+
+# }}}
+
+# Functions {{{
 
 # trim whitespace
 trim() {
@@ -104,6 +135,10 @@ dot() {
     popd >/dev/null
 }
 
+# }}}
+
+# Other sources {{{
+
 __src() {
     [ -r "$1" ] && . "$1" &>/dev/null || true
 }
@@ -128,8 +163,14 @@ __src "$HOME/.bashrc.local"
 
 unset __src
 
+# }}}
+
+# Misc {{{
+
 # read the inputrc file if it exists
 [ -r "$HOME/.inputrc" ] && bind -f "$HOME/.inputrc"
 
 # start the ssh-agent
 eval "$(ssh-agent)" >/dev/null
+
+# }}}
