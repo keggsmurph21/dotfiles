@@ -173,6 +173,9 @@ command! QW wq
 nnoremap j gj
 nnoremap k gk
 
+" toggle fold
+nnoremap <space> za
+
 " visual-mode pressing */# searches for current selection
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
