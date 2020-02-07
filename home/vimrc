@@ -87,10 +87,10 @@ set relativenumber
 set numberwidth=4
 
 set encoding=utf8
-set ffs=unix
+set fileformats=unix
 
 set nobackup
-set nowb
+set nowritebackup
 set noswapfile
 
 set expandtab
