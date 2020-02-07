@@ -233,6 +233,9 @@ vnoremap <leader>' <esc>`<i'<esc>`>la'<esc>`<lv`>ll
 nnoremap H ^
 nnoremap L $
 
+" clear hlsearch
+nnoremap <leader><space> :nohlsearch<cr>
+
 " autoformatting XML / HTML
 function! Tidy(type)
     :silent execute "!tidy -q -mi -".a:type." -wrap %" | edit! | redraw!
