@@ -1,5 +1,9 @@
 $include /etc/inputrc
 
+# To re-source this file, use one of
+#   $ C^x C^r
+#   $ bind -f ~/.inputrc
+
 # Make Tab autocomplete regardless of filename case
 set completion-ignore-case on
 
