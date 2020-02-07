@@ -1,5 +1,7 @@
+" General {{{
 
-" [general]
+" vim:foldmethod=marker:foldlevel=0
+
 set nocompatible
 filetype off
 
@@ -8,6 +10,13 @@ filetype off
 " can load.  Thus, we explicitly load python3 here...
 if has('python3')
 endif
+
+filetype plugin on
+filetype indent on
+
+syntax enable " highlighting
+
+let mapleader = "\\" " for extra key combos
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -36,12 +45,9 @@ call vundle#begin()
 
 call vundle#end()
 
-filetype plugin on
-filetype indent on
+" }}}
 
-syntax enable " highlighting
-
-let mapleader = "\\" " for extra key combos
+" Editor {{{
 
 set history=420
 set autoread " read when a file is changed from outside
@@ -62,7 +68,6 @@ set hlsearch " highlight search results
 " display <tab> as >\u00b7+ and &nbsp; as \u23b5 (<C-v>u....)
 set list
 set listchars=tab:>·,nbsp:⎵
-highlight SpecialKey ctermfg=darkgrey
 
 set linebreak " softwrap: break intelligently
 set showcmd " show current command buffer
@@ -80,12 +85,6 @@ set matchtime=2 " blink speed for bracket matching
 set number
 set relativenumber
 set numberwidth=4
-highlight LineNr ctermfg=DarkGrey ctermbg=NONE
-augroup numbertoggle
-    autocmd!
-    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-    autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
-augroup end
 
 set encoding=utf8
 set ffs=unix
@@ -107,6 +106,35 @@ set background=dark
 
 set hidden " allow hiding modified buffers
 
+set foldenable
+set foldlevelstart=10   " only fold after 10 levels
+set foldnestmax=10      " only allow 10 levels of nest
+set foldmethod=indent
+
+" }}}
+
+" Highlighting {{{
+
+highlight SpecialKey ctermfg=darkgrey
+highlight LineNr ctermfg=DarkGrey ctermbg=NONE
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%$\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" }}}
+
+" Autocommands {{{
+
+augroup numbertoggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
+augroup end
+
 " automatically open files in hex mode
 augroup binaryfile
     au!
@@ -124,19 +152,22 @@ au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 " return to last edit position when opening files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-" highlight trailing whitespace in red
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%$\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+" }}}
+
+" Functions, Mappings, etc. {{{
 
 " unbind things
 map <C-a> <Nop>
 map <C-x> <Nop>
 nmap Q <Nop>
 
+" accidental caps
+command! W w
+command! Q q
+command! Wq wq
+command! WQ wq
+command! Qw wq
+command! QW wq
 " visual-mode pressing */# searches for current selection
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
@@ -153,14 +184,6 @@ map <leader>j :%!python -m json.tool<cr>
 " copy / paste to system clipboard
 vnoremap <C-c> "+yy
 nnoremap <C-v> "+P
-
-" accidental caps
-command! W w
-command! Q q
-command! Wq wq
-command! WQ wq
-command! Qw wq
-command! QW wq
 
 " edit/source vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -191,19 +214,46 @@ nmap <leader>Q :bufdo bd<cr>
 nmap <leader>l :bnext<cr>
 nmap <leader>h :bprevious<cr>
 
-" clang_complete
+" quote word
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
+vnoremap <leader>" <esc>`<i"<esc>`>la"<esc>`<lv`>ll
+vnoremap <leader>' <esc>`<i'<esc>`>la'<esc>`<lv`>ll
+
+" easier movement to beginning / end of line
+nnoremap H ^
+nnoremap L $
+
+" autoformatting XML / HTML
+function! Tidy(type)
+    :silent execute "!tidy -q -mi -".a:type." -wrap %" | edit! | redraw!
+endfunction
+cnoremap <leader>xml call Tidy("xml")
+cnoremap <leader>html call Tidy("html")
+
+iabbrev @@ kevin@murp.us
+
+" }}}
+
+" Plugin:clang_complete {{{
+
 autocmd FileType c,cpp,objc ClangFormatAutoEnable
 let g:clang_library_path='/usr/lib/x86_64-linux-gnu/libclang-6.0.so.1'
 let g:clang_auto_select=0
 let g:clang_close_preview=1
 let g:clang_complete_macros=1
 
-" vim-airline
+" }}}
+
+" Plugin:vim-airline {{{
+
 let g:airline_theme='custom'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_symbols_ascii = 1
 
-" CtrlP
+" }}}
+
+" Plugin:CtrlP {{{
 " ---------------------------------------
 " <c-f>/<c-b>   cycle b/w modes
 " <c-d>         search filename only
@@ -226,29 +276,19 @@ let g:ctrlp_max_files=0
 let g:ctrlp_clear_cache_on_exit=0
 let g:ctrlp_working_path_mode = 'r'
 
-" black
+" }}}
+
+" Plugin:black {{{
+
 let g:black_quiet=1
 autocmd BufWritePre *.py execute ':Black'
+
+" }}}
+
+" local config {{{
 
 if filereadable(expand('~/.vimrc.local'))
     source ~/.vimrc.local
 endif
 
-" autoformatting XML / HTML
-function! Tidy(type)
-    :silent execute "!tidy -q -mi -".a:type." -wrap %" | edit! | redraw!
-endfunction
-cnoremap <leader>xml call Tidy("xml")
-cnoremap <leader>html call Tidy("html")
-
-iabbrev @@ kevin@murp.us
-
-" quote word
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
-vnoremap <leader>" <esc>`<i"<esc>`>la"<esc>`<lv`>ll
-vnoremap <leader>' <esc>`<i'<esc>`>la'<esc>`<lv`>ll
-
-" easier movement to beginning / end of line
-nnoremap H 0
-nnoremap L $
+" }}}
