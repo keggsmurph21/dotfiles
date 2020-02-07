@@ -114,6 +114,8 @@
 
     unstage = reset HEAD --
 
+    url     = ls-remote --get-url
+
 [core]
     excludesfile = ~/.gitignore
 
