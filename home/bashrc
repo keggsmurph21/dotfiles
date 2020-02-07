@@ -70,6 +70,9 @@ alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pyte
 alias grep="grep --color=auto --devices=skip -I"
 alias cat="cat -v" # show ^/M- escapes for nonprintable chars
 alias hl=highlight
+if which hub &>/dev/null; then
+    alias git=hub
+fi
 # }}}
 
 # bash rc files {{{
@@ -155,6 +158,7 @@ __src "$HOME/.opam/opam-init/init.sh"
 __src "$HOME/src/keggsmurph21/wt/scripts/wt.bash"
 __src "$NVM_DIR/nvm.sh"
 __src "$NVM_DIR/bash_completion"
+__src "$HOME/src/github/hub/etc/hub.bash_completion.sh"
 case "$OSTYPE" in
     linux-gnu)  __src "$HOME/.bashrc.linux" ;;
     darwin*)    __src "$HOME/.bashrc.macos" ;;
