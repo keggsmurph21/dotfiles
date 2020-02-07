@@ -183,6 +183,7 @@ nnoremap <leader>j :%!python -m json.tool<cr>
 
 " copy / paste to system clipboard
 vnoremap <C-c> "+yy
+nnoremap <C-c> V"+yy
 nnoremap <C-v> "+P
 
 " edit/source vimrc
