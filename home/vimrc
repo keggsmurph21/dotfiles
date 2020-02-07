@@ -250,7 +250,9 @@ iabbrev @@ kevin@murp.us
 
 " }}}
 
-" Plugin:clang_complete {{{
+" Plugins {{{
+
+" clang_complete {{{
 
 autocmd FileType c,cpp,objc ClangFormatAutoEnable
 let g:clang_library_path='/usr/lib/x86_64-linux-gnu/libclang-6.0.so.1'
@@ -260,7 +262,7 @@ let g:clang_complete_macros=1
 
 " }}}
 
-" Plugin:vim-airline {{{
+" vim-airline {{{
 
 let g:airline_theme='custom'
 let g:airline#extensions#tabline#enabled = 1
@@ -268,7 +270,7 @@ let g:airline_symbols_ascii = 1
 
 " }}}
 
-" Plugin:CtrlP {{{
+" CtrlP {{{
 " ---------------------------------------
 " <c-f>/<c-b>   cycle b/w modes
 " <c-d>         search filename only
@@ -293,10 +295,12 @@ let g:ctrlp_working_path_mode = 'r'
 
 " }}}
 
-" Plugin:black {{{
+" black {{{
 
 let g:black_quiet=1
 autocmd BufWritePre *.py execute ':Black'
+
+" }}}
 
 " }}}
 
