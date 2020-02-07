@@ -168,6 +168,11 @@ command! Wq wq
 command! WQ wq
 command! Qw wq
 command! QW wq
+
+" move vertically *visually* (i.e., thru wrapped lines)
+nnoremap j gj
+nnoremap k gk
+
 " visual-mode pressing */# searches for current selection
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<cr>/<C-R>=@/<cr><cr>
