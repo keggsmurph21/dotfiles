@@ -133,6 +133,20 @@ git-find() {
     git ls-files $(git root) | grep "$@"
 }
 
+# host a text file
+0x0st() {
+    local f
+    if [[ $# -eq 0 ]]; then
+        f="-"
+    elif [[ $# -eq 1 ]]; then
+        f="$1"
+    else
+        echo "Too many arguments!" >&2
+        return 1
+    fi
+    curl -F"file=@$f" http://0x0.st
+}
+
 # interact with DOTFILES repo from anywhere
 dot() {
     pushd "$DOTFILES_DIR" >/dev/null
