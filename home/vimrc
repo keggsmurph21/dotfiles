@@ -248,6 +248,9 @@ endfunction
 cnoremap <leader>xml call Tidy("xml")
 cnoremap <leader>html call Tidy("html")
 
+" start writing a command that will be executed by an interactive bash session
+cnoremap <leader><leader> !/bin/bash -i -c '
+
 iabbrev @@ kevin@murp.us
 
 " kill to EOL
