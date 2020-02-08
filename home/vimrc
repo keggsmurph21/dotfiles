@@ -250,6 +250,9 @@ cnoremap <leader>html call Tidy("html")
 
 iabbrev @@ kevin@murp.us
 
+" kill to EOL
+inoremap <C-k> <esc>ld$A
+
 " }}}
 
 " Plugins {{{
