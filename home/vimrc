@@ -168,6 +168,8 @@ command! Wq wq
 command! WQ wq
 command! Qw wq
 command! QW wq
+command! Qa qall
+command! QA qall
 
 " move vertically *visually* (i.e., thru wrapped lines)
 nnoremap j gj
