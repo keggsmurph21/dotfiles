@@ -155,6 +155,11 @@ dot() {
     popd >/dev/null
 }
 
+# get list of all mac-generated files
+find-mac-files() {
+    find "$@" -type f \( -name '._*' -or -name .DS_Store \)
+}
+
 # }}}
 
 # Other sources {{{
