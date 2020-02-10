@@ -160,6 +160,16 @@ find-mac-files() {
     find "$@" -type f \( -name '._*' -or -name .DS_Store \)
 }
 
+# interactively check spelling
+spellcheck() {
+    f=$(mktemp)
+    echo "Words to spellcheck (^D to end):" >&2
+    cat >> $f
+    aspell check $f
+    echo && echo "Spellchecked words:" >&2
+    tail -n+1 $f
+}
+
 # }}}
 
 # Other sources {{{
