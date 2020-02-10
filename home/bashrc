@@ -69,7 +69,6 @@ alias g=git
 alias pwd="pwd -P"
 alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles'"
 alias grep="grep --color=auto --devices=skip -I"
-alias cat="cat -v" # show ^/M- escapes for nonprintable chars
 alias hl=highlight
 if which hub &>/dev/null; then
     alias git=hub
