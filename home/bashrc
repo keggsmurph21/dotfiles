@@ -104,6 +104,12 @@ alias weather="curl https://wttr.in"
 alias late="curl https://cheat.sh/latencies"
 # }}}
 
+# completions for aliases {{{
+complete -o bashdefault -o default -o nospace -F __git_wrap__git_main d
+complete -o bashdefault -o default -o nospace -F __git_wrap__git_main dot
+complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
+# }}}
+
 # }}}
 
 # Functions {{{
