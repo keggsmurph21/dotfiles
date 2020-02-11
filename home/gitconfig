@@ -85,6 +85,8 @@
 
     graph   = log --graph
 
+    isempty = ! test $(git bl | wc -l) -eq 0
+
     null    = hash-object -t tree /dev/null
 
     l       = log
