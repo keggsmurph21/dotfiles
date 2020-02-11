@@ -67,6 +67,7 @@ alias sudo="sudo " # allow $ sudo <alias>
 alias vi=vim
 alias pip="python -m pip"
 alias g=git
+alias d=dot
 alias pwd="pwd -P"
 alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles'"
 alias grep="grep --color=auto --devices=skip -I"
