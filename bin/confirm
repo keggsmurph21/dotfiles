@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+EOF="$(printf "\x04")"
+prompt="${1:-"are you sure? "}"
+
+while true; do
+    read -p "$prompt" -n 1 -r response
+    echo >&2
+    if [[ "$response" == "$EOF" ]]; then
+        exit 1
+    elif [[ "$response" =~ ^[Yy](es)?$ ]]; then
+        exit 0
+    elif [[ "$response" =~ ^[Nn](o)?$ ]]; then
+        exit 1
+    else
+        echo "Unrecognized response: $response" >&2
+    fi
+done
