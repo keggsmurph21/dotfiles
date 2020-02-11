@@ -61,7 +61,6 @@
 
     conf    = config --edit
 
-    count   = ! git diff --stat "$(git null)"
 
     cp      = cherry-pick
 
@@ -109,6 +108,8 @@
     s       = status -sb
 
     sm      = submodule
+
+    tracked = ! git diff --stat "$(git null)"
 
     uncommit= reset --soft HEAD~1 --
 
