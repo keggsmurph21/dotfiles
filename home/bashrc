@@ -74,6 +74,7 @@ alias hl=highlight
 if which hub &>/dev/null; then
     alias git=hub
 fi
+alias wt=__wt_main
 # }}}
 
 # bash rc files {{{
@@ -186,7 +187,6 @@ __src "/usr/share/bash-completion/bash_completion"
 __src "$HOME/.tokens"
 __src "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
 __src "$HOME/.opam/opam-init/init.sh"
-__src "$HOME/src/keggsmurph21/wt/scripts/wt.bash"
 __src "$NVM_DIR/nvm.sh"
 __src "$NVM_DIR/bash_completion"
 __src "$HOME/src/github/hub/etc/hub.bash_completion.sh"

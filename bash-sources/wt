@@ -1,0 +1,133 @@
+#!/bin/bash
+#
+# Kevin Murphy
+# 2/11/20
+#
+# NB: Since this file changes the working directory, it cannot be run in a
+#     subshell.  That is, it is meant to be sourced into the current shell.
+
+
+export WORKTREE_HOME="${WORKTREE_HOME:-$HOME/.local/share/worktrees}"
+
+
+__wt_usage() {
+    cat <<USAGE
+usage: wt [ add <branch> | cd <branch> | ls | rm [branch] | where [branch] | * ]
+
+Manage git-worktrees more nicely.
+
+This tool will add / switch between / remove git-worktrees.  By default, the
+worktrees are stored in "$HOME/.local/share/worktrees" and then namespaced by
+the basename of the root of the current repository.  This can be overriden by
+setting the environment variable WORKTREE_HOME.
+
+    add:   Create a new worktree tracking <branch> if it doesn't already exist,
+           then \`cd\` into it.
+
+    cd:    Create a new worktree tracking <branch> if it doesn't already exist,
+           then \`cd\` into it.
+
+    ls:    List worktrees associated with this repository.
+
+    rm:    Remove a worktree tracking <branch>.
+
+    where: Get the path to a worktree tracking <branch>.
+
+    *:     Any other command will just be forward to git-worktree.
+
+For more information, try
+
+    $ man git-worktree
+USAGE
+}
+
+
+
+__wt_path() {
+    if [ -z "$1" ]; then
+        echo "Missing required arg: branch-name" >&2
+        return 1
+    fi
+    local worktree_root="$WORKTREE_HOME/$(git rname)"
+    local branch_name="$1"
+    local worktree_path="$worktree_root/$branch_name"
+    echo "$worktree_path"
+}
+
+
+__wt_add() {
+    if [ -z "$1" ]; then
+        echo "Missing required arg: branch-name" >&2
+        return 1
+    fi
+    local worktree_path=$(__wt_path "$1")
+    local git_root="$(git root)"
+    local branch_name="$1"
+    local create_branch_arg=""
+    if ! git rev-parse "$branch_name" &> /dev/null; then
+        echo "Unrecognized branch: $branch_name" >&2
+        if confirm "Create new branch: $branch_name? [y/n] "; then
+            create_branch_arg="-b"
+        else
+            return 1
+        fi
+    fi
+    # FIXME: Handle case where two projects have same name (could do it by
+    #        comparing .wt/root to $git_root
+    if [ ! -d "$worktree_path" ]; then
+        git worktree add "$worktree_path" $create_branch_arg "$branch_name"
+        mkdir -p "$worktree_path/.wt"
+        ln -s "$git_root" "$worktree_path/.wt/root"
+    fi
+    cd "$worktree_path"
+}
+
+
+__wt_rm() {
+    if [ -z "$1" ]; then
+        echo "Missing required arg: branch-name" >&2
+        return 1
+    fi
+    local git_root="$(git root)"
+    git worktree remove "$@" || return 1
+    pwd &> /dev/null || cd "$git_root" &> /dev/null
+}
+
+
+__wt_complete() {
+    local curr prev wt_cmds git_cmds branches opts
+    COMPREPLY=()
+    curr="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    branches="$(git branch --list | sed 's/^..//' | sort)"
+    git_cmds="$(get_completions "git worktree ")"
+    wt_cmds="$(echo "add cd ls rm where $git_cmds" | sort)"
+
+    case "$prev" in
+        wt)     opts="$wt_cmds" ;;
+        add|cd|ls|rm|where)
+            opts="$branches" ;;
+        *)      opts="$(get_completions "git worktree $prev ")" ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "$opts" -- $curr) )
+}
+
+
+__wt_main() {
+    cmd="$1"
+    case "$cmd" in
+        -h|--help|help|"")
+                __wt_usage ;;
+        add)    shift && __wt_add "$@" ;;
+        cd)     shift && __wt_add "$@" ;;
+        ls)     shift && git worktree list "$@" ;;
+        rm)     shift && __wt_rm "$@" ;;
+        where)  shift && __wt_path "$@" ;;
+        *)      git worktree "$@" ;;
+    esac
+}
+
+
+complete -F __wt_complete wt

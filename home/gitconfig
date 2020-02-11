@@ -110,7 +110,14 @@
     # get a "canonical" repo name
     rname   = ! basename "$(git root)"
 
-    root    = rev-parse --show-toplevel
+    # get the "root" git dir, even if we're in a (managed) worktree
+    root    = "! __git_root() { \
+                    local repo="$(git rev-parse --show-toplevel)"; \
+                    if [ -L "$repo/.wt/root" ]; then \
+                        repo="$(readlink "$repo/.wt/root")"; \
+                    fi; \
+                    echo "$repo"; \
+                }; __git_root"
 
     s       = status -sb
 
