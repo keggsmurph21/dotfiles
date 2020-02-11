@@ -61,6 +61,7 @@
 
     conf    = config --edit
 
+    count   = rev-list --count HEAD
 
     cp      = cherry-pick
 
