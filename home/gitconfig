@@ -107,6 +107,9 @@
 
     ri      = rebase -i
 
+    # get a "canonical" repo name
+    rname   = ! basename "$(git root)"
+
     root    = rev-parse --show-toplevel
 
     s       = status -sb
