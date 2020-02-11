@@ -49,6 +49,7 @@
 
     bd      = branch -D
     bl      = branch --all -vv
+    bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
     br      = checkout -b
 
     c       = commit -v
