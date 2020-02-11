@@ -12,3 +12,6 @@ model/nbproject
 
 # mypy
 .mypy_cache
+
+# worktree management
+.wt
