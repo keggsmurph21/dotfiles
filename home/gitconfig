@@ -98,7 +98,7 @@
 
     # merge-resolve: Open all files with merge conflicts in
     #   an editor and automatically highlight the conflicts
-    mr      = ! $EDITOR "$(git status -sb | sed -nE 's/^UU (.*)$/\\1/p')" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'
+    mr      = ! $EDITOR "$(git unmerged)" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'
 
     ra      = remote add
 
@@ -111,6 +111,8 @@
     sm      = submodule
 
     uncommit= reset --soft HEAD~1 --
+
+    unmerged= ! git status -sb | sed -nE 's/^UU (.*)$/\\1/p'
 
     unstage = reset HEAD --
 
