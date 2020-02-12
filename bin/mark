@@ -1,0 +1,122 @@
+#!/bin/bash
+#
+# Kevin Murphy
+# 2/11/2020
+
+set -euo pipefail
+
+MARK_DIR="${MARK_DIR:-$HOME/.local/share/mark}"
+MARK_FILE="$MARK_DIR/marks.json"
+if [ ! -d "$MARK_DIR" ]; then
+    mkdir -p "$MARK_DIR"
+fi
+if [ ! -f "$MARK_FILE" ]; then
+    echo '{}' > "$MARK_FILE"
+fi
+
+__mark_usage() {
+    cat <<USAGE >&2
+usage: $ mark [ get M? | set M D? | unset M | clear ]
+
+    It's like bookmarks for your terminal :^)
+
+    Here, M means "mark" or "identifier" or "key", D means "directory",
+    and ? means optional.
+
+    For example,
+
+        $ mark get              # Print out all marks
+        $ mark get foobar       # Print out dir marked as "foobar"
+        $ mark set foobar       # Mark <cwd> as "foobar"
+        $ mark set foobar baz   # Mark ./baz as "foobar"
+        $ mark unset foobar     # Remove the "foobar" mark
+        $ mark clear            # Remove all marks
+
+USAGE
+    exit 1
+}
+
+__mark_sanitize() {
+    echo "$1" | sed 's/[^a-zA-Z0-9$_-]/_/g'
+}
+
+__mark_get() {
+    if [[ $# -eq 0 ]]; then
+        cat "$MARK_FILE" \
+            | jq --raw-output 'to_entries | map(.key + " " + .value)[]' \
+            | column -t
+    elif [[ $# -eq 1 ]]; then
+        local mark=$(__mark_sanitize "$1")
+        cat "$MARK_FILE" \
+            | jq ".$mark" --raw-output
+    else
+        __mark_usage
+    fi
+}
+
+__mark_set() {
+    if [[ $# -eq 1 ]]; then
+        local mark=$(__mark_sanitize "$1")
+        if $(cat "$MARK_FILE" | jq "has(\"$mark\")"); then
+            confirm "Overwrite key \"$mark\"? [y/n] " || exit 1
+        fi
+        cat "$MARK_FILE" \
+            | jq ".$mark = \"$(pwd)\"" \
+            > "$MARK_FILE.tmp"
+        mv "$MARK_FILE.tmp" "$MARK_FILE"
+    elif [[ $# -eq 2 ]]; then
+        local mark=$(__mark_sanitize "$1")
+        if $(cat "$MARK_FILE" | jq "has(\"$mark\")"); then
+            confirm "Overwrite key \"$mark\"? [y/n] " || exit 1
+        fi
+        if [ ! -d "$2" ]; then
+            __mark_usage
+        fi
+        cat "$MARK_FILE" \
+            | jq ".$mark = \"$2\"" \
+            > "$MARK_FILE.tmp"
+        mv "$MARK_FILE.tmp" "$MARK_FILE"
+    else
+        __mark_usage
+    fi
+}
+
+__mark_unset() {
+    if [[ $# -eq 1 ]]; then
+        local mark=$(__mark_sanitize "$1")
+        if ! $(cat "$MARK_FILE" | jq "has(\"$mark\")"); then
+            echo "mark not found: \"$mark\"" >&2
+            exit 1
+        fi
+        confirm "Remove key \"$mark\"? [y/n] " || exit 1
+        cat "$MARK_FILE" \
+            | jq "del(.$mark)" \
+            > "$MARK_FILE.tmp"
+        mv "$MARK_FILE.tmp" "$MARK_FILE"
+    else
+        __mark_usage
+    fi
+}
+
+__mark_clear() {
+    confirm "Clear marks? [y/n] " || exit 1
+    bak "$MARK_FILE" &> /dev/null
+    echo '{}' > "$MARK_FILE"
+}
+
+__mark_complete() {
+    true
+}
+
+if [[ $# -eq 0 ]]; then
+    __mark_usage
+fi
+
+case "$1" in
+    get)    shift && __mark_get "$@" ;;
+    set)    shift && __mark_set "$@" ;;
+    unset)  shift && __mark_unset "$@" ;;
+    clear)  shift && __mark_clear ;;
+    __comp) __mark_complete ;;
+    *)      __mark_usage ;;
+esac
