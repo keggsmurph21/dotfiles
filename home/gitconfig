@@ -47,6 +47,8 @@
     aup     = add -up
     ac      = ! git add -up && git commit -v
 
+    back    = ! git-nav back
+
     bd      = branch -D
     bl      = branch --all -vv
     bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
@@ -86,7 +88,11 @@
     f       = fetch
     fa      = fetch --all -p
 
+    fw      = ! git-nav fw
+
     graph   = log --graph
+
+    history = ! git-nav show
 
     isempty = ! test $(git bl | wc -l) -eq 0
 
@@ -104,6 +110,8 @@
     # merge-resolve: Open all files with merge conflicts in
     #   an editor and automatically highlight the conflicts
     mr      = ! $EDITOR "$(git unmerged)" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'
+
+    nav     = ! git-nav
 
     ra      = remote add
 
