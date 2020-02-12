@@ -75,7 +75,7 @@ __wt_add() {
     # FIXME: Handle case where two projects have same name (could do it by
     #        comparing .wt/root to $git_root
     if [ ! -d "$worktree_path" ]; then
-        git worktree add "$worktree_path" $create_branch_arg "$branch_name"
+        git worktree add "$worktree_path" $create_branch_arg "$branch_name" || return 1
         mkdir -p "$worktree_path/.wt"
         ln -s "$git_root" "$worktree_path/.wt/root"
     fi
