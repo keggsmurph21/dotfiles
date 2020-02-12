@@ -75,6 +75,8 @@
     dcv     = diff --cached -vv
     dcw     = diff --cached --color-words
 
+    dir     = rev-parse --show-toplevel
+
     # drop the most recent commit from the local tree
     # NB: this can be undone by running
     #   $ git reflog # get the $sha
@@ -112,7 +114,7 @@
 
     # get the "root" git dir, even if we're in a (managed) worktree
     root    = "! __git_root() { \
-                    local repo="$(git rev-parse --show-toplevel)"; \
+                    local repo="$(git dir)"; \
                     if [ -L "$repo/.wt/root" ]; then \
                         repo="$(readlink "$repo/.wt/root")"; \
                     fi; \
