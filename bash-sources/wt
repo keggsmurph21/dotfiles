@@ -55,6 +55,15 @@ __wt_path() {
 }
 
 
+__wt_cd() {
+    if [[ $# -eq 0 ]]; then
+        cd "$(git root)"
+    else
+        __wt_add "$@"
+    fi
+}
+
+
 __wt_add() {
     if [ -z "$1" ]; then
         echo "Missing required arg: branch-name" >&2
@@ -121,7 +130,7 @@ __wt_main() {
         -h|--help|help|"")
                 __wt_usage ;;
         add)    shift && __wt_add "$@" ;;
-        cd)     shift && __wt_add "$@" ;;
+        cd)     shift && __wt_cd "$@" ;;
         ls)     shift && git worktree list "$@" ;;
         rm)     shift && __wt_rm "$@" ;;
         where)  shift && __wt_path "$@" ;;
