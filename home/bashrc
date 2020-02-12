@@ -178,6 +178,28 @@ spellcheck() {
     tail -n+1 $f
 }
 
+# use bin/mark to change directory
+mg() {
+    if [[ $# -eq 0 ]]; then
+        mark get
+    else
+        local dest="$(mark get "$@")"
+        if [[ "$dest" != null ]]; then
+            cd "$dest"
+        else
+            echo "mark not set: \"$@\"" >&2
+        fi
+    fi
+}
+
+ms() {
+    if [[ $# -eq 0 ]]; then
+        mark set
+    else
+        mark set "$@"
+    fi
+}
+
 # }}}
 
 # Other sources {{{
