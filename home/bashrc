@@ -2,8 +2,8 @@
 
 # vim: foldmethod=marker:foldlevel=0
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+# If not running interactively or from Vim, don't do anything
+[[ $- != *i* && "$SH_ENV" != vim ]] && return
 
 # }}}
 
@@ -233,9 +233,9 @@ unset __src
 # Misc {{{
 
 # read the inputrc file if it exists
-[ -r "$HOME/.inputrc" ] && bind -f "$HOME/.inputrc"
+[[ $- == *i* ]] && [ -r "$HOME/.inputrc" ] && bind -f "$HOME/.inputrc"
 
 # start the ssh-agent
-eval "$(ssh-agent)" >/dev/null
+[[ $- == *i* ]] && eval "$(ssh-agent)" >/dev/null
 
 # }}}

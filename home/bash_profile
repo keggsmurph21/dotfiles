@@ -1,5 +1,7 @@
 #!/bin/bash
-cat <<BEANS
+
+if [[ "$SH_ENV" != vim ]]; then
+    cat <<BEANS
  _______________
 < what's beadly >
  ---------------
@@ -9,5 +11,6 @@ cat <<BEANS
                 ||----w |
                 ||     ||
 BEANS
+fi
 
 source $HOME/.bashrc

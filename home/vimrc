@@ -45,6 +45,12 @@ call vundle#begin()
 
 call vundle#end()
 
+" Run a login shell (this ensures that ~/.bash_profile will be sourced!)
+set shell=bash\ --login
+
+" Set environment variables that will get passed on to subprocs
+let $SH_ENV = 'vim'
+
 " }}}
 
 " Editor {{{
