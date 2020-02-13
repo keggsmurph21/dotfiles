@@ -115,6 +115,8 @@
 
     ra      = remote add
 
+    recent  = ! git-recent
+
     ri      = rebase -i
 
     # get a "canonical" repo name
