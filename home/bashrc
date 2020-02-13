@@ -95,6 +95,7 @@ alias gitconf="vim $HOME/.gitconfig"
 alias inputrc="vim $HOME/.inputrc"
 alias xinitrc="vim $HOME/.xinitrc"
 alias mypyrc="vim $HOME/.mypy.ini"
+alias flake8rc="vim $HOME/.flake8"
 # }}}
 
 # one-liners {{{
