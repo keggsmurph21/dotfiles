@@ -24,6 +24,7 @@ call vundle#begin()
     Plugin 'VundleVim/Vundle.vim'
     Plugin 'cakebaker/scss-syntax.vim'
     Plugin 'leafgarland/typescript-vim'
+    Plugin 'Quramy/tsuquyomi' " typescript omni-complete
     setlocal indentkeys+=0.
     Plugin 'alvan/vim-closetag'
     Plugin 'swig'
