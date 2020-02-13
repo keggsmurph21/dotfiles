@@ -1,18 +1,16 @@
 #!/bin/bash
+# shellcheck disable=2155
 #
 # Kevin Murphy
 # 2/11/2020
 
-
 set -euo pipefail
-
 
 NAV_DIR="$(git dir)/.wt/nav-history"
 CURRENT="$NAV_DIR/current"
 BACK_STACK="$NAV_DIR/back"
 FW_STACK="$NAV_DIR/fw"
 INTERNAL_FLAG="$NAV_DIR/.internal"
-
 
 __git_nav_usage() {
     cat <<USAGE >&2
@@ -31,15 +29,14 @@ usage: $ git-nav [ back | clear | install | fw | show | where ]
 USAGE
 }
 
-
 __git_nav_init() {
     if [ ! -d "$NAV_DIR" ]; then
         mkdir -p "$NAV_DIR"
         touch "$BACK_STACK" "$FW_STACK"
+        # shellcheck disable=2119
         __git_nav_ref_name > "$CURRENT"
     fi
 }
-
 
 __git_nav_install() {
     this_script="$DOTFILES_DIR/bin/git-nav"
@@ -51,7 +48,7 @@ __git_nav_install() {
     fi
 }
 
-
+# shellcheck disable=2120
 __git_nav_ref_name() {
     # FIXME: Is there better heuristic we should use here?
     local ref_name="$(git bname)"
@@ -60,7 +57,6 @@ __git_nav_ref_name() {
     fi
     echo "$ref_name"
 }
-
 
 __git_nav_on_post_checkout_hook() {
     #
@@ -84,6 +80,7 @@ __git_nav_on_post_checkout_hook() {
     fi
 
     local current_ref_name stored_ref_name
+    # shellcheck disable=2119
     current_ref_name="$(__git_nav_ref_name)"
     stored_ref_name="$(cat "$CURRENT")"
     if [[ "$current_ref_name" != "$stored_ref_name" ]]; then
@@ -92,7 +89,6 @@ __git_nav_on_post_checkout_hook() {
     fi
     truncate -s0 "$FW_STACK"
 }
-
 
 __git_nav_safe_checkout() {
     local pop_from source push_to target
@@ -114,25 +110,22 @@ __git_nav_safe_checkout() {
     return 1
 }
 
-
 __git_nav_back() {
     __git_nav_safe_checkout "$BACK_STACK" "$FW_STACK" \
         || echo "git-nav: Cannot go back any farther!" >&2
 }
-
 
 __git_nav_fw() {
     __git_nav_safe_checkout "$FW_STACK" "$BACK_STACK" \
         || echo "cannot go forward any farther!" >&2
 }
 
-
 __git_nav_show() {
+    # shellcheck disable=2002
     cat "$BACK_STACK" | sed -E 's/^/  /'
     echo "* $(cat "$CURRENT")"
     tac "$FW_STACK" | sed -E 's/^/  /'
 }
-
 
 __git_nav_clear() {
     __git_nav_show >&2
@@ -141,22 +134,19 @@ __git_nav_clear() {
     fi
 }
 
-
 __git_nav_main() {
-    case "$1" in
+    case "${1:-}" in
         back)   __git_nav_back ;;
         clear)  __git_nav_clear ;;
         install)__git_nav_install ;;
         fw)     __git_nav_fw ;;
         show)   __git_nav_show ;;
         where)  echo "$NAV_DIR" ;;
-        *)      usage ;;
+        *)      __git_nav_usage ;;
     esac
 }
 
-
 __git_nav_init
-
 
 if [[ $# -eq 3 ]]; then
     __git_nav_on_post_checkout_hook "$@"
