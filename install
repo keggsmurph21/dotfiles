@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 # move dotfiles to $HOME
 
@@ -12,7 +12,7 @@ __backup_and_link() {
     if [ -e "$tar" ]; then
         src_hash=$(git hash-object "$src")
         tar_hash=$(git hash-object "$tar")
-        if [[ $src_hash != $tar_hash ]]; then
+        if [[ "$src_hash" != "$tar_hash" ]]; then
             ./bin/bak "$tar"
         fi
     fi

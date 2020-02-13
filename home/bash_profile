@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=1090,2086
 
 if [[ "$SH_ENV" != vim ]]; then
     cat <<BEANS
