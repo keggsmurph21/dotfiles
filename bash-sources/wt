@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=2155,2164
 #
 # Kevin Murphy
 # 2/11/20
@@ -6,9 +7,7 @@
 # NB: Since this file changes the working directory, it cannot be run in a
 #     subshell.  That is, it is meant to be sourced into the current shell.
 
-
 export WORKTREE_HOME="${WORKTREE_HOME:-$HOME/.local/share/worktrees}"
-
 
 __wt_usage() {
     cat <<USAGE
@@ -41,8 +40,6 @@ For more information, try
 USAGE
 }
 
-
-
 __wt_path() {
     if [ -z "$1" ]; then
         echo "Missing required arg: branch-name" >&2
@@ -54,7 +51,6 @@ __wt_path() {
     echo "$worktree_path"
 }
 
-
 __wt_cd() {
     if [[ $# -eq 0 ]]; then
         cd "$(git root)"
@@ -62,7 +58,6 @@ __wt_cd() {
         __wt_add "$@"
     fi
 }
-
 
 __wt_add() {
     if [ -z "$1" ]; then
@@ -91,7 +86,6 @@ __wt_add() {
     cd "$worktree_path"
 }
 
-
 __wt_rm() {
     if [ -z "$1" ]; then
         echo "Missing required arg: branch-name" >&2
@@ -101,7 +95,6 @@ __wt_rm() {
     git worktree remove "$@" || return 1
     pwd &> /dev/null || cd "$git_root" &> /dev/null
 }
-
 
 __wt_complete() {
     local curr prev wt_cmds git_cmds branches opts
@@ -120,9 +113,9 @@ __wt_complete() {
         *)      opts="$(get_completions "git worktree $prev ")" ;;
     esac
 
+    # shellcheck disable=2086
     COMPREPLY=( $(compgen -W "$opts" -- $curr) )
 }
-
 
 __wt_main() {
     cmd="$1"
@@ -137,6 +130,5 @@ __wt_main() {
         *)      git worktree "$@" ;;
     esac
 }
-
 
 complete -F __wt_complete wt
