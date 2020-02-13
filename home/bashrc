@@ -79,6 +79,7 @@ if which hub &>/dev/null; then
     alias git=hub
 fi
 alias wt=__wt_main
+alias less="less -R"
 # }}}
 
 # bash rc files {{{
