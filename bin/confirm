@@ -3,7 +3,7 @@
 set -euo pipefail
 
 EOF="$(printf "\x04")"
-prompt="${1:-"are you sure? "}"
+prompt="${*:-"are you sure?"} "
 
 while true; do
     read -p "$prompt" -n 1 -r response
