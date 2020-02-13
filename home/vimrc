@@ -35,7 +35,7 @@ call vundle#begin()
     Plugin 'rhysd/vim-clang-format'
     Plugin 'xavierd/clang_complete'
     Plugin 'scrooloose/nerdtree'
-    "Plugin 'vim-syntastic/syntastic'
+    Plugin 'vim-syntastic/syntastic'
     Plugin 'vim-airline/vim-airline'
     Plugin 'tpope/vim-fugitive'
     Plugin 'kien/ctrlp.vim'
@@ -314,6 +314,25 @@ let g:ctrlp_working_path_mode = 'r'
 
 let g:black_quiet=1
 autocmd FileType python cnoremap <buffer> <leader>b Black<cr>
+
+" }}}
+
+" syntastic {{{
+
+set statusline+=%#warningmsg
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+
+let g:syntastic_cpp_compiler = 'clang'
+let g:syntastic_cpp_compiler_options = '-std=c++17'
+
+let g:syntastic_java_checkers = []
+let g:syntastic_python_checkers = ['flake8', 'mypy']
 
 " }}}
 
