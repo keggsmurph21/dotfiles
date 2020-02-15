@@ -81,7 +81,7 @@ __git_nav_on_post_checkout_hook() {
 
     local current_ref_name stored_ref_name
     # shellcheck disable=2119
-    current_ref_name="$(__git_nav_ref_name)"
+    current_ref_name="$(__git_nav_ref_name "$@")"
     stored_ref_name="$(cat "$CURRENT")"
     if [[ "$current_ref_name" != "$stored_ref_name" ]]; then
         echo "$stored_ref_name" >> "$BACK_STACK"
