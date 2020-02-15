@@ -164,9 +164,9 @@ git-find() {
 
 # interact with DOTFILES repo from anywhere
 dot() {
-    pushd "$DOTFILES_DIR" >/dev/null
+    pushd "$DOTFILES_DIR" >/dev/null || return 1
     git "$@"
-    popd >/dev/null
+    popd >/dev/null || return 1
 }
 
 # get list of all mac-generated files
