@@ -52,6 +52,7 @@
     bd      = branch -D
     bl      = branch --all -vv
     bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
+    btrack  = ! git branch --set-upstream-to origin/$(git bname) $(git bname)
     br      = checkout -b
 
     c       = commit -v
