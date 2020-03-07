@@ -1,21 +1,165 @@
 #!/usr/bin/env python3
 
-from datetime import datetime
+from enum import Enum
+from googleapiclient.discovery import build as build_service  # type: ignore
+from googleapiclient.errors import HttpError as ClientHttpError  # type: ignore
+from googleapiclient.http import HttpRequest as ClientHttpRequest  # type: ignore
 from google_auth_oauthlib.flow import InstalledAppFlow  # type: ignore
 from google.auth.transport.requests import Request as AuthRequest  # type: ignore
 from google.oauth2.credentials import Credentials  # type: ignore
-from typing import IO, Iterable, Optional, Tuple
+from time import sleep
+from typing import Any, Generator, IO, Optional, Set, Sequence, Type
 
 import argparse
+import datetime
+import hashlib
 import os
 import pickle
+import re
+import struct
 
 
-def clean_date(date_entry: str) -> datetime:
-    return datetime.strptime(date_entry, "%m/%d/%Y")
+class Category(Enum):
+    Amazon = [
+        "Amazon.com*",
+        "AMAZON.COM*",
+        "AMZN Mktp",
+    ]
+    Apartment = [
+        "COMCAST",
+        "LEMONADE I",
+        "IKEA",
+        "THE HOME DEPOT",
+    ]
+    Books = [
+        "WALDEN POND BOOKS",
+    ]
+    Grocery = [
+        "BERKELEY BOWL",
+        "GRAND EXPRESS MARKET",
+        "HENG FA",
+        "H MART",
+        "HYDE PARK PRODUCE",
+        "KOREANA PLAZA",
+        "STOLTZFUS",
+        "TRADER JOE'S",
+        "WEIS MARKETS",
+        "WHOLEFDS",
+    ]
+    Laundry = [
+        "SHINEPAY LAUNDRY",
+    ]
+    Moving = [
+        "U-BOX",
+        "U-HAUL",
+    ]
+    Other = ["SP * FLATIRON WINES"]
+    Payment = [
+        "Everlaw, Inc. DES:Expensify",
+        "GUSTO DES:",
+        "*FINANCE CHARGE*",
+        "INTERNATIONAL TRANSACTION FEE",
+        "ONLINE BANKING PAYMENT",
+        "ONLINE CREDIT CARD PMT",
+        "PNC BANK NA DES:ONLINE PYM",
+        "VENMO DES:",
+    ]
+    Programming = [
+        "Amazon web services",
+        "GOOGLE *Domains",
+    ]
+    Restaurant = [
+        "JONG GA",
+    ]
+    Sports = [
+        "YMCA",
+    ]
+    Transport = [
+        "BART-CLIPPER",
+        "LAKEVIEW BICYCLE",
+        "LIM*",
+        "VENTRA VENDING",
+    ]
+    Travel = [
+        "AIRBNB",
+        "AIR CAN",
+        "ALASKA AIR",
+        "AMERICAN AIR",
+        "EXPEDIA",
+        "EXXONMOBIL",
+        "TRAVEL INSURANCE POLICY",
+        "UA INFLT ",
+        "UNITED ",
+    ]
+    Unknown = [
+        "Check ",
+    ]
+
+    def __init__(self, prefixes: Sequence[str]):
+        self.prefixes = prefixes
+
+    @classmethod
+    def from_description(cls: Type["Category"], desc: str) -> Set["Category"]:
+        candidates: Set["Category"] = set()
+        for category in cls:
+            for prefix in category.prefixes:
+                if desc.startswith(prefix):
+                    candidates.add(category)
+        return candidates
+
+    @classmethod
+    def from_name_prefix(cls: Type["Category"], prefix: str) -> Set["Category"]:
+        candidates: Set["Category"] = set()
+        prefix = prefix.lower()
+        for category in cls:
+            if category.name.lower().startswith(prefix):
+                candidates.add(category)
+        return candidates
 
 
-def clean_currency(amount_entry: str) -> float:
+class Record:
+    def __init__(self, date: datetime.date, desc: str, amount: float):
+        self.date = date
+        self.desc = desc
+        self.amount = amount
+        self.category = Category.Unknown
+
+        m = hashlib.md5()
+        m.update(struct.pack("<HHH", date.year, date.month, date.day))
+        m.update(desc.encode())
+        m.update(struct.pack("<f", amount))
+        self.id = m.hexdigest()
+
+    def __str__(self) -> str:
+        return f'{self.date} "{self.desc}" (${self.amount:.02f}) [{self.category.name}]'
+
+    def prompt_category(self) -> None:
+        auto_categories = Category.from_description(self.desc)
+        if len(auto_categories) == 1:
+            self.category = auto_categories.pop()
+        else:
+            while True:
+                try:
+                    prefix = input(f"\nCategory for '{self}' ? ").strip()
+                except EOFError:
+                    return
+                matches = Category.from_name_prefix(prefix)
+                if len(matches) == 0:
+                    matches = set(c for c in Category)
+                    print(f"Unrecognized prefix: '{prefix}'")
+                elif len(matches) == 1:
+                    self.category = matches.pop()
+                    return
+                elif len(matches) < len(Category):
+                    print(f"Ambiguous prefix: '{prefix}'")
+                print(f"Categories: {' '.join(sorted([c.name for c in matches]))}")
+
+
+def parse_date(date_entry: str) -> datetime.date:
+    return datetime.datetime.strptime(date_entry, "%m/%d/%Y").date()
+
+
+def _clean_pnc_currency(amount_entry: str) -> float:
     factor = 1
     if amount_entry.startswith("-"):
         factor = -1
@@ -25,27 +169,74 @@ def clean_currency(amount_entry: str) -> float:
     return float(amount_entry[1:]) * factor
 
 
-def iter_records(
-    records_fp: IO[str], includes_header: bool, delimiter: str
-) -> Iterable[Tuple[datetime, str, float]]:
+def iter_pnc_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, None]:
 
-    if includes_header:
-        records_fp.readline()  # consume one
-    for lineno, line in enumerate(records_fp):
-        fields = line.strip().split(",")
-        try:
-            if len(fields) == 1 and fields[0] == "":
-                continue
-            elif len(fields) == 3:
-                date, desc, amount = fields
-                yield clean_date(date), desc, clean_currency(amount)
-            elif len(fields) == 4 and fields[3] == '""':
-                date, desc, amount, _ = fields
-                yield clean_date(date), desc, clean_currency(amount)
-            else:
-                raise ValueError(f"Wrong number of fields")
-        except ValueError as e:
-            raise ValueError(f"Invalid record at line {lineno}: '{fields}'") from e
+    if records_fps is None:
+        return
+
+    for records_fp in records_fps:
+        records_fp.readline()  # consume headerA
+
+        for record_num, record in enumerate(records_fp):
+            fields = record.strip().split(",")
+            try:
+                if len(fields) == 1 and not fields[0]:
+                    continue
+
+                else:
+                    currency_index = -1
+                    while currency_index and fields[currency_index] == '""':
+                        currency_index -= 1
+
+                    if not currency_index:
+                        raise ValueError("Wrong number of fields")
+
+                    yield Record(
+                        parse_date(fields[0]),
+                        re.sub(r"\s+", " ", ", ".join(fields[1:currency_index])),
+                        _clean_pnc_currency(fields[currency_index]),
+                    )
+
+            except ValueError as e:
+                raise ValueError(
+                    f"Invalid record at {records_fp.name} record {record_num}: '{fields}'"
+                ) from e
+
+
+def iter_boa_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, None]:
+
+    if records_fps is None:
+        return
+
+    for records_fp in records_fps:
+        # Read 8 lines of header (lol)
+        records_fp.readline()
+        records_fp.readline()
+        records_fp.readline()
+        records_fp.readline()
+        records_fp.readline()
+        records_fp.readline()
+        records_fp.readline()
+        records_fp.readline()
+
+        # Read "Beginning balance as of ..." line
+        records_fp.readline()
+
+        for record_num, record in enumerate(records_fp):
+            record = record.strip()
+            match = re.match(
+                r"^(\d{2}/\d{2}/\d{4}) {5}(.{70}) +([-\d.,]{3,9}).*$", record
+            )
+            if match is None:
+                raise ValueError(
+                    f"Invalid record at {records_fp.name} record {record_num}: '{record}'"
+                )
+
+            yield Record(
+                parse_date(match.group(1)),
+                match.group(2).strip(),
+                float(match.group(3).replace(",", "")),
+            )
 
 
 def validate_credentials(credentials_fp: IO[str]) -> Credentials:
@@ -69,20 +260,114 @@ def validate_credentials(credentials_fp: IO[str]) -> Credentials:
     return creds
 
 
+class Sheet:
+    def __init__(self, credentials: Credentials, spreadsheet_id: str):
+        self.credentials = credentials
+        self.spreadsheet_id = spreadsheet_id
+        self.resource = (
+            build_service("sheets", "v4", credentials=credentials)
+            .spreadsheets()
+            .values()
+        )
+
+    @staticmethod
+    def _make_request(req: ClientHttpRequest) -> Any:
+        while True:
+            try:
+                return req.execute()
+            except ClientHttpError:
+                print("Quota exceeded, sleeping...")
+                sleep(20)
+
+    def read_column(
+        self, tab_name: str, column: str
+    ) -> Generator[Optional[str], None, None]:
+        range_name = f"{tab_name}!{column}:{column}"
+        req = self.resource.get(spreadsheetId=self.spreadsheet_id, range=range_name)
+        for row in self._make_request(req).get("values", []):
+            yield row[0] if len(row) else None
+
+    def write_cell(
+        self, tab_name: str, col: str, row: int, value: str, is_raw_input: bool = False
+    ) -> None:
+        range_name = f"{tab_name}!{col}{row}"
+        req = self.resource.update(
+            spreadsheetId=self.spreadsheet_id,
+            range=range_name,
+            valueInputOption="RAW" if is_raw_input else "USER_ENTERED",
+            body={"values": [[value]]},
+        )
+        self._make_request(req)
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("records", type=argparse.FileType("r"))
-    parser.add_argument("--no-header", dest="includes_header", action="store_false")
-    parser.add_argument("-d", "--delimiter", default=",")
+    parser.add_argument(
+        "-b", "--boa", type=argparse.FileType("r"), nargs="*", dest="boa_records"
+    )
+    parser.add_argument(
+        "-p", "--pnc", type=argparse.FileType("r"), nargs="*", dest="pnc_records"
+    )
     parser.add_argument("--credentials", type=argparse.FileType("r"), required=True)
     args = parser.parse_args()
 
-    print(args)
-
     creds = validate_credentials(args.credentials)
+    SPREADSHEET_ID = "17JEgl3lAvqOTNKamgQfOS_vtm3bVMo3oKXqvDEqGOEo"
+    sheet = Sheet(creds, SPREADSHEET_ID)
 
-    for date, desc, amount in iter_records(
-        args.records, args.includes_header, args.delimiter
-    ):
-        print(date, desc, amount)
+    record_ids = set(sheet.read_column("internal", "A"))
+    next_record_id_index = len(record_ids) + 1
+
+    next_row_index = len(list(sheet.read_column("testing", "A"))) + 1
+
+    ID_COL = "A"
+
+    DATE_COL = "A"
+    CATEGORY_COL = "B"
+    DESC_COL = "C"
+
+    BOA_COL = "D"
+    PNC_COL = "G"
+
+    for record in iter_boa_records(args.boa_records):
+        if record.id in record_ids:
+            print(f"Skipping... ({record})")
+            continue
+
+        record.prompt_category()
+        print(record)
+
+        sheet.write_cell("internal", ID_COL, next_record_id_index, record.id, True)
+        next_record_id_index += 1
+        record_ids.add(record.id)
+
+        sheet.write_cell("testing", DATE_COL, next_row_index, str(record.date))
+        sheet.write_cell(
+            "testing", CATEGORY_COL, next_row_index, record.category.name.lower()
+        )
+        sheet.write_cell("testing", DESC_COL, next_row_index, record.desc)
+        sheet.write_cell("testing", BOA_COL, next_row_index, f"${record.amount:.02f}")
+        next_row_index += 1
+
+    for record in iter_pnc_records(args.pnc_records):
+        if record.id in record_ids:
+            print(f"Skipping... ({record})")
+            continue
+
+        record.prompt_category()
+        print(record)
+
+        sheet.write_cell("internal", ID_COL, next_record_id_index, record.id, True)
+        next_record_id_index += 1
+        record_ids.add(record.id)
+
+        sheet.write_cell("testing", DATE_COL, next_row_index, str(record.date))
+        sheet.write_cell(
+            "testing", CATEGORY_COL, next_row_index, record.category.name.lower()
+        )
+        sheet.write_cell("testing", DESC_COL, next_row_index, record.desc)
+        sheet.write_cell(
+            "testing", PNC_COL, next_row_index, f"${record.amount * -1:.02f}"
+        )
+        next_row_index += 1
