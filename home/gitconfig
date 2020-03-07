@@ -118,7 +118,9 @@
 
     recent  = ! git-recent
 
-    ri      = rebase -i
+    ra      = rebase --abort
+    rc      = rebase --continue
+    ri      = rebase --interactive
 
     # get a "canonical" repo name
     rname   = ! basename "$(git root)"
