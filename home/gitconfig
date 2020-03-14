@@ -103,7 +103,7 @@
     lol     = log --pretty=line
     lp      = log -p
     lpw     = log -p --color-words
-    lstat   = log --stat
+    ls      = log --stat
     last    = log -p -1 HEAD
 
     lsm     = ! git-ls-mtime
