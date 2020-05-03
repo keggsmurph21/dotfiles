@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 
 from enum import Enum
-from googleapiclient.discovery import build as build_service  # type: ignore
-from googleapiclient.errors import HttpError as ClientHttpError  # type: ignore
-from googleapiclient.http import HttpRequest as ClientHttpRequest  # type: ignore
-from google_auth_oauthlib.flow import InstalledAppFlow  # type: ignore
-from google.auth.transport.requests import Request as AuthRequest  # type: ignore
-from google.oauth2.credentials import Credentials  # type: ignore
 from time import sleep
 from typing import Any, Generator, IO, Optional, Set, Sequence, Type
 
@@ -239,67 +233,6 @@ def iter_boa_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, 
             )
 
 
-def validate_credentials(credentials_fp: IO[str]) -> Credentials:
-    TOKEN_PATH = "/tmp/google-api-token.pkl"
-    SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-    creds: Optional[Credentials] = None
-    if os.path.exists(TOKEN_PATH):
-        with open(TOKEN_PATH, "rb") as token_fp:
-            creds = pickle.load(token_fp)
-            assert isinstance(creds, Credentials)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(AuthRequest())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                credentials_fp.name, scopes=SCOPES
-            )
-            creds = flow.run_local_server(port=0)
-        with open(TOKEN_PATH, "wb") as token_fp:
-            pickle.dump(creds, token_fp)
-    return creds
-
-
-class Sheet:
-    def __init__(self, credentials: Credentials, spreadsheet_id: str):
-        self.credentials = credentials
-        self.spreadsheet_id = spreadsheet_id
-        self.resource = (
-            build_service("sheets", "v4", credentials=credentials)
-            .spreadsheets()
-            .values()
-        )
-
-    @staticmethod
-    def _make_request(req: ClientHttpRequest) -> Any:
-        while True:
-            try:
-                return req.execute()
-            except ClientHttpError:
-                print("Quota exceeded, sleeping...")
-                sleep(20)
-
-    def read_column(
-        self, tab_name: str, column: str
-    ) -> Generator[Optional[str], None, None]:
-        range_name = f"{tab_name}!{column}:{column}"
-        req = self.resource.get(spreadsheetId=self.spreadsheet_id, range=range_name)
-        for row in self._make_request(req).get("values", []):
-            yield row[0] if len(row) else None
-
-    def write_cell(
-        self, tab_name: str, col: str, row: int, value: str, is_raw_input: bool = False
-    ) -> None:
-        range_name = f"{tab_name}!{col}{row}"
-        req = self.resource.update(
-            spreadsheetId=self.spreadsheet_id,
-            range=range_name,
-            valueInputOption="RAW" if is_raw_input else "USER_ENTERED",
-            body={"values": [[value]]},
-        )
-        self._make_request(req)
-
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -309,65 +242,26 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--pnc", type=argparse.FileType("r"), nargs="*", dest="pnc_records"
     )
-    parser.add_argument("--credentials", type=argparse.FileType("r"), required=True)
     args = parser.parse_args()
 
-    creds = validate_credentials(args.credentials)
-    SPREADSHEET_ID = "17JEgl3lAvqOTNKamgQfOS_vtm3bVMo3oKXqvDEqGOEo"
-    sheet = Sheet(creds, SPREADSHEET_ID)
-
-    record_ids = set(sheet.read_column("internal", "A"))
-    next_record_id_index = len(record_ids) + 1
-
-    next_row_index = len(list(sheet.read_column("testing", "A"))) + 1
-
-    ID_COL = "A"
-
-    DATE_COL = "A"
-    CATEGORY_COL = "B"
-    DESC_COL = "C"
-
-    BOA_COL = "D"
-    PNC_COL = "G"
-
-    for record in iter_boa_records(args.boa_records):
-        if record.id in record_ids:
-            print(f"Skipping... ({record})")
-            continue
-
+    records = [r for r in iter_boa_records(args.boa_records)] + [
+        r for r in iter_pnc_records(args.pnc_records)
+    ]
+    for record in records:
         record.prompt_category()
-        print(record)
 
-        sheet.write_cell("internal", ID_COL, next_record_id_index, record.id, True)
-        next_record_id_index += 1
-        record_ids.add(record.id)
-
-        sheet.write_cell("testing", DATE_COL, next_row_index, str(record.date))
-        sheet.write_cell(
-            "testing", CATEGORY_COL, next_row_index, record.category.name.lower()
+    for record in records:
+        print(
+            "\t".join(
+                [
+                    str(record.date),
+                    record.category.name.lower(),
+                    record.desc,
+                    # extra columns & negative factor for PNC
+                    "",
+                    "",
+                    "",
+                    f"${-1 * record.amount:.02f}",
+                ]
+            )
         )
-        sheet.write_cell("testing", DESC_COL, next_row_index, record.desc)
-        sheet.write_cell("testing", BOA_COL, next_row_index, f"${record.amount:.02f}")
-        next_row_index += 1
-
-    for record in iter_pnc_records(args.pnc_records):
-        if record.id in record_ids:
-            print(f"Skipping... ({record})")
-            continue
-
-        record.prompt_category()
-        print(record)
-
-        sheet.write_cell("internal", ID_COL, next_record_id_index, record.id, True)
-        next_record_id_index += 1
-        record_ids.add(record.id)
-
-        sheet.write_cell("testing", DATE_COL, next_row_index, str(record.date))
-        sheet.write_cell(
-            "testing", CATEGORY_COL, next_row_index, record.category.name.lower()
-        )
-        sheet.write_cell("testing", DESC_COL, next_row_index, record.desc)
-        sheet.write_cell(
-            "testing", PNC_COL, next_row_index, f"${record.amount * -1:.02f}"
-        )
-        next_row_index += 1
