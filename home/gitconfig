@@ -21,7 +21,9 @@
     defaultToUpstream = true
 
 [color]
-    ui = auto
+    ui = true
+    status = auto
+    branch = auto
 
 [pretty]
     line = "%C(auto)%h %<|(80,trunc)%s %C(green)%ad %C(blue)%an%C(auto)%d"
