@@ -73,7 +73,7 @@ alias pip="python -m pip"
 alias g=git
 alias d=dot
 alias pwd="pwd -P"
-alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles'"
+alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles|node_modules'"
 alias grep="grep --color=auto --devices=skip -I"
 alias hl=highlight
 if which hub &>/dev/null; then
