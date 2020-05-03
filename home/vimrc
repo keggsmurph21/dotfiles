@@ -164,8 +164,6 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 " Functions, Mappings, etc. {{{
 
 " unbind things
-map <C-a> <Nop>
-map <C-x> <Nop>
 nmap Q <Nop>
 
 " accidental caps
