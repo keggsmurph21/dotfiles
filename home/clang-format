@@ -1,3 +1,4 @@
+# vim: syntax=yaml
 ---
 Language: Cpp
 BasedOnStyle: LLVM
@@ -27,3 +28,15 @@ BinPackParameters: false
 BinPackArguments: false
 #ExperimentalAutoDetectBinPacking: true
 BreakBeforeBinaryOperators: "NonAssignment"
+---
+Language: JavaScript
+BasedOnStyle: LLVM
+TabWidth: 4
+IndentWidth: 4
+UseTab: Never
+SpacesInContainerLiterals: false
+IndentCaseLabels: false
+JavaScriptQuotes: Double
+JavaScriptWrapImports: true
+AlignAfterOpenBracket: true
+ColumnLimit: 80
