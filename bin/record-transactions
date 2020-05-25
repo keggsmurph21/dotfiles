@@ -6,6 +6,7 @@ from time import sleep
 from typing import Any, Generator, IO, Optional, Set, Sequence, Type
 
 import argparse
+import csv
 import datetime
 import hashlib
 import os
@@ -168,6 +169,11 @@ class PNCRecord(Record):
     spacing_cols = 3
 
 
+class VenmoRecord(Record):
+    sign = 1
+    spacing_cols = 4
+
+
 def parse_date(date_entry: str) -> datetime.date:
     return datetime.datetime.strptime(date_entry, "%m/%d/%Y").date()
 
@@ -252,6 +258,30 @@ def iter_boa_records(
             )
 
 
+def iter_venmo_records(
+    records_fps: Sequence[IO[str]],
+) -> Generator[VenmoRecord, None, None]:
+    if records_fps is None:
+        return
+    for records_fp in records_fps:
+        # Read header
+        records_fp.readline()
+        for record_num, row in enumerate(csv.reader(records_fp)):
+            if not row[1]:
+                # This isn't an actual record
+                continue
+            date = datetime.datetime.strptime(row[2], "%Y-%m-%dT%H:%M:%S").date()
+            match = re.match(r"^([-+]) *\$([0-9,.]+)$", row[8])
+            if match is None:
+                raise ValueError(
+                    f"Invalid record at {records_fp.name} record {record_num}: '{','.join(row)}'"
+                )
+            sign = -1 if match.group(1) == "-" else 1
+            yield VenmoRecord(
+                date, row[5], sign * float(match.group(2).replace(",", ""))
+            )
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -261,12 +291,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--pnc", type=argparse.FileType("r"), nargs="*", dest="pnc_records"
     )
+    parser.add_argument(
+        "-v", "--venmo", type=argparse.FileType("r"), nargs="*", dest="venmo_records"
+    )
     args = parser.parse_args()
 
     boa_records = iter_boa_records(args.boa_records)
     pnc_records = iter_pnc_records(args.pnc_records)
+    venmo_records = iter_venmo_records(args.venmo_records)
 
-    records = [*boa_records, *pnc_records]
+    records = [*boa_records, *pnc_records, *venmo_records]
 
     for record in records:
         record.prompt_category()
