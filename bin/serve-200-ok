@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Respond to all incoming requests on localhost:<port> with a 200 OK
+# response.  This depends on the `nc` (aka `netcat` or `ncat` utility).
+
+set -euo pipefail
+
+fail() {
+    echo "$@" >&2
+    exit 1
+}
+
+which nc &>/dev/null || fail "Missing required dependency: 'nc'"
+
+if [[ $# -ne 1 ]]; then
+    fail "Missing required arg: PORT"
+fi
+PORT="$1"
+
+NETCAT_FLAVOR="$(nc -h 2>&1 | head -1 | cut -d\  -f1)"
+case "$NETCAT_FLAVOR" in
+    OpenBSD) CLOSE_CONN_FLAG="-q1" ;;
+    *) fail "Unrecognized netcat flavor '$NETCAT_FLAVOR'" ;;
+esac
+
+while true; do
+    printf "HTTP/1.1 200 OK\n\n" \
+        | nc -l localhost "$PORT" "$CLOSE_CONN_FLAG"
+done
