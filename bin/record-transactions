@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+from abc import ABC
 from enum import Enum
 from time import sleep
 from typing import Any, Generator, IO, Optional, Set, Sequence, Type
 
 import argparse
+import csv
 import datetime
 import hashlib
 import os
@@ -111,7 +113,7 @@ class Category(Enum):
         return candidates
 
 
-class Record:
+class Record(ABC):
     def __init__(self, date: datetime.date, desc: str, amount: float):
         self.date = date
         self.desc = desc
@@ -123,9 +125,6 @@ class Record:
         m.update(desc.encode())
         m.update(struct.pack("<f", amount))
         self.id = m.hexdigest()
-
-    def __str__(self) -> str:
-        return f'{self.date} "{self.desc}" (${self.amount:.02f}) [{self.category.name}]'
 
     def prompt_category(self) -> None:
         auto_categories = Category.from_description(self.desc)
@@ -148,6 +147,32 @@ class Record:
                     print(f"Ambiguous prefix: '{prefix}'")
                 print(f"Categories: {' '.join(sorted([c.name for c in matches]))}")
 
+    def __str__(self) -> str:
+        return "\t".join(
+            [
+                str(self.date),
+                self.category.name.lower(),
+                self.desc,
+                *["" for _ in range(self.spacing_cols)],
+                f"${self.sign * record.amount:.02f}",
+            ]
+        )
+
+
+class BOARecord(Record):
+    sign = 1
+    spacing_cols = 0
+
+
+class PNCRecord(Record):
+    sign = -1
+    spacing_cols = 3
+
+
+class VenmoRecord(Record):
+    sign = 1
+    spacing_cols = 4
+
 
 def parse_date(date_entry: str) -> datetime.date:
     return datetime.datetime.strptime(date_entry, "%m/%d/%Y").date()
@@ -163,11 +188,11 @@ def _clean_pnc_currency(amount_entry: str) -> float:
     return float(amount_entry[1:]) * factor
 
 
-def iter_pnc_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, None]:
-
+def iter_pnc_records(
+    records_fps: Sequence[IO[str]],
+) -> Generator[PNCRecord, None, None]:
     if records_fps is None:
         return
-
     for records_fp in records_fps:
         records_fp.readline()  # consume headerA
 
@@ -185,7 +210,7 @@ def iter_pnc_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, 
                     if not currency_index:
                         raise ValueError("Wrong number of fields")
 
-                    yield Record(
+                    yield PNCRecord(
                         parse_date(fields[0]),
                         re.sub(r"\s+", " ", ", ".join(fields[1:currency_index])),
                         _clean_pnc_currency(fields[currency_index]),
@@ -197,11 +222,11 @@ def iter_pnc_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, 
                 ) from e
 
 
-def iter_boa_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, None]:
-
+def iter_boa_records(
+    records_fps: Sequence[IO[str]],
+) -> Generator[BOARecord, None, None]:
     if records_fps is None:
         return
-
     for records_fp in records_fps:
         # Read 8 lines of header (lol)
         records_fp.readline()
@@ -226,10 +251,34 @@ def iter_boa_records(records_fps: Sequence[IO[str]]) -> Generator[Record, None, 
                     f"Invalid record at {records_fp.name} record {record_num}: '{record}'"
                 )
 
-            yield Record(
+            yield BOARecord(
                 parse_date(match.group(1)),
                 match.group(2).strip(),
                 float(match.group(3).replace(",", "")),
+            )
+
+
+def iter_venmo_records(
+    records_fps: Sequence[IO[str]],
+) -> Generator[VenmoRecord, None, None]:
+    if records_fps is None:
+        return
+    for records_fp in records_fps:
+        # Read header
+        records_fp.readline()
+        for record_num, row in enumerate(csv.reader(records_fp)):
+            if not row[1]:
+                # This isn't an actual record
+                continue
+            date = datetime.datetime.strptime(row[2], "%Y-%m-%dT%H:%M:%S").date()
+            match = re.match(r"^([-+]) *\$([0-9,.]+)$", row[8])
+            if match is None:
+                raise ValueError(
+                    f"Invalid record at {records_fp.name} record {record_num}: '{','.join(row)}'"
+                )
+            sign = -1 if match.group(1) == "-" else 1
+            yield VenmoRecord(
+                date, row[5], sign * float(match.group(2).replace(",", ""))
             )
 
 
@@ -242,26 +291,19 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--pnc", type=argparse.FileType("r"), nargs="*", dest="pnc_records"
     )
+    parser.add_argument(
+        "-v", "--venmo", type=argparse.FileType("r"), nargs="*", dest="venmo_records"
+    )
     args = parser.parse_args()
 
-    records = [r for r in iter_boa_records(args.boa_records)] + [
-        r for r in iter_pnc_records(args.pnc_records)
-    ]
+    boa_records = iter_boa_records(args.boa_records)
+    pnc_records = iter_pnc_records(args.pnc_records)
+    venmo_records = iter_venmo_records(args.venmo_records)
+
+    records = [*boa_records, *pnc_records, *venmo_records]
+
     for record in records:
         record.prompt_category()
 
     for record in records:
-        print(
-            "\t".join(
-                [
-                    str(record.date),
-                    record.category.name.lower(),
-                    record.desc,
-                    # extra columns & negative factor for PNC
-                    "",
-                    "",
-                    "",
-                    f"${-1 * record.amount:.02f}",
-                ]
-            )
-        )
+        print(record)
