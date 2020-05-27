@@ -2,7 +2,7 @@
 .settings
 .classpath
 .project
-model/nbproject
+nbproject
 
 # local config
 *.local
