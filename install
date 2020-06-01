@@ -4,7 +4,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
-# move dotfiles to $HOME
+# move dotfiles to $INSTALL_BASE (default $HOME)
+INSTALL_BASE="${DOTFILES_INSTALL_BASE:-$HOME}"
+echo "INSTALLING TO $INSTALL_BASE" >&2
 
 __backup_and_link() {
     src="$1"
@@ -34,25 +36,28 @@ which git &>/dev/null || __install_dependency git
 
 for rcfile in ./home/*; do
     basename="$(basename "$rcfile")"
-    __backup_and_link "$(pwd)/home/$basename" "$HOME/.$basename"
+    __backup_and_link "$(pwd)/home/$basename" "$INSTALL_BASE/.$basename"
 done
 
 # set up directory structure
 git_username="$( (git config --get user.email || true) | sed 's/@.*//g')"
-[[ -z "$git_username" ]] || mkdir -p \
-        "$HOME/src/$git_username" \
-        "$HOME/.local/bin"
+if [ ! -z "$git_username" ]; then
+    mkdir -p "$INSTALL_BASE/src/$git_username"
+fi
+mkdir -p "$INSTALL_BASE/.local/bin"
+mkdir -p "$INSTALL_BASE/.vim/bundle/vim-airline/autoload/airline/themes"
 
 # install vim plugins via vundle
-[[ -d ~/.vim/bundle/Vundle.vim ]] \
-    || git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
+if [ ! -d "$INSTALL_BASE/.vim/bundle/Vundle.vim" ]; then
+    git clone https://github.com/VundleVim/Vundle.vim "$INSTALL_BASE/.vim/bundle/Vundle.vim"
+fi
 vim +PluginInstall +qall
 
 # copy custom vim plugin into expected location :^)
 ln -sf \
     "$(pwd)/vim/custom-airline-theme.vim" \
-    "$HOME/.vim/bundle/vim-airline/autoload/airline/themes/custom.vim"
+    "$INSTALL_BASE/.vim/bundle/vim-airline/autoload/airline/themes/custom.vim"
 
 cat <<EOM
-> Success! Don't forget to source ~/.bashrc :^)
+> Success! Don't forget to source $INSTALL_BASE/.bashrc :^)
 EOM
