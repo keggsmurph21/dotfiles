@@ -7,6 +7,7 @@ cd "$(dirname "$0")"
 # move dotfiles to $INSTALL_BASE (default $HOME)
 INSTALL_BASE="${DOTFILES_INSTALL_BASE:-$HOME}"
 echo "INSTALLING TO $INSTALL_BASE" >&2
+export DOTFILES_INSTALL_BASE="$INSTALL_BASE"
 
 __backup_and_link() {
     src="$1"
@@ -31,8 +32,24 @@ __install_dependency() {
     fi
 }
 
+__ensure_repo_present() {
+    origin_url="$(git config --get remote.origin.url || true)"
+    if [ ! -z "$origin_url" ]; then
+        return
+    fi
+    echo -n "No repo detected. Where would you like to clone into? "
+    read -r DOTFILES_REPO
+    mkdir -p "$DOTFILES_REPO"
+    git clone https://github.com/keggsmurph21/dotfiles.git "$DOTFILES_REPO"
+    cd "$DOTFILES_REPO"
+    ./install
+    exit
+}
+
 # ensure we have `git`
 which git &>/dev/null || __install_dependency git
+
+__ensure_repo_present
 
 for rcfile in ./home/*; do
     basename="$(basename "$rcfile")"
