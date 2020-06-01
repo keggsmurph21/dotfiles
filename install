@@ -88,6 +88,15 @@ fi
 mkdir -p "$INSTALL_BASE/.local/bin"
 mkdir -p "$INSTALL_BASE/.vim/bundle/vim-airline/autoload/airline/themes"
 
+# copy XFCE keyboard shortcuts
+if [[ "$INSTALL_WM" == xfce ]]; then
+    XFCE_SHORTCUTS_DIR=".config/xfce4/xfconf/xfce-perchannel-xml"
+    mkdir -p "$INSTALL_BASE/$XFCE_SHORTCUTS_DIR"
+    __backup_and_link \
+        "$(pwd)/home/xfce4-keyboard-shortcuts.xml" \
+        "$INSTALL_BASE/$XFCE_SHORTCUTS_DIR/xfce4-keyboard-shortcuts.xml"
+fi
+
 # install vim plugins via vundle
 if [ ! -d "$INSTALL_BASE/.vim/bundle/Vundle.vim" ]; then
     git clone https://github.com/VundleVim/Vundle.vim "$INSTALL_BASE/.vim/bundle/Vundle.vim"
