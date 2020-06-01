@@ -9,6 +9,11 @@ INSTALL_BASE="${DOTFILES_INSTALL_BASE:-$HOME}"
 echo "INSTALLING TO $INSTALL_BASE" >&2
 export DOTFILES_INSTALL_BASE="$INSTALL_BASE"
 
+fail() {
+    echo "$@" >&2
+    exit 1
+}
+
 __backup_and_link() {
     src="$1"
     tar="$2"
@@ -27,8 +32,7 @@ __install_dependency() {
     if uname -a | grep Ubuntu; then
         sudo apt-get install -y "$1"
     else
-        echo "Unrecognized OS! Aborting..." >&2
-        exit 1
+        fail "Unrecognized OS! Aborting ..."
     fi
 }
 
