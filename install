@@ -9,6 +9,9 @@ INSTALL_BASE="${DOTFILES_INSTALL_BASE:-$HOME}"
 echo "INSTALLING TO $INSTALL_BASE" >&2
 export DOTFILES_INSTALL_BASE="$INSTALL_BASE"
 
+INSTALL_OS=""
+INSTALL_WM=""
+
 fail() {
     echo "$@" >&2
     exit 1
@@ -29,11 +32,10 @@ __backup_and_link() {
 }
 
 __install_dependency() {
-    if uname -a | grep Ubuntu; then
-        sudo apt-get install -y "$1"
-    else
-        fail "Unrecognized OS! Aborting ..."
-    fi
+    case "$INSTALL_OS" in
+        ubuntu) sudo apt-get install -y "$1";;
+        *)      fail "Unrecognized OS! Aborting ..."
+    esac
 }
 
 __ensure_repo_present() {
@@ -49,6 +51,24 @@ __ensure_repo_present() {
     ./install
     exit
 }
+
+__get_os() {
+    if uname -a | grep -q Ubuntu; then
+        INSTALL_OS=ubuntu
+    else
+        fail "Unrecognized OS! Aborting ..."
+    fi
+}
+
+__get_wm() {
+    case "$XDG_CURRENT_DESKTOP" in
+        XFCE)   INSTALL_WM=xfce;;
+        *)      fail "Unrecognized window manager! Aborting ..." >&2;;
+    esac
+}
+
+__get_os
+__get_wm
 
 # ensure we have `git`
 which git &>/dev/null || __install_dependency git
