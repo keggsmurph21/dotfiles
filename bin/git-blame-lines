@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# For every line in file, show the email of the most recent
+# person to touch that line, then sort by frequency.
+
+set -euo pipefail
+
+git blame --porcelain "$@" \
+    | grep '^committer-mail' \
+    | sed -E 's/.*<(.*)>/\1/' \
+    | sort \
+    | uniq -c \
+    | sort -rh \
+    | less
