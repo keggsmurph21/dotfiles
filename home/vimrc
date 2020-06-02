@@ -334,8 +334,13 @@ let g:syntastic_cpp_compiler_options = '-std=c++17'
 
 let g:syntastic_java_checkers = []
 let g:syntastic_python_checkers = ['flake8', 'mypy']
+let g:syntastic_typescript_checkers = ['tsuquyomi']
 
 " }}}
+
+" tsuquyomi {{{
+
+let g:tsuquyomi_disable_quickfix = 1
 
 " }}}
 
