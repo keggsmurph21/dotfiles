@@ -61,6 +61,10 @@ __get_os() {
 }
 
 __get_wm() {
+    if [ -z "${XDG_CURRENT_DESKTOP:-}" ]; then
+        INSTALL_WM=none
+        return
+    fi
     case "$XDG_CURRENT_DESKTOP" in
         XFCE)   INSTALL_WM=xfce;;
         *)      fail "Unrecognized window manager! Aborting ..." >&2;;
