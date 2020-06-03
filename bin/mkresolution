@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Create a new screen resolution and add to all output devices.
+
+set -euo pipefail
+set -x
+
+usage() {
+    cat <<EOM
+usage: $(basename "$0") <x> <y>
+EOM
+    exit 1
+}
+
+if [[ $# -ne 2 ]]; then
+    usage
+fi
+
+requested_x="$1"
+requested_y="$2"
+
+mode_name="$(uuidgen)"
+mode="$(cvt "$requested_x" "$requested_y" \
+    | tail -1 \
+    | sed -E 's/^Modeline ".*" (.*)/\1/')"
+
+# shellcheck disable=SC2086
+sudo xrandr --newmode "$mode_name" $mode
+
+xrandr \
+    | grep ' connected ' \
+    | sed -E 's/^([^ ]+) connected.*$/\1/' \
+    | while read -r device_name; do \
+        echo "$device_name => $mode_name"; \
+        sudo xrandr --addmode "$device_name" "$mode_name"; \
+    done
