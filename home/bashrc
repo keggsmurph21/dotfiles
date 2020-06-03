@@ -134,6 +134,7 @@ pywhich() {
         python -c "import $module; print($module.__file__)";
     done
 }
+
 pywhich3() {
     for module in "$@"; do
         python3 -c "import $module; print($module.__file__)";
@@ -208,6 +209,12 @@ ms() {
     else
         mark set "$@"
     fi
+}
+
+pycheck() {
+    black "$1" \
+        && mypy --strict --show-error-codes "$1" \
+        && flake8 "$1"
 }
 
 # }}}
