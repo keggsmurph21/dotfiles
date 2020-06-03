@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# Manage a command via a pidfile.
+#
+# This is useful if we want to have only *one* instance of a given
+# command running at a time (for example, an SSH tunnel).
+
+set -euo pipefail
+
+usage() {
+    cat <<EOM
+usage: $(basename "$0") <cmd> <pidfile>
+
+    Fork and execute <cmd> and store pid in <pidfile>
+
+EOM
+    exit 1
+}
+
+debug() {
+    local DEBUG="${PIDFILE_DEBUG:-0}"
+    if [[ "$DEBUG" -eq 1 ]]; then
+        echo "$@" >&2
+    fi
+}
+
+if [[ $# -ne 2 ]]; then
+    usage
+fi
+
+cmd="$1"
+pidfile="$2"
+
+if [ -r "$pidfile" ]; then
+    debug "Found pidfile '$pidfile'"
+    pid=$(cat "$pidfile")
+    pattern="^\(bash -c \)\?$cmd$"
+    debug "Process cmd: $(ps -q "$pid" -o cmd=)"
+    debug "Expected pattern: /$pattern/"
+    if ! ps -q "$pid" &>/dev/null; then
+        debug "Unknown process for pid $pid, ignoring ..."
+    elif ! ps -q "$pid" -o cmd= | grep -q "$pattern"; then
+        debug "Invalid pid $pid, ignoring ..."
+    else
+        debug "Killing pid $pid ..."
+        kill "$pid"
+    fi
+fi
+
+bash -c "$cmd" &
+pid=$!
+echo "$pid" > "$pidfile"
+debug "Forked '$cmd' with pid $pid"
