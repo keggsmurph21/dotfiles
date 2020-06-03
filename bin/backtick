@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Pre- and append triple backticks to stdin.
+#
+# This is useful if you're copying code to paste into
+# a markdown-aware editor :^)
+
+set -euo pipefail
+
+printf '```\n'
+cat
+printf '```\n'
