@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Simple script to print out a message and then die.
+#
+# Note that this since it's its own executable, it will
+# not kill the calling process!
+
+fail() {
+    echo "$@" >&2
+    exit 1
+}
