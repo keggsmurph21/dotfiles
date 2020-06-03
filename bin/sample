@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Randomly sample stdin <n-samples> times.
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    cat <<EOM
+usage: $(basename "$0") <n-samples>
+
+EOM
+fi
+
+cat \
+    | sort \
+    | uniq \
+    | shuf \
+    | tail "-$1"
