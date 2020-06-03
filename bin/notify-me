@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import tkinter as tk
+
+
+def exit(*args, **kwargs):
+    sys.exit()
+
+
+class App(tk.Frame):
+    def __init__(self, *, master: tk.Tk, text: str, title: str):
+        super().__init__(master)
+        self.pack()
+
+        self.message_label = tk.Label(self, text=text)
+        self.message_label.pack(side="top", expand=1, fill="y")
+
+        self.ok_button = tk.Button(self, text="OK", command=exit)
+        self.ok_button.pack(side="bottom")
+
+        master.title(title)
+        master.geometry("200x100")
+        master.bind("<Return>", exit)
+        master.bind("<Escape>", exit)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("messages", nargs="+")
+    parser.add_argument("--title", default="notify-me")
+    args = parser.parse_args()
+
+    text = " ".join(args.messages)
+    title = args.title
+
+    root = tk.Tk()
+    app = App(master=root, text=text, title=title)
+    app.mainloop()
