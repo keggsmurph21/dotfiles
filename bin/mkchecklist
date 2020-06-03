@@ -1,0 +1,15 @@
+#!/bin/bash
+# vim: filetype=sh
+#
+# Turn a directory hierarchy into a markdown checklist :^)
+
+set -euo pipefail
+
+IGNORES='__pycache__|tests|*.pyc|__init__.py|gui'
+
+tree --dirsfirst --noreport -I "$IGNORES" "$@" \
+    | sed -E 's/─//g' \
+    | sed -E 's/│/ /g' \
+    | sed -E 's/[└├]/- [ ]/g' \
+    | sed -E 's/^-/ -/g' \
+    | tail -n+2
