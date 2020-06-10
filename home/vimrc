@@ -3,7 +3,6 @@
 " vim:foldmethod=marker:foldlevel=0
 
 set nocompatible
-filetype off
 
 " vi can only have one version of python loaded at a time, so
 " the first version that gets loaded is the only one that we
@@ -11,12 +10,11 @@ filetype off
 if has('python3')
 endif
 
-filetype plugin on
-filetype indent on
-
 syntax enable " highlighting
 
 let mapleader = "\\" " for extra key combos
+
+filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -46,6 +44,8 @@ call vundle#begin()
     Plugin 'flammie/vim-conllu'
 
 call vundle#end()
+
+filetype plugin indent on
 
 " Run a login shell (this ensures that ~/.bash_profile will be sourced!)
 set shell=bash\ --login
