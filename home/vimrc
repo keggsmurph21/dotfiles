@@ -43,6 +43,7 @@ call vundle#begin()
     Plugin 'psf/black'
     Plugin 'elzr/vim-json'
     Plugin 'vim-latex/vim-latex'
+    Plugin 'flammie/vim-conllu'
 
 call vundle#end()
 
