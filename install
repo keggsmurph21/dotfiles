@@ -90,7 +90,6 @@ if [ ! -z "$git_username" ]; then
     mkdir -p "$INSTALL_BASE/src/$git_username"
 fi
 mkdir -p "$INSTALL_BASE/.local/bin"
-mkdir -p "$INSTALL_BASE/.vim/bundle/vim-airline/autoload/airline/themes"
 
 # copy XFCE keyboard shortcuts
 if [[ "$INSTALL_WM" == xfce ]]; then
