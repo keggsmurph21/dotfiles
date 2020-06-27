@@ -23,3 +23,6 @@ l2p() {
     "$HOME/src/keggsmurph21/latex2png/latex2png" "$@" \
         | xclip -selection c -t image/png -i
 }
+
+# map <CapsLock> to <Esc> (on X systems)
+alias xmapcapslock="xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'"
