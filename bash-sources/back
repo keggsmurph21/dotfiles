@@ -26,7 +26,7 @@ function __back_debug() {
 }
 
 function __cd() {
-    builtin cd $1
+    builtin cd "$1"
 }
 
 function cd() {
