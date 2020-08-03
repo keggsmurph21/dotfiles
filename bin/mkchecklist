@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-IGNORES='__pycache__|tests|*.pyc|__init__.py|gui'
+IGNORES='__pycache__|tests|*.pyc|__init__.py|gui|target'
 
 tree --dirsfirst --noreport -I "$IGNORES" "$@" \
     | sed -E 's/─//g' \
