@@ -30,8 +30,13 @@ function __cd() {
 }
 
 function cd() {
-    current="$(pwd)"
-    __cd "$1" || return
+    local current="$(pwd)"
+    local target="$1"
+    if [ -z "$target" ]; then
+        # Emulate "cd" without any args
+        target="$HOME"
+    fi
+    __cd "$target" || return
     echo "$current" >> $BACKSTACK
     rm $FWSTACK
     touch $FWSTACK
