@@ -98,6 +98,9 @@
 
     graph   = log --graph
 
+    hashes  = log --format="%h"
+    hashes40= log --format="%H"
+
     history = ! git-nav show
 
     isempty = ! test $(git bl | wc -l) -eq 0
