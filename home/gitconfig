@@ -149,6 +149,10 @@
 
     tracked = ! git diff --stat "$(git null)"
 
+    # undo-commit-amend
+    # see: https://stackoverflow.com/a/1459264
+    uca     = ! git reset --soft HEAD@{1} && git commit -c HEAD@{1}
+
     uncommit= reset --soft HEAD~1 --
 
     unmerged= ! git status -sb | sed -nE 's/^UU (.*)$/\\1/p'
