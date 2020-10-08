@@ -20,6 +20,9 @@
     conflictstyle = diff3
     defaultToUpstream = true
 
+[pull]
+    ff = only
+
 [color]
     ui = true
     status = auto
