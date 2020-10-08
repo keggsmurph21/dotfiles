@@ -19,8 +19,8 @@ shopt -s globstar
 # History {{{
 
 HISTCONTROL=ignoreboth
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=10000
+HISTFILESIZE=20000
 HISTIGNORE="pwd"
 
 # }}}
