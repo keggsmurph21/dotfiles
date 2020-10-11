@@ -52,6 +52,8 @@
     aup     = add -up
     ac      = ! git add -up && git commit -v
 
+    aliases = ! git config -l | grep ^alias | sed 's/^alias.//'
+
     back    = ! git-nav back
 
     bd      = branch -D
@@ -59,6 +61,7 @@
     bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
     btrack  = ! git branch --set-upstream-to origin/$(git bname) $(git bname)
     br      = checkout -b
+    boverwrite = "! __boverwrite() { git bd $1 && git br $1; }; __boverwrite"
 
     c       = commit -v
     ca      = commit -v --amend
@@ -116,6 +119,7 @@
 
     lsm     = ! git-ls-mtime
 
+    ma      = merge --abort
     # merge-resolve: Open all files with merge conflicts in
     #   an editor and automatically highlight the conflicts
     mr      = ! $EDITOR "$(git unmerged)" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'
