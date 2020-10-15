@@ -228,6 +228,12 @@ man() {
     command man "$@"
 }
 
+freshvenv() {
+    _freshvenv "$@"
+    venv="$(cat /tmp/latest-venv)"
+    source "$venv/bin/activate"
+}
+
 # }}}
 
 # Other sources {{{

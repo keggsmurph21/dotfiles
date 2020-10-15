@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# $ _freshvenv <venv>
+#
+# Create a virtual environment at <venv>, and delete
+# one if it already exists there.
+#
+# To use a specific Python executable, set the $PYTHON
+# environment variable.  For example:
+#
+#   $ PYTHON=/usr/local/bin/python3.9 _freshvenv /tmp/py39
+#
+
+set -euo pipefail
+
+venv="${1:-/tmp/freshvenv}"
+python="${PYTHON:-python3.6}"
+
+if [ -d "$venv" ]; then
+    if [ ! -e "$venv/pyvenv.cfg" ]; then
+        echo "Refusing to delete '$venv', not a venv!" >&2
+        exit 1
+    fi
+    echo -n "Removing existing venv at '$venv' ..." >&2
+    rm -rf "$venv"
+    echo " done!" >&2
+fi
+
+echo -n "Creating a venv at '$venv' ..." >&2
+"$python" -m venv "$venv"
+echo " done!" >&2
+
+# So that the wrapper can get the path of the
+# environment we just created.
+echo "$venv" > /tmp/latest-venv
