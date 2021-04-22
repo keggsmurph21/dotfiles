@@ -35,7 +35,7 @@ __prompt_rc_color() {
         echo -e '\e[0;32m' # normal green
     fi
 }
-PS1='\[`__prompt_rc_color`\]\h\[\e[0m\]:\[\e[01;34m\]\w\[\e[0m\]\$ '
+PS1='\[`__prompt_rc_color`\]\h\[\e[0m\] \[\e[01;34m\]\w\[\e[0m\]\$ '
 
 # }}}
 
