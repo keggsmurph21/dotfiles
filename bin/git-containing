@@ -3,4 +3,4 @@
 set -euo pipefail
 
 # Open all files matching the call to git-grep in $EDITOR
-"$EDITOR" $(git grep -l "$@")
+git grep -l "$@" | xe
