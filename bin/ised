@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Like `sed`, but interactive!
+#
+# See https://unix.stackexchange.com/a/20255
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+    cat <<EOF >&2
+usage: $0 <sed-command> <file> ...
+
+    If no <file>s are passed, reads them from stdin.
+
+EOF
+    exit 1
+fi
+
+sed_command="$1"
+shift
+
+# If we have no files, assume they're coming from stdin
+if [[ $# -eq 0 ]]; then
+    cmd=xe
+else
+    cmd=vi
+fi
+
+"$cmd" -c "%${sed_command}c" -c wqall "$@"
