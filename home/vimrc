@@ -42,6 +42,7 @@ call vundle#begin()
     Plugin 'elzr/vim-json'
     Plugin 'vim-latex/vim-latex'
     Plugin 'flammie/vim-conllu'
+    Plugin 'lepture/vim-jinja'
 
 call vundle#end()
 
