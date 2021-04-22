@@ -141,6 +141,8 @@
     s       = status --short --branch
     st      = status
 
+    show-upstream = "! __git_show_upstream() { if [[ $# -ne 1 ]]; then echo 'usage: $0 <ref>' >&2; return 1; fi; git rev-parse --symbolic-full-name \"$1\" | xargs git for-each-ref --format=\"%(upstream:short)\"; }; __git_show_upstream"
+
     tracked = ! git diff --stat "$(git null)"
 
     # undo-commit-amend
