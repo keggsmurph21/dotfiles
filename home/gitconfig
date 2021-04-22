@@ -70,7 +70,9 @@
 
     commits = log --pretty=format:"%H"
 
-    conf    = config --edit
+    # Using git's builtin "config --edit" command won't preserve
+    # whitespace or symlinks for this file :/
+    conf    = ! "$EDITOR" ~/.gitconfig
 
     count   = rev-list --count HEAD
 
