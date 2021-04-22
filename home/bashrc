@@ -109,6 +109,7 @@ alias gtrim="trim \$(git status --porcelain | sed 's/^...//g')"
 alias ipaddr="curl https://api.ipify.org/"
 alias weather="curl https://wttr.in"
 alias late="curl https://cheat.sh/latencies"
+alias t0="tmux attach -t0"
 # }}}
 
 # completions for aliases {{{
