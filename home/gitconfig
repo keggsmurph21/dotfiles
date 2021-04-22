@@ -46,6 +46,7 @@
 
 [alias]
     a       = add
+    ae      = add --edit
     ap      = add --patch
     au      = add --update
     aup     = add --update --patch
