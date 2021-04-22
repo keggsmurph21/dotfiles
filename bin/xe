@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Open all the files passed on stdin in $EDITOR.
+#
+# See https://vi.stackexchange.com/a/1892
+
+xargs -o "$EDITOR" "$@"
