@@ -74,6 +74,8 @@
     # whitespace or symlinks for this file :/
     conf    = ! "$EDITOR" ~/.gitconfig
 
+    containing = "! __containing() { $EDITOR $(git grep -l $@); }; __containing"
+
     count   = rev-list --count HEAD
 
     cp      = cherry-pick
