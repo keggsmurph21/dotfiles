@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -euo pipefail
+
+git status --short --branch \
+    | sed -nE 's/^(U.|.U) (.*)$/\2/p'

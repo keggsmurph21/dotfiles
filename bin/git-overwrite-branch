@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: $0 <branch>" >&2
+    exit 1
+fi
+
+branch="$1"
+
+git branch --delete --force "$branch" \
+    && git checkout -b "$branch"

@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Get a "canonical" repo name.  Really, this
+# is a major hack, since git doesn't track this
+# information.  It would probably be better to
+# get this information from the remote /shrug.
+
+set -euo pipefail
+
+basename "$(git root)"

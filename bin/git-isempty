@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Checks whether a repo has any branches.  Note that
+# if you haven't committed anything to a new repo, then
+# you'll have none!
+
+set -euo pipefail
+
+branches="$(git branch --all -vv | wc -l)"
+
+test "$branches" -eq 0

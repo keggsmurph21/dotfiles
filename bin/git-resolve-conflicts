@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Open all files with merge conflicts in `vi`
+# and automatically highlight the conflicts.
+
+set -euo pipefail
+
+# Usually I would use $EDITOR here, but there's not
+# an editor-independent way to highlight a regular
+# expression :^)
+vi "$(git unmerged)" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'

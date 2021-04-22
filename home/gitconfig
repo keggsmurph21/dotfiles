@@ -50,38 +50,20 @@
     ap      = add --patch
     au      = add --update
     aup     = add --update --patch
-
-    aliases = ! git config --list | grep ^alias | sed 's/^alias.//'
-
     bd      = branch --delete --force
     bl      = branch --all -vv
-    bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
-    btrack  = ! git branch --set-upstream-to origin/$(git bname) $(git bname)
     br      = checkout -b
     brecent = for-each-ref --sort=committerdate
-    bo      = boverwrite
-    boverwrite = "! __boverwrite() { git bd $1 && git br $1; }; __boverwrite"
-
+    bo      = overwrite-branch
     c       = commit
     ca      = commit --amend
     commit  = commit -v
-
     co      = checkout
-
     commits = log --pretty=format:"%H"
-
-    # Using git's builtin "config --edit" command won't preserve
-    # whitespace or symlinks for this file :/
-    conf    = ! "$EDITOR" ~/.gitconfig
-
-    containing = "! __containing() { $EDITOR $(git grep -l $@); }; __containing"
-
     count   = rev-list --count HEAD
-
     cp      = cherry-pick
     cpa     = cherry-pick --abort
     cpc     = cherry-pick --continue
-
     d       = diff
     ds      = diff --stat
     dv      = diff -vv
@@ -90,71 +72,28 @@
     dcs     = diff --cached --stat
     dcv     = diff --cached -vv
     dcw     = diff --cached --color-words
-
     dir     = rev-parse --show-toplevel
-
-    # drop the most recent commit from the local tree
-    # NB: this can be undone by running
-    #   $ git reflog # get the $sha
-    #   $ git reset --hard $sha
-    drop    = ! confirm "Are you sure you want to DROP this commit? [y/n] " && git reset --hard HEAD~1
-
     f       = fetch
     fa      = fetch --all --prune
-
     graph   = log --graph
-
     hashes  = log --format="%h"
     hashes40= log --format="%H"
-
-    isempty = ! test $(git bl | wc -l) -eq 0
-
     null    = hash-object -t tree /dev/null
-
     l       = log
     lol     = log --pretty=line
     ls      = log --stat
-
-    lsm     = ! git-ls-mtime
-
+    lsm     = ls-mtime
     ma      = merge --abort
-    # merge-resolve: Open all files with merge conflicts in
-    #   an editor and automatically highlight the conflicts
-    mr      = ! $EDITOR "$(git unmerged)" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'
-
+    mr      = resolve-conflicts
     ra      = rebase --abort
     rc      = rebase --continue
     ri      = rebase --interactive
-
-    # get a "canonical" repo name
-    rname   = ! basename "$(git root)"
-
-    # get the "root" git dir, even if we're in a (managed) worktree
-    root    = "! __git_root() { \
-                    local repo="$(git dir)"; \
-                    if [ -L "$repo/.wt/root" ]; then \
-                        repo="$(readlink "$repo/.wt/root")"; \
-                    fi; \
-                    echo "$repo"; \
-                }; __git_root"
-
     s       = status --short --branch
     st      = status
-
-    show-upstream = "! __git_show_upstream() { if [[ $# -ne 1 ]]; then echo 'usage: $0 <ref>' >&2; return 1; fi; git rev-parse --symbolic-full-name \"$1\" | xargs git for-each-ref --format=\"%(upstream:short)\"; }; __git_show_upstream"
-
-    tracked = ! git diff --stat "$(git null)"
-
-    # undo-commit-amend
-    # see: https://stackoverflow.com/a/1459264
-    uca     = ! git reset --soft HEAD@{1} && git commit -c HEAD@{1}
-
+    su      = show-upstream
+    uca     = undo-commit-amend
     uncommit= reset --soft HEAD~1 --
-
-    unmerged= ! git status --short --branch | sed -nE 's/^(U.|.U) (.*)$/\\2/p'
-
     unstage = reset HEAD --
-
     url     = ls-remote --get-url
 
 [core]

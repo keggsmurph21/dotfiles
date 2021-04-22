@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: $0 <ref>" >&2
+    return 1
+fi
+
+ref="$(git rev-parse --symbolic-full-name "$1")"
+git for-each-ref --format="%(upstream:short)" "$ref"

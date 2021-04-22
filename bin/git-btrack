@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -euo pipefail
+
+branch="$(git bname)"
+
+git branch --set-upstream-to "origin/$branch" "$branch"

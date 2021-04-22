@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Get the "root" git dir, even if we're in a (managed)
+# worktree.  This isn't really useful at the moment, since
+# I'm not using the worktree stuff /shrug.
+
+set -euo pipefail
+
+repo="$(git dir)"
+if [ -L "$repo/.wt/root" ]; then
+    repo="$(readlink "$repo/.wt/root")"
+fi
+echo "$repo"
