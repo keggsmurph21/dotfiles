@@ -59,6 +59,7 @@
     btrack  = ! git branch --set-upstream-to origin/$(git bname) $(git bname)
     br      = checkout -b
     brecent = for-each-ref --sort=committerdate
+    bo      = boverwrite
     boverwrite = "! __boverwrite() { git bd $1 && git br $1; }; __boverwrite"
 
     c       = commit -v
