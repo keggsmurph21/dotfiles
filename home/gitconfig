@@ -44,6 +44,9 @@
     required = true
     clean = git-lfs clean -- %f
 
+[commit]
+    verbose = true
+
 [alias]
     a       = add
     ae      = add --edit
@@ -57,7 +60,6 @@
     bo      = overwrite-branch
     c       = commit
     ca      = commit --amend
-    commit  = commit -v
     co      = checkout
     commits = log --pretty=format:"%H"
     count   = rev-list --count HEAD
