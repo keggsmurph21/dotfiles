@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+from typing import Sequence, Set
+
+import argparse
+import logging
+import subprocess as sp
+import string
+
+
+logger = logging.getLogger(__name__)
+
+
+def _run_command(*args: str) -> str:
+    """
+    Wrapper around subprocess.run() with nicer defaults.
+    """
+    logger.debug("Running command: $ %s", " ".join(args))
+    proc = sp.run(list(args), stdout=sp.PIPE, encoding="utf-8")
+    return proc.stdout
+
+
+def _get_repo_root() -> str:
+    return _run_command("git", "dir").strip()
+
+
+def _expand_roots(roots: Sequence[str]) -> Set[Path]:
+    return set.union(*(_expand_root(root) for root in roots))
+
+
+def _expand_root(root: str) -> Set[Path]:
+    stdout = _run_command("git", "ls-files", "--", root)
+    lines = stdout.strip().split("\n")
+    return set(Path(line).resolve() for line in lines)
+
+
+def _get_sed_delimiter(pattern: str, replacement: str) -> str:
+    for punct in string.punctuation:
+        if punct in ("'", '"', "\\"):
+            # Let's just skip these cans of worms ...
+            continue
+        if punct in pattern:
+            continue
+        if punct in replacement:
+            continue
+        return punct
+    raise ValueError(f"Could not find a delimiter for {pattern!r} and {replacement!r}")
+
+
+def _build_sed_command(pattern: str, replacement: str) -> str:
+    delim = _get_sed_delimiter(pattern, replacement)
+    command = "s"
+    flags = "g"
+    return delim.join((command, pattern, replacement, flags))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("pattern", help="Pattern to be replaced")
+    parser.add_argument("replacement", help="Text to replace pattern")
+    parser.add_argument(
+        "files",
+        nargs="*",
+        help="Files to search for <pattern> (if not passed, searches the entire repo)",
+    )
+    parser.add_argument("-v", "--verbose", action="store_true")
+    args = parser.parse_args()
+
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
+    roots = args.files or [_get_repo_root()]
+    files = (str(path) for path in _expand_roots(roots))
+    sed_command = _build_sed_command(args.pattern, args.replacement)
+    _run_command("sed", "-i", sed_command, *files)
+
+
+if __name__ == "__main__":
+    main()
