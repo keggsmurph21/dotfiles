@@ -44,7 +44,7 @@ _import_pg() {
 
 _export_mysql() {
     OUTPUT_FILE="$1.mysql"
-    mysqldump --hex-blob -ulocal ESI > $OUTPUT_FILE
+    mysqldump --no-tablespaces --hex-blob -ulocal ESI > $OUTPUT_FILE
 }
 
 _import_mysql() {
