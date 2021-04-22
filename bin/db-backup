@@ -73,11 +73,11 @@ case "$1" in
     export)
         OUTPUT_BASE=$(_get_output_base)
         _export_pg $OUTPUT_BASE
-        #_export_mysql $OUTPUT_BASE
+        _export_mysql $OUTPUT_BASE
         ;;
     import)
         _import_pg "$2"
-        #_import_mysql "$2"
+        _import_mysql "$2"
         ;;
     *)
         usage
