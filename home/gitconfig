@@ -62,8 +62,9 @@
     bo      = boverwrite
     boverwrite = "! __boverwrite() { git bd $1 && git br $1; }; __boverwrite"
 
-    c       = commit -v
-    ca      = commit -v --amend
+    c       = commit
+    ca      = commit --amend
+    commit  = commit -v
 
     co      = checkout
 
