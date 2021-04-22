@@ -57,6 +57,7 @@
     bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
     btrack  = ! git branch --set-upstream-to origin/$(git bname) $(git bname)
     br      = checkout -b
+    brecent = for-each-ref --sort=committerdate
     boverwrite = "! __boverwrite() { git bd $1 && git br $1; }; __boverwrite"
 
     c       = commit -v
