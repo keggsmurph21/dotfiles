@@ -46,15 +46,11 @@
 
 [alias]
     a       = add
-    af      = add -N
     ap      = add -p
     au      = add -u
     aup     = add -up
-    ac      = ! git add -up && git commit -v
 
     aliases = ! git config -l | grep ^alias | sed 's/^alias.//'
-
-    back    = ! git-nav back
 
     bd      = branch -D
     bl      = branch --all -vv
@@ -65,7 +61,6 @@
 
     c       = commit -v
     ca      = commit -v --amend
-    cm      = ! cat | git commit -F -
 
     co      = checkout
 
@@ -97,14 +92,10 @@
     f       = fetch
     fa      = fetch --all -p
 
-    fw      = ! git-nav fw
-
     graph   = log --graph
 
     hashes  = log --format="%h"
     hashes40= log --format="%H"
-
-    history = ! git-nav show
 
     isempty = ! test $(git bl | wc -l) -eq 0
 
@@ -112,10 +103,7 @@
 
     l       = log
     lol     = log --pretty=line
-    lp      = log -p
-    lpw     = log -p --color-words
     ls      = log --stat
-    last    = log -p -1 HEAD
 
     lsm     = ! git-ls-mtime
 
@@ -123,12 +111,6 @@
     # merge-resolve: Open all files with merge conflicts in
     #   an editor and automatically highlight the conflicts
     mr      = ! $EDITOR "$(git unmerged)" '+/\\(<\\|=\\||\\|>\\)\\{7\\}'
-
-    nav     = ! git-nav
-
-    ra      = remote add
-
-    recent  = ! git-recent
 
     ra      = rebase --abort
     rc      = rebase --continue
@@ -148,8 +130,6 @@
 
     s       = status -sb
     st      = status
-
-    sm      = submodule
 
     tracked = ! git diff --stat "$(git null)"
 
