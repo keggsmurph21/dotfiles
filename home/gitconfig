@@ -46,13 +46,13 @@
 
 [alias]
     a       = add
-    ap      = add -p
-    au      = add -u
-    aup     = add -up
+    ap      = add --patch
+    au      = add --update
+    aup     = add --update --patch
 
-    aliases = ! git config -l | grep ^alias | sed 's/^alias.//'
+    aliases = ! git config --list | grep ^alias | sed 's/^alias.//'
 
-    bd      = branch -D
+    bd      = branch --delete --force
     bl      = branch --all -vv
     bname   = ! git isempty && echo __NO_HEAD__ || git rev-parse --abbrev-ref HEAD
     btrack  = ! git branch --set-upstream-to origin/$(git bname) $(git bname)
@@ -90,7 +90,7 @@
     drop    = ! confirm "Are you sure you want to DROP this commit? [y/n] " && git reset --hard HEAD~1
 
     f       = fetch
-    fa      = fetch --all -p
+    fa      = fetch --all --prune
 
     graph   = log --graph
 
@@ -128,7 +128,7 @@
                     echo "$repo"; \
                 }; __git_root"
 
-    s       = status -sb
+    s       = status --short --branch
     st      = status
 
     tracked = ! git diff --stat "$(git null)"
@@ -139,7 +139,7 @@
 
     uncommit= reset --soft HEAD~1 --
 
-    unmerged= ! git status -sb | sed -nE 's/^UU (.*)$/\\1/p'
+    unmerged= ! git status --short --branch | sed -nE 's/^(U.|.U) (.*)$/\\2/p'
 
     unstage = reset HEAD --
 
