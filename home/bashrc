@@ -113,6 +113,7 @@ alias t0="tmux attach -t0"
 # }}}
 
 # completions for aliases {{{
+source /usr/share/bash-completion/completions/git
 complete -o bashdefault -o default -o nospace -F __git_wrap__git_main d
 complete -o bashdefault -o default -o nospace -F __git_wrap__git_main dot
 complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
