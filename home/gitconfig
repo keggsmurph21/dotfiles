@@ -1,5 +1,8 @@
 # vim: syntax=gitconfig
 
+[init]
+    defaultBranch = main
+
 [user]
     useConfigOnly = true
 
