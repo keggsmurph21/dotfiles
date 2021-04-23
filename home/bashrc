@@ -235,6 +235,13 @@ freshvenv() {
     source "$venv/bin/activate"
 }
 
+to-width() {
+    # Truncate stdin to fit screen
+    while read -r line; do
+        echo "$line" | cut -b 1-$COLUMNS;
+    done
+}
+
 # }}}
 
 # Other sources {{{
