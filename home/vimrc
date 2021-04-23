@@ -43,6 +43,7 @@ call vundle#begin()
     Plugin 'vim-latex/vim-latex'
     Plugin 'flammie/vim-conllu'
     Plugin 'lepture/vim-jinja'
+    Plugin 'rust-lang/rust.vim'
 
 call vundle#end()
 
@@ -369,6 +370,12 @@ let g:syntastic_typescript_checkers = ['tsuquyomi']
 " tsuquyomi {{{
 
 let g:tsuquyomi_disable_quickfix = 1
+
+" }}}
+
+" rust.vim {{{
+
+let g:rustfmt_autosave = 1
 
 " }}}
 
