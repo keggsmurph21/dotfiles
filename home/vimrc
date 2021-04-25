@@ -44,6 +44,7 @@ call vundle#begin()
     Plugin 'flammie/vim-conllu'
     Plugin 'lepture/vim-jinja'
     Plugin 'rust-lang/rust.vim'
+    Plugin 'jaspervdj/stylish-haskell'
 
 call vundle#end()
 
@@ -376,6 +377,14 @@ let g:tsuquyomi_disable_quickfix = 1
 " rust.vim {{{
 
 let g:rustfmt_autosave = 1
+
+" }}}
+
+" stylish-haskell {{{
+
+autocmd FileType haskell nnoremap <leader>f :%! stylish-haskell<cr>
+
+" }}}
 
 " }}}
 
