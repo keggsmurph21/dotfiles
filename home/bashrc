@@ -105,7 +105,6 @@ alias flake8rc="vim $HOME/.flake8"
 
 # one-liners {{{
 alias peek='tee >(cat 1>&2)' # mirror stdout to stderr (for seeing data thru pipe)
-alias gtrim="trim \$(git status --porcelain | sed 's/^...//g')"
 alias ipaddr="curl https://api.ipify.org/"
 alias weather="curl https://wttr.in"
 alias late="curl https://cheat.sh/latencies"
