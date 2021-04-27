@@ -123,13 +123,6 @@ complete -o bashdefault -o default -o nospace -F __git_wrap__git_main g
 
 # Functions {{{
 
-# trim whitespace
-trim() {
-    for file in "$@"; do
-        sed -E 's/\s+$//g' -i'' "$file"
-    done
-}
-
 # see where python is importing a module from
 pywhich() {
     for module in "$@"; do
