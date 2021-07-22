@@ -4,7 +4,7 @@
 # shellcheck disable=SC2139
 
 # If not running interactively or from Vim, don't do anything
-[[ $- != *i* && "$SH_ENV" != vim ]] && return
+[[ $- != *i* && "${SH_ENV:-}" != vim ]] && return
 
 # }}}
 
