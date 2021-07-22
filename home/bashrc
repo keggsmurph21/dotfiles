@@ -72,6 +72,7 @@ alias vi=vim
 alias pip="python -m pip"
 alias g=git
 alias d=dot
+alias x=xargs
 alias pwd="pwd -P"
 alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles|node_modules|venv|.tox|.eggs|build|dist'"
 alias grep="grep --color=auto --devices=skip -I"
