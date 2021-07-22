@@ -63,6 +63,7 @@
     bo      = overwrite-branch
     c       = commit
     ca      = commit --amend
+    cane    = commit --amend --no-edit
     co      = checkout
     commits = log --pretty=format:"%H"
     count   = rev-list --count HEAD
