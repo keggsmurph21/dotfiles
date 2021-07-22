@@ -96,6 +96,7 @@
     ri      = rebase --interactive
     ro      = rebase --onto
     s       = status --short --branch
+    spull   = stash-pull
     st      = status
     su      = show-upstream
     uca     = undo-commit-amend
