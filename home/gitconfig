@@ -94,6 +94,7 @@
     ra      = rebase --abort
     rc      = rebase --continue
     ri      = rebase --interactive
+    ro      = rebase --onto
     s       = status --short --branch
     st      = status
     su      = show-upstream
