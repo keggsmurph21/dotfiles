@@ -243,7 +243,9 @@ to-width() {
 
 __src() {
     # shellcheck disable=SC2015,SC1090
-    [ -r "$1" ] && . "$1" &>/dev/null || true
+    if [[ -r "$1" ]]; then
+        source "$1" &>/dev/null
+    fi
 }
 
 # source external files
