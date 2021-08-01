@@ -95,6 +95,7 @@
     ra      = rebase --abort
     rc      = rebase --continue
     ri      = rebase --interactive
+    rh      = reset --hard
     ro      = rebase --onto
     rood    = rebase --onto origin/develop
     room    = rebase --onto origin/master
