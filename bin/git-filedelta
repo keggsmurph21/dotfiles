@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# What files changed in <ref> ?
+
+set -euo pipefail
+
+ref="${1:-HEAD}"
+
+git diff-tree \
+    --no-commit-id \
+    --name-only \
+    --relative \
+    -r  \
+    "$ref"

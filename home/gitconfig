@@ -82,6 +82,7 @@
     dir     = rev-parse --show-toplevel
     f       = fetch
     fa      = fetch --all --prune
+    fd      = filedelta
     graph   = log --graph
     hashes  = log --format="%h"
     hashes40= log --format="%H"
