@@ -53,6 +53,7 @@
 [alias]
     a       = add
     ae      = add --edit
+    an      = add --intent-to-add
     ap      = add --patch
     au      = add --update
     aup     = add --update --patch
