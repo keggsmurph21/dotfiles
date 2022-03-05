@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Get the 'HostName' associated with 'Host' from 'ssh/config'.
+
+set -euo pipefail
+
+host="$1"
+
+ssh -G "$host" \
+    | grep ^hostname \
+    | cut -d' ' -f2
