@@ -84,6 +84,7 @@ if which hub &>/dev/null; then
 fi
 alias wt=__wt_main
 alias less="less -R"
+alias lsports="netstat -talpn"
 # }}}
 
 # bash rc files {{{
