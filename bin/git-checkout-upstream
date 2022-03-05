@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Reset local copy of <branch> to <upstream>/<branch> and
+# check it out (without checking out the local copy).
+
+set -euo pipefail
+
+branch="$1"
+upstream="${2:-origin}"
+
+set -x
+git fetch "$upstream" "$branch"
+git checkout "$upstream/$branch"
+git overwrite-branch "$branch"
+git btrack

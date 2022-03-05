@@ -66,6 +66,7 @@
     ca      = commit --amend
     cane    = commit --amend --no-edit
     co      = checkout
+    cou     = checkout-upstream
     commits = log --pretty=format:"%H"
     count   = rev-list --count HEAD
     cp      = cherry-pick
