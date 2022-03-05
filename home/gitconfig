@@ -83,6 +83,7 @@
     f       = fetch
     fa      = fetch --all --prune
     fd      = filedelta
+    fm      = find-merge
     graph   = log --graph
     hashes  = log --format="%h"
     hashes40= log --format="%H"

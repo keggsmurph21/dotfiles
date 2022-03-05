@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Find the merge commit where <commit> was merged into <branch>.
+#
+# (from https://stackoverflow.com/q/8475448)
+
+set -euo pipefail
+
+commit="$1"
+branch="${2:-HEAD}"
+
+_rev_list() {
+    # Get an enumerated list of all commits into <branch>
+    # since <commit>.
+    git rev-list "$commit..$branch" --ancestry-path | cat --number
+    git rev-list "$commit..$branch" --first-parent  | cat --number
+}
+
+# Sort by SHA1, drop non-duplicates, order by index (newest => oldest), take oldest.
+merge="$(_rev_list \
+    | sort -k2 --stable \
+    | uniq --skip-fields 1 --repeated \
+    | sort --numeric-sort \
+    | tail -1 \
+    | cut -f2)"
+
+if [[ -z "$merge" ]]; then
+    echo "No merge commit found for '$commit' (into '$branch')" >&2
+    exit 1
+fi
+
+echo "$merge"
