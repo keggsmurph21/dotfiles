@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Get a link to <path> on <remote> (assuming GitHub URL schemas).
+
+set -euo pipefail
+
+path="$(realpath --relative-to "$(git dir)" "${1:-.}")"
+remote="${2:-}"
+hostname="$(git remote-hostname "$remote")"
+branch="$(git bname)"
+
+echo "https://$hostname/tree/$branch/$path"
