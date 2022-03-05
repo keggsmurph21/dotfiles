@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -exuo pipefail
 
 usage() {
     echo "usage: $0 [export|import \$FILE|list]"
