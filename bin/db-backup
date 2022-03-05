@@ -28,10 +28,10 @@ _import_pg() {
         echo "psql import file does not exist: $INPUT_FILE"
         usage
     fi
-    sudo service postgresql restart
     sudo -u postgres dropdb VPC
     sudo -u postgres createdb -T template0 VPC
     sudo -u postgres psql VPC < "$INPUT_FILE"
+    sudo systemctl restart postgresql
 }
 
 _export_mysql() {
@@ -48,6 +48,7 @@ _import_mysql() {
     mysql -uroot -e "DROP DATABASE ESI;"
     mysql -uroot -e "CREATE DATABASE ESI DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;"
     mysql -uroot ESI < "$INPUT_FILE"
+    sudo systemctl restart mysql
 }
 
 _list_dbs() {
