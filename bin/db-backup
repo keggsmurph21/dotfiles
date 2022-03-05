@@ -45,9 +45,9 @@ _import_mysql() {
         echo "mysql import file does not exist: $INPUT_FILE"
         usage
     fi
-    mysql -uroot -e "DROP DATABASE ESI;"
-    mysql -uroot -e "CREATE DATABASE ESI DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;"
-    mysql -uroot ESI < "$INPUT_FILE"
+    sudo mysql -e "DROP DATABASE ESI;"
+    sudo mysql -e "CREATE DATABASE ESI DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;"
+    sudo mysql ESI < "$INPUT_FILE"
     sudo systemctl restart mysql
 }
 
