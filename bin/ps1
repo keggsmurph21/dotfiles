@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+
+from typing import Optional, Sequence
+
+import argparse
+import enum
+import subprocess as sp
+
+
+class Color(enum.Enum):
+    Red = r"\e[0;31m"
+    Green = r"\e[0;32m"
+    Yellow = r"\e[0;33m"
+    Blue = r"\e[0;34m"
+    Magenta = r"\e[0;35m"
+    BrightRed = r"\e[1;31m"
+    BrightGreen = r"\e[1;32m"
+    BrightYellow = r"\e[1;33m"
+    BrightBlue = r"\e[1;34m"
+    BrightMagenta = r"\e[1;35m"
+    Reset = r"\e[0m"
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+
+def run(command: str) -> Sequence[str]:
+    lines = maybe_run(command)
+    assert lines is not None
+    return lines
+
+
+def maybe_run(command: str) -> Optional[Sequence[str]]:
+    try:
+        proc = sp.run(command.split(), stdout=sp.PIPE, stderr=sp.PIPE, check=True)
+        return proc.stdout.decode("utf-8").strip().split("\n")
+    except sp.CalledProcessError:
+        return None
+
+
+class GitState:
+    def __init__(self) -> None:
+        remote_url = run("git remote get-url origin")[0]
+        self.repo_name = run(f"basename {remote_url}")[0]
+
+        self.branch_name = run("git rev-parse --abbrev-ref HEAD")[0]
+        self.commits_ahead_of_remote = len(
+            [line for line in run("git log @{u}.. --pretty=%h") if line]
+        )
+        self.commits_behind_remote = len(
+            [line for line in run("git log ..@{u} --pretty=%h") if line]
+        )
+        self.is_dirty = maybe_run("git diff-index  --quiet HEAD --") is None
+        self.has_untracked_files = (
+            len(
+                [
+                    line
+                    for line in run("git status --porcelain")
+                    if line.startswith("?? ")
+                ]
+            )
+            > 0
+        )
+
+        git_dir = run("git rev-parse --git-dir")[0]
+        self.is_rebasing = maybe_run(f"ls {git_dir}/rebase-merge") is not None
+        self.is_merging = maybe_run(f"ls {git_dir}/MERGE_HEAD") is not None
+        self.is_cherry_picking = maybe_run(f"ls {git_dir}/CHERRY_PICK_HEAD") is not None
+
+        repo_root = run("git dir")[0]
+        pwd = run("pwd")[0]
+        if repo_root == pwd:
+            self.effective_pwd = ""
+        else:
+            self.effective_pwd = pwd[len(repo_root) + 1 :]  # noqa: E203
+
+    @classmethod
+    def create(cls) -> Optional["GitState"]:
+        if maybe_run("git status") is None:
+            return None
+        return cls()
+
+
+def get_ps1(last_command_succeeded: bool) -> str:
+    s = ""
+    if last_command_succeeded:
+        s += str(Color.BrightGreen)
+    else:
+        s += str(Color.Green)
+
+    state = GitState.create()
+    if state is None:
+        s += (
+            fr"\u@\h{Color.Reset}:{Color.BrightBlue}\w{Color.Reset}$ "
+        )
+        return s
+
+    s += f"{state.repo_name}{Color.Reset} "
+
+    if state.is_dirty:
+        s += f"{Color.BrightMagenta}"
+    else:
+        s += f"{Color.Magenta}"
+    s += f"{state.branch_name}{Color.Reset}"
+
+    if state.commits_ahead_of_remote or state.commits_behind_remote:
+        s += "("
+        if state.commits_ahead_of_remote:
+            s += f"{Color.Green}+{state.commits_ahead_of_remote}{Color.Reset}"
+            if state.commits_behind_remote:
+                s += ","
+        if state.commits_behind_remote:
+            s += f"{Color.Red}-{state.commits_behind_remote}{Color.Reset}"
+        s += ")"
+
+    if state.is_rebasing or state.is_merging or state.is_cherry_picking:
+        s += f"[{Color.Red}"
+        if state.is_rebasing:
+            s += "REBASING"
+        elif state.is_merging:
+            s += "MERGING"
+        elif state.is_cherry_picking:
+            s += "CHERRY-PICKING"
+        s += f"{Color.Reset}]"
+
+    s += " "
+    if state.effective_pwd:
+        s += f"{Color.BrightBlue}{state.effective_pwd}{Color.Reset} "
+
+    return s
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-x", "--last-exit-code", type=int, required=True)
+    args = parser.parse_args()
+
+    print(get_ps1(args.last_exit_code == 0))
