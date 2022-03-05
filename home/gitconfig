@@ -91,6 +91,7 @@
     null    = hash-object -t tree /dev/null
     l       = log
     lol     = log --pretty=line
+    lp      = log -p
     ls      = log --stat
     lsm     = ls-mtime
     ma      = merge --abort
