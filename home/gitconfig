@@ -110,6 +110,7 @@
     s       = status --short --branch
     spull   = stash-pull
     st      = status
+    stat    = log -n1 --format=%s --stat
     su      = show-upstream
     uca     = undo-commit-amend
     uncommit= reset --soft HEAD~1 --
