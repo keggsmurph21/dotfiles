@@ -17,26 +17,18 @@ _get_output_base() {
     echo "$DB_DUMP_DIR/$(_timestamp)"
 }
 
-_ensure_privileges() {
-    if [[ $UID != 0 ]]; then
-        echo "this function requires sudo"
-        exit 2
-    fi
-}
-
 _export_pg() {
     OUTPUT_FILE="$1.psql"
     pg_dump VPC > "$OUTPUT_FILE"
 }
 
 _import_pg() {
-    _ensure_privileges
     INPUT_FILE="$1.psql"
     if [ ! -f "$INPUT_FILE" ]; then
         echo "psql import file does not exist: $INPUT_FILE"
         usage
     fi
-    service postgresql restart
+    sudo service postgresql restart
     sudo -u postgres dropdb VPC
     sudo -u postgres createdb -T template0 VPC
     sudo -u postgres psql VPC < "$INPUT_FILE"
