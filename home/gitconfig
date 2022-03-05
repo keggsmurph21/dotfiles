@@ -101,8 +101,8 @@
     rc      = rebase --continue
     re      = rebase --edit-todo
     ri      = rebase --interactive
-    rhod    = reset --hard origin/develop
-    rhom    = reset --hard origin/master
+    rhod    = reset-hard-remote origin develop
+    rhom    = reset-hard-remote origin master
     rho     = reset-hard-remote origin
     ro      = rebase --onto
     rood    = rebase --onto origin/develop
