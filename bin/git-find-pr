@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Find the PR where <commit> was merged into <branch>.
+#
+# (from Ryan)
+
+set -euo pipefail
+
+merge="$(git find-merge "$1" "${2:-}")"
+remote="${3:-}"
+pr="$(git log -n1 "$merge" | sed -nE 's/.*Merge pull request #([0-9]+).*/\1/p')"
+
+if [[ -z "$pr" ]]; then
+    echo "No PR found for '$1' (via '$merge')" >&2
+    exit 1
+fi
+
+hostname="$(git remote-hostname "$remote")"
+
+# This assumes GitHub-style URL schemas.
+echo "https://$hostname/pull/$pr"
