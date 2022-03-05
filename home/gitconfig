@@ -99,6 +99,7 @@
     mr      = resolve-conflicts
     ra      = rebase --abort
     rc      = rebase --continue
+    re      = rebase --edit-todo
     ri      = rebase --interactive
     rh      = reset --hard
     rhod    = reset --hard origin/develop
