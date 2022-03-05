@@ -341,6 +341,9 @@ let g:ctrlp_max_files=0
 let g:ctrlp_clear_cache_on_exit=0
 let g:ctrlp_working_path_mode = 'r'
 
+" Adapted from https://github.com/kien/ctrlp.vim/issues/174#issuecomment-49747252
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files --others --cached --exclude-standard']
+
 " }}}
 
 " black {{{
