@@ -1,0 +1,13 @@
+# On Ubuntu, MySQL is bundled with libedit instead of libreadline.  This
+# means that it has totally different keybindings.  Luckily, we can define
+# our own keybindings to mimic libreadline ...
+
+bind "^W" ed-delete-prev-word
+bind "^U" vi-kill-line-prev
+bind "^R" em-inc-search-prev
+bind "^5D" vi-prev-word  # LeftArrow
+bind "^5C" vi-next-word  # RightArrow
+
+# Ideally, we would bind this to '^C', but that doesn't seem to work for
+# me (not sure why ...) even with '--sigint-ignore'.
+bind "^X" ed-start-over
