@@ -210,6 +210,9 @@ nnoremap <C-DOWN> :m+<cr>==
 " pretty-print JSON
 nnoremap <leader>j :%!python -m json.tool<cr>
 
+" enter visual block mode
+nnoremap <leader>v <C-v>
+
 " copy / paste to system clipboard
 vnoremap <C-c> "+y
 nnoremap <C-c> V"+y
