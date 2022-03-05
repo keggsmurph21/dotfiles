@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Get the hostname associated with a given git remote.
+
+set -euo pipefail
+
+remote="${1:-origin}"
+url="$(git config --get "remote.$remote.url")"
+hostname_part="$(echo "$url" | cut -d: -f1)"
+path_part="$(echo "$url" | cut -d: -f2)"
+
+# This is assuming that we're using an SSH url, which
+# isn't necessarily true!
+hostname="$(ssh-hostname "$hostname_part")"
+
+echo "$hostname/$path_part"
