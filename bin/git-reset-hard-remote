@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Move HEAD of current branch to its HEAD on <remote>.
+
+set -euo pipefail
+
+remote="${1:-origin}"
+branch="${2:-$(git bname)}"
+
+git reset --hard "$remote/$branch"

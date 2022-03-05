@@ -103,6 +103,7 @@
     rh      = reset --hard
     rhod    = reset --hard origin/develop
     rhom    = reset --hard origin/master
+    rho     = reset-hard-remote origin
     ro      = rebase --onto
     rood    = rebase --onto origin/develop
     room    = rebase --onto origin/master
