@@ -71,6 +71,7 @@ alias sudo="sudo " # allow $ sudo <alias>
 alias vi=vim
 alias pip="python -m pip"
 alias g=git
+alias gg="git grep"
 alias d=dot
 alias x=xargs
 alias xg="xargs git"
