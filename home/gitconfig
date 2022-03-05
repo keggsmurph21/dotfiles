@@ -59,28 +59,28 @@
     aup     = add --update --patch
     bd      = branch --delete --force
     bl      = branch --all -vv
+    bo      = overwrite-branch
     br      = checkout -b
     brecent = for-each-ref --sort=committerdate
-    bo      = overwrite-branch
     c       = commit
     ca      = commit --amend
     cane    = commit --amend --no-edit
     co      = checkout
-    cou     = checkout-upstream
     commits = log --pretty=format:"%H"
+    cou     = checkout-upstream
     count   = rev-list --count HEAD
     cp      = cherry-pick
     cpa     = cherry-pick --abort
     cpc     = cherry-pick --continue
     d       = diff
-    ds      = diff --stat
-    dv      = diff -vv
-    dw      = diff --color-words
     dc      = diff --cached
     dcs     = diff --cached --stat
     dcv     = diff --cached -vv
     dcw     = diff --cached --color-words
     dir     = rev-parse --show-toplevel
+    ds      = diff --stat
+    dv      = diff -vv
+    dw      = diff --color-words
     f       = fetch
     fa      = fetch --all --prune
     fd      = filedelta
@@ -89,7 +89,6 @@
     graph   = log --graph
     hashes  = log --format="%h"
     hashes40= log --format="%H"
-    null    = hash-object -t tree /dev/null
     l       = log
     lol     = log --pretty=line
     lp      = log -p
@@ -97,20 +96,21 @@
     lsm     = ls-mtime
     ma      = merge --abort
     mr      = resolve-conflicts
+    null    = hash-object -t tree /dev/null
     ra      = rebase --abort
     rc      = rebase --continue
     re      = rebase --edit-todo
-    ri      = rebase --interactive
+    rho     = reset-hard-remote origin
     rhod    = reset-hard-remote origin develop
     rhom    = reset-hard-remote origin master
-    rho     = reset-hard-remote origin
+    ri      = rebase --interactive
     ro      = rebase --onto
     rood    = rebase --onto origin/develop
     room    = rebase --onto origin/master
     s       = status --short --branch
     spull   = stash-pull
-    st      = status
     stat    = log -n1 --format=%s --stat
+    st      = status
     su      = show-upstream
     uca     = undo-commit-amend
     uncommit= reset --soft HEAD~1 --
