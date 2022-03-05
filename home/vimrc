@@ -45,6 +45,7 @@ call vundle#begin()
     Plugin 'lepture/vim-jinja'
     Plugin 'rust-lang/rust.vim'
     Plugin 'jaspervdj/stylish-haskell'
+    Plugin 'fisadev/vim-isort'
 
 call vundle#end()
 
