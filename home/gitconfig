@@ -92,7 +92,7 @@
     l       = log
     lol     = log --pretty=line
     lp      = log -p
-    ls      = log --stat
+    ls      = ls-files
     lsm     = ls-mtime
     ma      = merge --abort
     mr      = resolve-conflicts
