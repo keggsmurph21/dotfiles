@@ -68,6 +68,7 @@ fi
 
 # system {{{
 alias sudo="sudo " # allow $ sudo <alias>
+alias v=vim
 alias vi=vim
 alias pip="python -m pip"
 alias g=git
