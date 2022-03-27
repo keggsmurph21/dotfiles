@@ -9,7 +9,14 @@ branch="$1"
 upstream="${2:-origin}"
 
 set -x
+
 git fetch "$upstream" "$branch"
-git checkout "$upstream/$branch"
-git overwrite-branch "$branch"
+
+if git branch-exists "$branch"; then
+    git checkout "$upstream/$branch"
+    git overwrite-branch "$branch"
+else
+    git checkout -b "$branch" --track "$upstream/$branch"
+fi
+
 git btrack
