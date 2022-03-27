@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""
+TODO: Document
+"""
+
+import argparse
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+
+DOTFILES_DIR = Path(os.environ["DOTFILES_DIR"])
+
+
+def run_bin(command: str, *args: str) -> "subprocess.CompletedProcess[str]":
+    subprocess.run(
+        [
+            str(DOTFILES_DIR / "bin" / command),
+            *args,
+        ],
+        check=True,
+        encoding="utf-8",
+    )
+
+
+def backup_and_link(*, orig: Path, copy: Path) -> None:
+    try:
+        copy.parent.mkdir(parents=True, exist_ok=True)
+    except FileExistsError:
+        # https://bugs.python.org/issue29694
+        pass
+
+    if copy.exists():
+        if copy.samefile(orig):
+            # Fast path -- <copy> already is a link to <orig>.
+            print("Nothing to do!", file=sys.stderr)
+            return
+
+        # If <copy> exists but isn't just a link to <orig>,
+        # then let's be nice and create a backup (if it has
+        # different content) before we overwrite it.
+        if orig.read_bytes() != copy.read_bytes():
+            run_bin("bak", copy)
+
+        copy.unlink()
+
+    elif copy.is_symlink():
+        # It's a broken link.
+        copy.unlink()
+
+    copy.symlink_to(orig.resolve())
+    print(f"linked {copy}@ => {orig}", file=sys.stderr)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--path", type=Path, required=True)
+    parser.add_argument("--original-dir", type=Path, required=True)
+    parser.add_argument("--target-dir", type=Path, required=True)
+    args = parser.parse_args()
+
+    backup_and_link(
+        orig=args.original_dir / args.path,
+        copy=args.target_dir / args.path,
+    )
+
+
+if __name__ == "__main__":
+    main()

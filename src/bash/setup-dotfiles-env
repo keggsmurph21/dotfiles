@@ -1,0 +1,6 @@
+# vim: syntax=sh
+#
+# Set up tools that need to be active in the *current* shell.
+
+export DOTFILES_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")/../..")"
+export DOTFILES_VENV="$DOTFILES_DIR/.dotfiles-data/dotfiles-venv"

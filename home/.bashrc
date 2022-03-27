@@ -25,8 +25,10 @@ __src() {
     fi
 }
 
+__src "$HOME/.local/share/dotfiles/src/bash/setup-dotfiles-env"
+
 # source external files
-for file in "$DOTFILES_DIR/bash-sources/"*; do
+for file in "$DOTFILES_DIR/src/bash/"*; do
     __src "$file"
 done
 __src "/usr/share/bash-completion/bash_completion"
@@ -72,7 +74,6 @@ PS1='\[`__prompt_rc_color`\]\h\[\e[0m\] \[\e[01;34m\]\w\[\e[0m\]\$ '
 
 # Exports {{{
 
-export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
 export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$HOME/.cargo/bin:$HOME/.cabal/bin:$PATH"
 export EDITOR=vim
 export VISUAL=vim
@@ -105,6 +106,7 @@ alias pip="python -m pip"
 alias g=git
 alias gg="git grep"
 alias d=dot
+alias dsync=dot-sync
 alias x=xargs
 alias xg="xargs git"
 alias pwd="pwd -P"

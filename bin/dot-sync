@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# TODO: Document
+
+set -euo pipefail
+
+source "$DOTFILES_VENV/bin/activate"
+
+cd "$DOTFILES_DIR"
+ansible-playbook \
+    -i localhost \
+    sync.yml \
+    -vv \
+    --diff \
+    "$@"
