@@ -1,0 +1,60 @@
+- hosts: all
+  tasks:
+    - name: set facts
+      set_fact:
+        destdir: '{{ lookup("env", "DESTDIR") or lookup("env", "HOME") }}'
+        dotfiles_dir: '{{ lookup("env", "DOTFILES_DIR") }}'
+        is_xfce: '{{ lookup("env", "XDG_CURRENT_DESKTOP") == "XFCE" }}'
+
+    - name: create directories
+      file: path={{ item }} state=directory
+      loop:
+        - '{{ destdir }}/.local/bin'
+        - '{{ destdir }}/.local/share'
+
+    - name: create local dotfiles dir
+      file:
+        state: link
+        src: '{{ dotfiles_dir }}'
+        dest: '{{ destdir }}/.local/share/dotfiles'
+
+    - name: peek into 'home/'
+      find:
+        path: home/
+        hidden: yes
+        recurse: yes
+      register: home
+
+    - name: backup and link 'home/'
+      command: |
+        bin/link-to-dotfile
+        --path '{{ item.path | relpath("home") }}'
+        --original-dir 'home'
+        --target-dir '{{ destdir }}'
+      loop: '{{ home.files }}'
+
+    - name: copy xfce4 shortcuts
+      command: |
+        bin/link-to-dotfile
+        --path 'xfce4-keyboard-shortcuts.xml'
+        --original-dir 'src/xml'
+        --target-dir '{{ destdir }}/.config/xfce4/xfconf/xfce-perchannel-xml'
+      when: is_xfce
+
+    - name: install vundle
+      command:
+        cmd: |
+          git clone
+          https://github.com/VundleVim/Vundle.vim
+          '{{ destdir }}/.vim/bundle/Vundle.vim'
+        creates: '{{ destdir }}/.vim/bundle/Vundle.vim'
+
+    - name: install/update vundle plugins
+      shell: |
+        vim +PluginInstall +qall &>/dev/null
+
+    - name: copy custom vim theme
+      file:
+        state: link
+        src: '{{ dotfiles_dir }}/src/vim/custom-airline-theme.vim'
+        dest: '{{ destdir }}/.vim/bundle/vim-airline/autoload/airline/themes/custom.vim'

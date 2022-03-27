@@ -35,7 +35,6 @@ call vundle#begin()
     Plugin 'scrooloose/nerdtree'
     Plugin 'vim-syntastic/syntastic'
     Plugin 'vim-airline/vim-airline'
-    Plugin 'tpope/vim-fugitive'
     Plugin 'kien/ctrlp.vim'
     Plugin 'cespare/vim-toml'
     Plugin 'psf/black'

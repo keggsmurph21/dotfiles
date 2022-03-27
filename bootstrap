@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Just install ansible so we can use that for everything else :^)
+
+set -euo pipefail
+
+source "$(dirname "$0")/src/bash/setup-dotfiles-env"
+
+if ! "$DOTFILES_DIR/bin/dot-sync" --version &> /dev/null; then
+
+    if ! test -d "$DOTFILES_VENV"; then
+        # NOTE: 'venv' was added to the stdlib in 3.6
+        python3 -m venv "$DOTFILES_VENV"
+    fi
+
+    source "$DOTFILES_VENV/bin/activate"
+
+    pip install --upgrade pip wheel
+    pip install ansible==2.9.11
+
+fi
+
+"$DOTFILES_DIR/bin/dot-sync" "$@"

@@ -16,6 +16,39 @@ shopt -s globstar
 
 # }}}
 
+# Other sources {{{
+
+__src() {
+    # shellcheck disable=SC2015,SC1090
+    if [[ -r "$1" ]]; then
+        source "$1"
+    fi
+}
+
+__src "$HOME/.local/share/dotfiles/src/bash/setup-dotfiles-env"
+
+# source external files
+for file in "$DOTFILES_DIR/src/bash/"*; do
+    __src "$file"
+done
+__src "/usr/share/bash-completion/bash_completion"
+__src "$HOME/.tokens"
+__src "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
+__src "$HOME/.opam/opam-init/init.sh"
+__src "$NVM_DIR/nvm.sh"
+__src "$NVM_DIR/bash_completion"
+__src "$HOME/src/github/hub/etc/hub.bash_completion.sh"
+case "$OSTYPE" in
+    linux-gnu)  __src "$HOME/.bashrc.linux" ;;
+    darwin*)    __src "$HOME/.bashrc.macos" ;;
+    *)          echo "unrecognized OSTYPE: $OSTYPE" >&2 ;;
+esac
+__src "$HOME/.bashrc.local"
+
+unset __src
+
+# }}}
+
 # History {{{
 
 HISTCONTROL=ignoreboth
@@ -41,7 +74,6 @@ PS1='\[`__prompt_rc_color`\]\h\[\e[0m\] \[\e[01;34m\]\w\[\e[0m\]\$ '
 
 # Exports {{{
 
-export DOTFILES_DIR="$HOME/src/keggsmurph21/dotfiles"
 export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$HOME/.cargo/bin:$HOME/.cabal/bin:$PATH"
 export EDITOR=vim
 export VISUAL=vim
@@ -68,11 +100,13 @@ fi
 
 # system {{{
 alias sudo="sudo " # allow $ sudo <alias>
+alias v=vim
 alias vi=vim
 alias pip="python -m pip"
 alias g=git
 alias gg="git grep"
 alias d=dot
+alias dsync=dot-sync
 alias x=xargs
 alias xg="xargs git"
 alias pwd="pwd -P"
@@ -240,36 +274,10 @@ to-width() {
     done
 }
 
-# }}}
-
-# Other sources {{{
-
-__src() {
-    # shellcheck disable=SC2015,SC1090
-    if [[ -r "$1" ]]; then
-        source "$1"
-    fi
+udiff() {
+    # Generate a unified + colored diff
+    diff -u "$@" | colordiff
 }
-
-# source external files
-for file in "$DOTFILES_DIR/bash-sources/"*; do
-    __src "$file"
-done
-__src "/usr/share/bash-completion/bash_completion"
-__src "$HOME/.tokens"
-__src "$HOME/.local/bin/virtualenvwrapper_lazy.sh"
-__src "$HOME/.opam/opam-init/init.sh"
-__src "$NVM_DIR/nvm.sh"
-__src "$NVM_DIR/bash_completion"
-__src "$HOME/src/github/hub/etc/hub.bash_completion.sh"
-case "$OSTYPE" in
-    linux-gnu)  __src "$HOME/.bashrc.linux" ;;
-    darwin*)    __src "$HOME/.bashrc.macos" ;;
-    *)          echo "unrecognized OSTYPE: $OSTYPE" >&2 ;;
-esac
-__src "$HOME/.bashrc.local"
-
-unset __src
 
 # }}}
 

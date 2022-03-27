@@ -58,6 +58,7 @@
     au      = add --update
     aup     = add --update --patch
     bd      = branch --delete --force
+    be      = branch-exists
     bl      = branch --all -vv
     bo      = overwrite-branch
     br      = checkout -b
@@ -92,7 +93,7 @@
     l       = log
     lol     = log --pretty=line
     lp      = log -p
-    ls      = log --stat
+    ls      = ls-files
     lsm     = ls-mtime
     ma      = merge --abort
     mr      = resolve-conflicts
