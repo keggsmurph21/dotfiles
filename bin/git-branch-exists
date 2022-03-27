@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# https://stackoverflow.com/q/5167957/15080009
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: $0 <local branch name>" >&2
+    exit 1
+fi
+
+git show-ref --verify --quiet "refs/heads/$1"
