@@ -274,6 +274,11 @@ to-width() {
     done
 }
 
+udiff() {
+    # Generate a unified + colored diff
+    diff -u "$@" | colordiff
+}
+
 # }}}
 
 # Misc {{{
