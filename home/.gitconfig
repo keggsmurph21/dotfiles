@@ -69,6 +69,7 @@
     co      = checkout
     commits = log --pretty=format:"%H"
     cou     = checkout-upstream
+    coud    = checkout-upstream develop
     count   = rev-list --count HEAD
     cp      = cherry-pick
     cpa     = cherry-pick --abort
