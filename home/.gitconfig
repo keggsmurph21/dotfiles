@@ -80,6 +80,7 @@
     dcv     = diff --cached -vv
     dcw     = diff --cached --color-words
     dir     = rev-parse --show-toplevel
+    dn      = diff --name-only
     ds      = diff --stat
     dv      = diff -vv
     dw      = diff --color-words
