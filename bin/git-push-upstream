@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Push and automatically set upstream branch to match
+# current branch name.
+
+set -euo pipefail
+
+upstream="${1:-origin}"
+
+git push --set-upstream "$upstream" "$(git bname)"
