@@ -4,4 +4,4 @@
 #
 # See https://vi.stackexchange.com/a/1892
 
-xargs -o "$EDITOR" "$@"
+xargs --open-tty "$EDITOR" "$@"
