@@ -64,6 +64,7 @@
     br      = checkout -b
     brecent = for-each-ref --sort=committerdate
     c       = commit
+    cel     = config --edit --local
     ca      = commit --amend
     cane    = commit --amend --no-edit
     co      = checkout
