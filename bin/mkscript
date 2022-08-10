@@ -18,4 +18,4 @@ fi
 touch "$path"
 chmod +x "$path"
 $EDITOR "$path"
-
+git -C "$DOTFILES_DIR" add --intent-to-add "$path"
