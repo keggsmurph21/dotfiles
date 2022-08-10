@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -euo pipefail
-
-git config --list \
-    | grep ^alias \
-    | sed 's/^alias.//'
