@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Dump out all git aliases in the form
+#
+#   <alias_name>	= <aliased_command>
+
+set -euo pipefail
+
+git config --get-regexp '^alias\.' \
+    | sed -E 's/^alias.(\w+)/\1\t=/'
