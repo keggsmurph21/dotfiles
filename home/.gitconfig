@@ -33,6 +33,7 @@
 
 [pretty]
     line = "%C(auto)%h %<|(80,trunc)%s %C(green)%ad %C(blue)%an%C(auto)%d"
+    linenarrow = "%C(auto)%h %<|(60,trunc)%s %C(auto)%d"
     detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
 
 [credential]
@@ -96,6 +97,7 @@
     hashes40= log --format="%H"
     l       = log
     lol     = log --pretty=line
+    loln    = log --pretty=linenarrow
     lp      = log -p
     ls      = ls-files
     lsm     = ls-mtime
