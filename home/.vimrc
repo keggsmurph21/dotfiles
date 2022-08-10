@@ -46,6 +46,7 @@ call vundle#begin()
     Plugin 'jaspervdj/stylish-haskell'
     Plugin 'fisadev/vim-isort'
     Plugin 'powerman/vim-plugin-AnsiEsc'
+    Plugin 'ElmCast/elm-vim'
 
 call vundle#end()
 
