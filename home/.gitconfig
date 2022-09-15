@@ -53,6 +53,7 @@
 
 [alias]
     a       = add
+    abbr    = log -n1 --format=%h
     ae      = add --edit
     an      = add --intent-to-add
     ap      = add --patch
