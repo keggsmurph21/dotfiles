@@ -244,8 +244,8 @@ nnoremap <leader>q :bprevious<bar>bdelete #<cr>
 nnoremap <leader>Q :bufdo bd<cr>
 
 " move b/w buffers
-nnoremap <leader>l :bnext<cr>
-nnoremap <leader>h :bprevious<cr>
+nnoremap <C-h> :bprevious<cr>
+nnoremap <C-l> :bnext<cr>
 
 " quote word
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
