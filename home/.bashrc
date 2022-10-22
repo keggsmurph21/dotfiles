@@ -6,6 +6,9 @@
 # If not running interactively or from Vim, don't do anything
 [[ $- != *i* && "${SH_ENV:-}" != vim ]] && return
 
+# start the ssh-agent
+[[ $- == *i* ]] && eval "$(ssh-agent)" >/dev/null
+
 # }}}
 
 # Shell options {{{
@@ -287,8 +290,5 @@ udiff() {
 
 # read the inputrc file if it exists
 [[ $- == *i* ]] && [ -r "$HOME/.inputrc" ] && bind -f "$HOME/.inputrc"
-
-# start the ssh-agent
-[[ $- == *i* ]] && eval "$(ssh-agent)" >/dev/null
 
 # }}}
