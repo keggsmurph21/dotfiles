@@ -124,6 +124,8 @@ fi
 alias wt=__wt_main
 alias less="less -R"
 alias lsports="netstat -talpn"
+alias open=xdg-open
+alias o=xdg-open
 # }}}
 
 # bash rc files {{{
