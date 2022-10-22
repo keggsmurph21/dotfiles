@@ -371,7 +371,7 @@ let g:syntastic_cpp_compiler = 'clang'
 let g:syntastic_cpp_compiler_options = '-std=c++17'
 
 let g:syntastic_java_checkers = []
-let g:syntastic_python_checkers = ['flake8', 'mypy']
+let g:syntastic_python_checkers = ['mypy', 'flake8']
 let g:syntastic_typescript_checkers = ['tsuquyomi']
 
 command! ToggleLinting SyntasticToggleMode
