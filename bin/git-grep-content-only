@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# Regular `git grep ...` but without filenames or line numbers :^)
+
+set -euo pipefail
+
+GIT_CONFIG_GLOBAL=/dev/null git grep -h "$@"

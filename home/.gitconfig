@@ -93,6 +93,7 @@
     fm      = find-merge
     fo      = fetch origin
     fpr     = find-pr
+    gcontent= grep-content-only
     graph   = log --graph
     hashes  = log --format="%h"
     hashes40= log --format="%H"
