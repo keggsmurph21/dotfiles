@@ -3,4 +3,8 @@
 # Set up tools that need to be active in the *current* shell.
 
 export DOTFILES_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")/../..")"
-export DOTFILES_VENV="$DOTFILES_DIR/.dotfiles-data/dotfiles-venv"
+
+export DOTFILES_BOOTSTRAP_PYTHON="/usr/bin/python3"
+export DOTFILES_ANSIBLE_VERSION_SPEC="==2.9.11"
+export DOTFILES_VENV_VERSION="1"
+export DOTFILES_VENV="$DOTFILES_DIR/.dotfiles-data/v${DOTFILES_VENV_VERSION}/dotfiles-venv"
