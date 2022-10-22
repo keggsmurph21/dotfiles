@@ -103,6 +103,7 @@ alias sudo="sudo " # allow $ sudo <alias>
 alias v=vim
 alias vi=vim
 alias pip="python -m pip"
+alias p=pyeval
 alias g=git
 alias gg="git grep"
 alias d=dot

@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+#
+# Run a code snippet in Python and print it to stdout.
+
+import sys
+
+code = " ".join(sys.argv[1:])
+print(f"\033[2m>>> {code}\033[0m", file=sys.stderr)
+
+result = eval(code)  # spooky!
+print(result)
