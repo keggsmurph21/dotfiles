@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -exuo pipefail
+
+if [[ $# == 0 ]]; then
+    message="wip"
+else
+    message="wip: $@"
+fi
+
+git add --update
+git commit -m "$message"
