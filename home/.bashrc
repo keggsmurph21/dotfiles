@@ -102,6 +102,7 @@ fi
 alias sudo="sudo " # allow $ sudo <alias>
 alias v=vim
 alias vi=vim
+alias vitl="vim +TL"
 alias pip="python -m pip"
 alias p=pyeval
 alias g=git

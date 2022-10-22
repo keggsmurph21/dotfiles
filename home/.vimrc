@@ -374,6 +374,9 @@ let g:syntastic_java_checkers = []
 let g:syntastic_python_checkers = ['flake8', 'mypy']
 let g:syntastic_typescript_checkers = ['tsuquyomi']
 
+command! ToggleLinting SyntasticToggleMode
+command! TL SyntasticToggleMode
+
 " }}}
 
 " tsuquyomi {{{
