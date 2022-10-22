@@ -3,14 +3,17 @@
 # Essentially, this is just a shortcut for `git checkout HEAD ...`
 # that also saves the diff in case this was a mistake :^)
 
-set -euo pipefail
+set -exuo pipefail
 
 id="git-x-$(uuidgen).patch"
 dir="$HOME/.local/share/git-backups"
 mkdir -p "$dir"
 backup="$dir/$id"
 
+echo "BEFORE:" >&2
 git status --short --branch >&2
 git diff "$@" > "$backup"
 git checkout HEAD -- "$@"
 echo "Saved backup to '$backup'" >&2
+
+git status --short --branch >&2
