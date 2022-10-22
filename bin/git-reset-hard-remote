@@ -2,7 +2,7 @@
 #
 # Move HEAD of current branch to its HEAD on <remote>.
 
-set -euo pipefail
+set -exuo pipefail
 
 remote="${1:-origin}"
 branch="${2:-$(git bname)}"
