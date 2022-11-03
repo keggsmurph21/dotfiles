@@ -170,6 +170,13 @@ au BufNewFile,BufRead requirements.txt setlocal filetype=conf
 au BufNewFile,BufRead .clang-format setlocal filetype=yaml
 au BufNewFile,BufRead .prettierrc setlocal filetype=yaml
 
+" slides :^)
+au BufNewFile,BufRead *.slide setlocal filetype=markdown
+au BufNewFile,BufRead *.slide setlocal foldmethod=marker
+au BufNewFile,BufWinEnter,BufRead *.slide setlocal foldlevel=0
+au BufNewFile,BufRead *.slide setlocal nowrap
+au BufNewFile,BufRead *.slide setlocal shiftwidth=2
+
 " return to last edit position when opening files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
