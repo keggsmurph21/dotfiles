@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Like 'git-x', except doesn't save a copy!  So actually just
+#
+#   $ git checkout HEAD ...
+
+set -exuo pipefail
+
+what="${1:-.}"  # if passed nothing, assume we mean $PWD
+shift || true
+
+git checkout HEAD "$what" "$@"
