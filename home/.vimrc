@@ -361,6 +361,7 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files --others --
 " black {{{
 
 let g:black_quiet=1
+let g:black_linelength=100
 autocmd FileType python cnoremap <buffer> <leader>b Black<cr>
 
 " }}}
