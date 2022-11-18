@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -exuo pipefail
+
+search_dir="$(git dir)/$1"
+shift
+
+git grep -- "$search_dir" "$@"
