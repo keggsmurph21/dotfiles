@@ -77,6 +77,8 @@
     cp      = cherry-pick
     cpa     = cherry-pick --abort
     cpc     = cherry-pick --continue
+    cpq     = cherry-pick --quit
+    cps     = cherry-pick --skip
     d       = diff
     dc      = diff --cached
     dcs     = diff --cached --stat
