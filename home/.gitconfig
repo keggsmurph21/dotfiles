@@ -98,6 +98,7 @@
     hashes  = log --format="%h"
     hashes40= log --format="%H"
     kcpw    = keep-cherry-picking-while
+    krw     = keep-rebasing-while
     l       = log
     lol     = log --pretty=line
     loln    = log --pretty=linenarrow

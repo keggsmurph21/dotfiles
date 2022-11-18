@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -exuo pipefail
+
+while true; do
+    "$@" || break
+    git rebase --continue
+done
