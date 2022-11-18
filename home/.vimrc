@@ -113,7 +113,7 @@ set shiftwidth=4
 
 set autoindent
 set smartindent
-set wrap
+set nowrap
 
 set background=dark
 
