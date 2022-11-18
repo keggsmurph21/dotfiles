@@ -115,7 +115,7 @@ alias dsync=dot-sync
 alias x=xargs
 alias xg="xargs git"
 alias pwd="pwd -P"
-alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles|node_modules|venv|.tox|.eggs|build|dist'"
+alias tree="tree -a -I '.git|__pycache__|*.pyc|.mypy_cache|.nox|*.egg-info|.pytest_cache|*.o|CMakeFiles|node_modules|venv|.tox|.eggs|build|dist|__reflection_metadata__.py'"
 alias grep="grep --color=auto --devices=skip -I"
 alias hl=highlight
 if which hub &>/dev/null; then
