@@ -124,6 +124,8 @@ set foldlevelstart=10   " only fold after 10 levels
 set foldnestmax=10      " only allow 10 levels of nest
 set foldmethod=indent
 
+set display=lastline  " show as much of wrapped last line as possible
+
 " }}}
 
 " Highlighting {{{
