@@ -4,7 +4,7 @@
 
 export DOTFILES_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")/../..")"
 
-export DOTFILES_BOOTSTRAP_PYTHON="/usr/bin/python3.8"
+export DOTFILES_BOOTSTRAP_PYTHON="python3.8"
 export DOTFILES_ANSIBLE_VERSION_SPEC="==6.5.0"
 export DOTFILES_VENV_VERSION="1"
 export DOTFILES_VENV="$DOTFILES_DIR/.dotfiles-data/v${DOTFILES_VENV_VERSION}/dotfiles-venv"
