@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euo pipefail
+
+hostname="$(git remote-hostname)"
+head_sha1="$(git log -n1 --format=%H)"
+path="${1:-}"
+
+echo "https://$hostname/blob/$head_sha1/$path"
