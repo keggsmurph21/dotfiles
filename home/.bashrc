@@ -303,6 +303,10 @@ ggr() {
     git grep "$@" -- "$(git dir)"
 }
 
+br() {
+    "$BROWSER" "$@"
+}
+
 # }}}
 
 # Misc {{{
