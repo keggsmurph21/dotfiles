@@ -164,6 +164,11 @@ augroup END
 
 au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
+au FileType html setlocal shiftwidth=2
+au FileType javascript setlocal shiftwidth=2
+au FileType typescript setlocal shiftwidth=2
+au FileType jinja.html setlocal shiftwidth=2
+
 au BufNewFile,BufRead *.ts setlocal filetype=typescript
 au BufNewFile,BufRead *.tsx setlocal filetype=typescript
 au BufNewFile,BufRead *.ejs setlocal filetype=html
