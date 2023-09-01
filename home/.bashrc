@@ -298,6 +298,11 @@ udiff() {
     diff -u "$@" | colordiff
 }
 
+ggr() {
+    # git grep from repo root
+    git grep "$@" -- "$(git dir)"
+}
+
 # }}}
 
 # Misc {{{
