@@ -126,6 +126,7 @@ alias less="less -R"
 alias lsports="netstat -talpn"
 alias open=xdg-open
 alias o=xdg-open
+alias gcd=git-cd
 # }}}
 
 # bash rc files {{{
@@ -188,6 +189,12 @@ gpip() {
 
 git-find() {
     git ls-files "$(git root)" | grep "$@"
+}
+
+git-cd() {
+    dir="$1"
+    shift
+    cd "$(git root)/$dir" "$@"
 }
 
 # host a text file
