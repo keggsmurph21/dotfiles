@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+GRIP_VENV="${GRIP_VENV:-$HOME/.local/share/venvs/grip}"
+GRIP_PYTHON="${GRIP_PYTHON:-python3}"
+GRIP_LOG="${GRIP_LOG:-/tmp/grip.log}"
+GRIP_DOCUMENT="$1"
+
+if [[ -e "$GRIP_VENV/bin/activate" ]]; then
+    source "$GRIP_VENV/bin/activate"
+else
+    >&2 echo "Creating new venv at '$GRIP_VENV'"
+    "$GRIP_PYTHON" -m venv "$GRIP_VENV"
+    source "$GRIP_VENV/bin/activate"
+    pip install --upgrade pip setuptools wheel
+    pip install grip
+fi
+
+exec python -m grip "$GRIP_DOCUMENT" &>> "$GRIP_LOG"
