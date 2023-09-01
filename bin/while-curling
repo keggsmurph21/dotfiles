@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euo pipefail
+
+while true; do
+    if curl \
+        -fSs \
+        -o /dev/null \
+        --connect-timeout 10 \
+        "$@"; then
+        date
+    fi
+done
