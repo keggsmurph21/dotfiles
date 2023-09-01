@@ -176,6 +176,7 @@ au BufNewFile,BufRead .git-blame-ignore-revs-file setlocal filetype=conf
 au BufNewFile,BufRead requirements.txt setlocal filetype=conf
 au BufNewFile,BufRead .clang-format setlocal filetype=yaml
 au BufNewFile,BufRead .prettierrc setlocal filetype=yaml
+au BufNewFile,BufRead *.hcl setlocal filetype=terraform
 
 " slides :^)
 au BufNewFile,BufRead *.slide setlocal filetype=markdown
