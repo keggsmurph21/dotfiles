@@ -281,6 +281,11 @@ freshvenv() {
     source "$venv/bin/activate"
 }
 
+tmpdir() {
+    local tmpdir="$(mktemp --directory)"
+    cd "$tmpdir"
+}
+
 to-width() {
     # Truncate stdin to fit screen
     while read -r line; do
