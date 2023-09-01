@@ -39,6 +39,7 @@
       <property name="&lt;Super&gt;t" type="string" value="/usr/bin/xfce4-terminal.wrapper"/>
       <property name="&lt;Super&gt;k" type="string" value="/usr/bin/xfce4-keyboard-settings"/>
       <property name="&lt;Super&gt;l" type="string" value="/usr/bin/xflock4"/>
+      <property name="&lt;Super&gt;v" type="string" value="/usr/bin/pavucontrol"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
