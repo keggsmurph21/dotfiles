@@ -99,6 +99,7 @@
     graph   = log --graph
     hashes  = log --format="%h"
     hashes40= log --format="%H"
+    head    = hashes40 -n1
     kcpw    = keep-cherry-picking-while
     krw     = keep-rebasing-while
     l       = log
