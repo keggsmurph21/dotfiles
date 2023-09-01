@@ -15,3 +15,6 @@ nbproject
 
 # worktree management
 .wt
+
+# personal stuff
+*.kevinignore
