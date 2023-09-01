@@ -97,6 +97,7 @@
     fpr     = find-pr
     gcontent= grep-content-only
     graph   = log --graph
+    h       = log --format="%h" -n1
     hashes  = log --format="%h"
     hashes40= log --format="%H"
     head    = hashes40 -n1
