@@ -89,7 +89,6 @@ export PIP_DOWNLOAD_CACHE="$HOME/.cache/pip"
 export NVM_DIR="$HOME/.nvm"
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export PRE_CXX=ccache
-export BROWSER=firefox
 
 if which go &>/dev/null; then
     # shellcheck disable=SC2155
