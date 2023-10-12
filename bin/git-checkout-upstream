@@ -19,4 +19,4 @@ else
     git checkout -b "$branch" --track "$upstream/$branch"
 fi
 
-git btrack
+git track
