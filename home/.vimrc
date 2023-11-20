@@ -47,6 +47,7 @@ call vundle#begin()
     Plugin 'fisadev/vim-isort'
     Plugin 'powerman/vim-plugin-AnsiEsc'
     Plugin 'ElmCast/elm-vim'
+    Plugin 'udalov/kotlin-vim'
 
 call vundle#end()
 
