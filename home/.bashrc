@@ -128,6 +128,7 @@ alias lsports="netstat -talpn"
 alias open=xdg-open
 alias o=xdg-open
 alias gcd=git-cd
+alias udate="date --utc"
 # }}}
 
 # bash rc files {{{
