@@ -169,8 +169,9 @@ au FileType html setlocal shiftwidth=2
 au FileType javascript setlocal shiftwidth=2
 au FileType typescript setlocal shiftwidth=2
 au FileType jinja.html setlocal shiftwidth=2
+au FileType yaml setlocal shiftwidth=2
 
-au FileType markdown setlocal wrap columns=120
+au FileType markdown setlocal wrap columns=120 shiftwidth=2
 
 au BufNewFile,BufRead *.ts setlocal filetype=typescript
 au BufNewFile,BufRead *.tsx setlocal filetype=typescript
