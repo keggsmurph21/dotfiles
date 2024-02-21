@@ -6,6 +6,6 @@ set -euo pipefail
 
 host="$1"
 
-ssh -G "$host" \
+ssh -G "$host" 2>/dev/null \
     | grep ^hostname \
     | cut -d' ' -f2
