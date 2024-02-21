@@ -104,6 +104,7 @@
     kcpw    = keep-cherry-picking-while
     krw     = keep-rebasing-while
     l       = log
+    lm      = log -n1 --format=%s%n%n%b
     lol     = log --pretty=line
     loln    = log --pretty=linenarrow
     lp      = log -p
