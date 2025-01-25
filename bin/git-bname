@@ -2,6 +2,4 @@
 
 set -euo pipefail
 
-if ! git isempty; then
-    git rev-parse --abbrev-ref HEAD
-fi
+git rev-parse --abbrev-ref HEAD
