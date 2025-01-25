@@ -229,7 +229,7 @@ nnoremap <C-UP> :m-2<cr>==
 nnoremap <C-DOWN> :m+<cr>==
 
 " pretty-print JSON
-nnoremap <leader>j :%!python -m json.tool<cr>
+nnoremap <leader>j :%!python3 -m json.tool<cr>
 
 " enter visual block mode
 nnoremap <leader>v <C-v>
