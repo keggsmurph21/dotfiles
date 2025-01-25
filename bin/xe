@@ -4,4 +4,9 @@
 #
 # See https://vi.stackexchange.com/a/1892
 
+#if [[ $# -eq 0 ]]; then
+#    >&2 echo "Nothing to edit!"
+#    exit 0
+#fi
+
 xargs --open-tty "$EDITOR" "$@"
