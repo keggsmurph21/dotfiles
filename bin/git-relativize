@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+usage() {
+    >&2 cat <<EOF
+usage: $0 <...
+
+    Read paths from stdin that are relative to the root
+    of the repository and print them relative to the cwd.
+
+EOF
+}
+
+if [[ "${1:-}" == -h || "${1:-}" == --help ]]; then
+    usage
+    exit 0
+fi
+
+root="$(git root)"
+
+sed "s,^,$root/," \
+    | relativize "$(pwd)"

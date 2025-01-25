@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""
+For each path on stdin, print relative to a given reference.
+"""
+
+import argparse
+import os
+import sys
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("reference")
+    args = parser.parse_args()
+
+    for line in sys.stdin:
+        absolute_path = os.path.abspath(line.strip())
+        relative_path = os.path.relpath(absolute_path, args.reference)
+        print(relative_path)
+
+
+if __name__ == "__main__":
+    main()
