@@ -62,6 +62,7 @@
     bd      = branch --delete --force
     be      = branch-exists
     bl      = branch --all -vv
+    bn      = bname
     bo      = overwrite-branch
     br      = checkout -b
     brecent = for-each-ref --sort=committerdate
