@@ -182,6 +182,7 @@ au BufNewFile,BufRead requirements.txt setlocal filetype=conf
 au BufNewFile,BufRead .clang-format setlocal filetype=yaml
 au BufNewFile,BufRead .prettierrc setlocal filetype=yaml
 au BufNewFile,BufRead *.hcl setlocal filetype=terraform
+au BufNewFile,BufRead uv.lock setlocal filetype=toml
 
 " slides :^)
 au BufNewFile,BufRead *.slide setlocal filetype=markdown
