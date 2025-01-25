@@ -9,4 +9,4 @@ else
 fi
 
 git add --update
-git commit -m "$message"
+git commit --no-verify -m "$message"
