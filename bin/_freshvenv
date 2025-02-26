@@ -27,7 +27,7 @@ if [ -d "$venv" ]; then
 fi
 
 echo -n "Creating a venv at '$venv' ..." >&2
-"$python" -m venv "$venv"
+uv venv --python "$python" "$venv"
 echo " done!" >&2
 
 # So that the wrapper can get the path of the
