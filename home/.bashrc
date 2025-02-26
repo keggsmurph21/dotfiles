@@ -278,8 +278,7 @@ man() {
 }
 
 freshvenv() {
-    _freshvenv "$@"
-    venv="$(cat /tmp/latest-venv)"
+    venv="$(_freshvenv "$@")"
     source "$venv/bin/activate"
 }
 

@@ -32,4 +32,4 @@ echo " done!" >&2
 
 # So that the wrapper can get the path of the
 # environment we just created.
-echo "$venv" > /tmp/latest-venv
+echo "$venv"
