@@ -6,12 +6,29 @@ set -exuo pipefail
 
 source "$(dirname "$0")/src/bash/setup-dotfiles-env"
 
-if ! test -d "$DOTFILES_VENV"; then
-    "$DOTFILES_BOOTSTRAP_PYTHON" -m venv "$DOTFILES_VENV"
-fi
+if [[ ! -d "$DOTFILES_VENV" ]]; then
+    tmpdir="$(mktemp --directory)"
+    pushd "$tmpdir"
+    curl -fSsL \
+        "https://github.com/astral-sh/uv/releases/download/0.7.20/uv-x86_64-unknown-linux-gnu.tar.gz" \
+        -o uv.tar.gz
+    echo "10f204426ff188925d22a53c1d0310d190a8d4d24513712e1b8e2ca9873f0666  uv.tar.gz" \
+        | sha256sum --check
+    tar xzf uv.tar.gz
+    ./uv-x86_64-unknown-linux-gnu/uv --version
 
-source "$DOTFILES_VENV/bin/activate"
-pip install --upgrade pip setuptools wheel
-pip install "ansible$DOTFILES_ANSIBLE_VERSION_SPEC"
+    ./uv-x86_64-unknown-linux-gnu/uv \
+        venv \
+        --python python3.12 \
+        "$DOTFILES_VENV"
+
+    source "$DOTFILES_VENV/bin/activate"
+
+    ./uv-x86_64-unknown-linux-gnu/uv \
+        pip install "ansible==11.6.0"
+
+    popd
+    rm -rf "$tmpdir"
+fi
 
 "$DOTFILES_DIR/bin/dot-sync" "$@"
