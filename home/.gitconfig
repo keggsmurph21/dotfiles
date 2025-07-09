@@ -98,8 +98,8 @@
     fpr     = find-pr
     gcontent= grep-content-only
     graph   = log --graph
-    h       = log --format="%h" -n1
-    hh      = log --format="%H" -n1
+    h       = log --pretty=format:"%h" -n1
+    hh      = log --pretty=format:"%H" -n1
     head    = hashes40 -n1
     kcpw    = keep-cherry-picking-while
     krw     = keep-rebasing-while
