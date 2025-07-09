@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+"""
+Extract the filenames that contain errors from `mypy`'s output (on stdin).
+"""
+
+import re
+import sys
+import typing as ty
+
+
+PATTERN = re.compile(r"^(.*\.py):[0-9]+:[0-9]+: error:")
+
+
+def extract_filenames(fileobj: ty.IO[str]) -> ty.Iterator[str]:
+    for line in fileobj:
+        match = PATTERN.match(line)
+        if not match:
+            continue
+        filename = match.group(1)
+        yield filename
+
+
+if __name__ == "__main__":  # noqa: EVE002
+    for filename in sorted(set(extract_filenames(sys.stdin))):
+        print(filename)
