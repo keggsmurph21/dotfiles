@@ -53,6 +53,11 @@
       shell: |
         vim +PluginInstall +qall &>/dev/null
 
+    - name: mkdir vim-airline themes
+      file:
+        state: directory
+        path: '{{ destdir }}/.vim/bundle/vim-airline/autoload/airline/themes'
+
     - name: copy custom vim theme
       file:
         state: link
