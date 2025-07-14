@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -exuo pipefail
+
+>&2 echo "\$?=$?"
+
+ffplay \
+    -nodisp \
+    -autoexit \
+    "$HOME/.config/keggsmurph21/dotfiles/the-song" \
+    &> /dev/null
