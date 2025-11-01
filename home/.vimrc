@@ -37,7 +37,6 @@ call vundle#begin()
     Plugin 'vim-airline/vim-airline'
     Plugin 'kien/ctrlp.vim'
     Plugin 'cespare/vim-toml'
-    Plugin 'psf/black'
     Plugin 'elzr/vim-json'
     Plugin 'vim-latex/vim-latex'
     Plugin 'flammie/vim-conllu'
@@ -48,6 +47,7 @@ call vundle#begin()
     Plugin 'powerman/vim-plugin-AnsiEsc'
     Plugin 'ElmCast/elm-vim'
     Plugin 'udalov/kotlin-vim'
+    Plugin 'prabirshrestha/vim-lsp'
 
 call vundle#end()
 
@@ -370,14 +370,6 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files --others --
 
 " }}}
 
-" black {{{
-
-let g:black_quiet=1
-let g:black_linelength=100
-autocmd FileType python cnoremap <buffer> <leader>b Black<cr>
-
-" }}}
-
 " syntastic {{{
 
 set statusline+=%#warningmsg
@@ -419,6 +411,26 @@ autocmd FileType haskell nnoremap <leader>f :%! stylish-haskell<cr>
 
 " }}}
 
+" {{{ vim-lsp
+
+let g:lsp_document_code_action_signs_enabled = 0
+
+nnoremap <C-f> :LspCodeAction<cr>
+
+if executable('ruff')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'ruff',
+        \ 'cmd': {server_info->['ruff', 'server']},
+        \ 'allowlist': ['python'],
+        \ 'workspace_config': {'organize_imports': 1},
+        \ })
+
+    autocmd! BufWritePre *.py call execute('LspDocumentFormatSync')
+
+endif
+
+" }}}
+
 " }}}
 
 " local config {{{
@@ -426,5 +438,9 @@ autocmd FileType haskell nnoremap <leader>f :%! stylish-haskell<cr>
 if filereadable(expand('~/.vimrc.local'))
     source ~/.vimrc.local
 endif
+
+"if filereadable(expand('$SERVERS_ROOT/dev/config/ide/vim/vimrc'))
+"    source $SERVERS_ROOT/dev/config/ide/vim/vimrc
+"endif
 
 " }}}

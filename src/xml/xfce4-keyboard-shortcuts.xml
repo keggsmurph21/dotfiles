@@ -34,7 +34,7 @@
       <property name="&lt;Super&gt;p" type="string" value="xfce4-display-settings --minimal"/>
       <property name="&lt;Primary&gt;Escape" type="string" value="xfdesktop --menu"/>
       <property name="override" type="bool" value="true"/>
-      <property name="&lt;Super&gt;c" type="string" value="/usr/bin/chromium-browser"/>
+      <property name="&lt;Super&gt;c" type="string" value="/usr/bin/google-chrome"/>
       <property name="&lt;Super&gt;f" type="string" value="/usr/bin/firefox"/>
       <property name="&lt;Super&gt;t" type="string" value="/usr/bin/xfce4-terminal.wrapper"/>
       <property name="&lt;Super&gt;k" type="string" value="/usr/bin/xfce4-keyboard-settings"/>

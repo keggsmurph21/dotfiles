@@ -66,9 +66,9 @@ HISTIGNORE="pwd"
 __prompt_rc_color() {
     # shellcheck disable=SC2181
     if [[ $? -eq 0 ]]; then
-        echo -e '\e[01;32m' # bright green
+        echo -e '\e[01;36m' # bright cyan
     else
-        echo -e '\e[0;32m' # normal green
+        echo -e '\e[0;36m' # normal cyan
     fi
 }
 PS1='\[`__prompt_rc_color`\]\h\[\e[0m\] \[\e[01;34m\]\w\[\e[0m\]\$ '
@@ -109,6 +109,7 @@ alias pip="python -m pip"
 alias p=pyeval
 alias g=git
 alias gg="git grep"
+alias ggc="git grep-content-only"
 alias gs="git s"  # to avoid launching `ghostscript`...
 alias d=dot
 alias dsync=dot-sync
@@ -129,6 +130,7 @@ alias open=xdg-open
 alias o=xdg-open
 alias gcd=git-cd
 alias udate="date --utc"
+alias dig="dig +ttlunits"
 # }}}
 
 # bash rc files {{{
@@ -306,6 +308,14 @@ ggr() {
 
 br() {
     "$BROWSER" "$@"
+}
+
+hf() {
+    (set -x && hyperfine --warmup 3 -- "$*")
+}
+
+p() {
+    se && python "$@"
 }
 
 # }}}
